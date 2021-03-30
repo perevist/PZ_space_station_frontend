@@ -1,10 +1,11 @@
-<mat-card>
+<mat-card class="card">
     <mat-card-title>
         Dodaj rezerwacje
     </mat-card-title>
     <mat-card-content>
-        <mat-form-field appearance="fill" class="datepicker-field">
-            <mat-label>Wybierz termin</mat-label>
+        <mat-label>Termin rezerwacji</mat-label>
+        <mat-form-field appearance="fill" class="input-form">
+            <mat-label>Wybierz termin:</mat-label>
             <mat-date-range-input [rangePicker]="picker">
               <input matStartDate placeholder="Początek">
               <input matEndDate placeholder="Koniec">
@@ -14,15 +15,27 @@
           </mat-form-field>
     </mat-card-content>
     <mat-card-content>
-        
-    <mat-chip-list aria-label="Fish selection">
-        <mat-chip>One fish</mat-chip>
-        <mat-chip>Two fish</mat-chip>
-        <mat-chip color="primary" selected>Primary fish</mat-chip>
-        <mat-chip color="accent" selected>Accent fish</mat-chip>
-    </mat-chip-list>
-
+    <mat-label>Adrest rezerwacji:</mat-label>
     <app-users-chips></app-users-chips>
-
+    </mat-card-content>
+    <mat-card-content>
+        <mat-label>Pokój:</mat-label>
+        <mat-form-field apperance="fill" class="input-form">
+            <mat-select>
+                <mat-option *ngFor="let room of rooms" [value]="room">
+                    {{room}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </mat-card-content>
+    <mat-card-content>
+        <mat-label>Numer stanowiska:</mat-label>
+        <mat-form-field apperance="fill" class="input-form">
+            <mat-select>
+                <mat-option *ngFor="let workSite of workSitesIds" [value]="workSite">
+                    {{workSite}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
     </mat-card-content>
 </mat-card>

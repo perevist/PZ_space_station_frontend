@@ -1,7 +1,8 @@
-.example-chip-list {
-    width: 100%;
-  }
+.card{
+  width: 53%;
+  left: 23%;
+}
 
-  .datepicker-field{
-    width: 200px;
-  }
+.input-form{
+  left: 2%;
+}

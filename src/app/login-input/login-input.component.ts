@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./login-input.component.css']
 })
 export class LoginInputComponent {
-
+  hide = true;
   constructor() { }
 
   loginValue = 'Enter login';

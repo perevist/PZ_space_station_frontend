@@ -1,26 +1,23 @@
 <mat-card class="card">
     <mat-card-content>
 
-        <mat-form-field appearance="fill" [floatLabel]="loginValue" class="input-form-field" hintLabel="Max 15 znaków">
+        <mat-form-field appearance="fill" [floatLabel]="loginValue" class="input-form-field">
             <mat-label> Nazwa użytkownika </mat-label>
-            <input matInput placeholder="Username" #login maxlength="15">
+            <input matInput placeholder="Nazwa użtykownika" #login required minlength="6">
             <button mat-button *ngIf="loginValue" matSuffix mat-icon-button aria-label="Clear" (click)="login.value=''">
                 <mat-icon>close</mat-icon>
             </button>
-            <mat-hint align="end">{{login.value?.length || 0}}/15</mat-hint>
         </mat-form-field>
     
         </mat-card-content>
 
     <mat-card-content>
 
-    <mat-form-field appearance="fill" [floatLabel]="passwordValue" class="input-form-field" hintLabel="Max 20 znaków">
+    <mat-form-field appearance="fill" [floatLabel]="passwordValue" class="input-form-field" hintLabel="Max 30 znaków">
         <mat-label>Hasło</mat-label>
-        <input matInput type="text" placeholder="Password" #password maxlength="20">
-        <button mat-button *ngIf="passwordValue" matSuffix mat-icon-button aria-label="Clear" (click)="password.value=''">
-            <mat-icon>close</mat-icon>
-        </button>
-        <mat-hint align="end">{{password.value?.length || 0}}/20</mat-hint>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required placeholder="Hasło" #password minlength="6" maxlength="30">
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-hint align="end">{{password.value?.length || 0}}/30</mat-hint>
     </mat-form-field>
 
     </mat-card-content>

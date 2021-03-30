@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 
-export interface User{
-  name: string;
-}
 
 @Component({
   selector: 'app-users-chips',
@@ -17,14 +14,14 @@ export class UsersChipsComponent implements OnInit {
   removable = true;
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  users: User[];
+  users: string[] = [];
 
   add(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
 
     if ((value || '').trim()) {
-      this.users.push({name: value.trim()});
+      this.users.push(value.trim());
     }
 
 
@@ -33,7 +30,7 @@ export class UsersChipsComponent implements OnInit {
     }
   }
   
-  remove(user: User): void {
+  remove(user: string): void {
     const index = this.users.indexOf(user);
 
     if (index >= 0) {
