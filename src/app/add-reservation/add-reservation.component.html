@@ -1,26 +1,17 @@
-<p>add-reservation works!</p>
 <mat-card>
     <mat-card-title>
-        Hello
+        Dodaj rezerwacje
     </mat-card-title>
     <mat-card-content>
-        hello 
-        helooo
-    </mat-card-content>
-    <mat-card-content>
-        <mat-form-field appearance="fill">
-            <mat-label>Enter a date range</mat-label>
+        <mat-form-field appearance="fill" class="datepicker-field">
+            <mat-label>Wybierz termin</mat-label>
             <mat-date-range-input [rangePicker]="picker">
-              <input matStartDate placeholder="Start date">
-              <input matEndDate placeholder="End date">
+              <input matStartDate placeholder="Początek">
+              <input matEndDate placeholder="Koniec">
             </mat-date-range-input>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-date-range-picker #picker></mat-date-range-picker>
           </mat-form-field>
-    </mat-card-content>
-    <mat-card-content>
-        <button mat-raised-button onclick="window.location.href=['/add-reservation']" >Add</button> 
-        <button mat-raised-button onclick="window.location.href=['/add-reservation']" >Add</button>
     </mat-card-content>
     <mat-card-content>
         
@@ -30,5 +21,8 @@
         <mat-chip color="primary" selected>Primary fish</mat-chip>
         <mat-chip color="accent" selected>Accent fish</mat-chip>
     </mat-chip-list>
+
+    <app-users-chips></app-users-chips>
+
     </mat-card-content>
 </mat-card>

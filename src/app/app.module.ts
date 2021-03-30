@@ -6,7 +6,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReservationsComponent } from'./reservations/reservations.component';
 import { AddReservationComponent } from './add-reservation/add-reservation.component';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -14,23 +13,34 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatSliderModule} from '@angular/material/slider';
-import {MatNativeDateModule} from '@angular/material/core';
+import { MatChipsModule} from '@angular/material/chips';
+import { MatSliderModule} from '@angular/material/slider';
+import { MatNativeDateModule} from '@angular/material/core';
+import { ReservationsTableComponent } from './reservations-table/reservations-table.component';
+import { MatTableModule } from '@angular/material/table'; 
+import { LoginInputComponent } from './login-input/login-input.component';
+import { MatIconModule } from '@angular/material/icon';
+import { RegistrationComponent } from './registration/registration.component';
+import { UsersChipsComponent } from './users-chips/users-chips.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ReservationsComponent,
-    AddReservationComponent
+    AddReservationComponent,
+    ReservationsTableComponent,
+    LoginInputComponent,
+    RegistrationComponent,
+    UsersChipsComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
     RouterModule.forRoot([
-      { path: 'reservations', component: ReservationsComponent},
-      { path: 'add-reservation', component: AddReservationComponent},
+      { path: 'reservations-table', component: ReservationsTableComponent },
+      { path: 'add-reservation', component: AddReservationComponent },
+      { path: 'login-input', component: LoginInputComponent },
+      { path: 'registration', component: RegistrationComponent }
     ]),
     BrowserAnimationsModule,
 
@@ -42,7 +52,9 @@ import {MatNativeDateModule} from '@angular/material/core';
     MatInputModule,
     MatChipsModule,
     MatSliderModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatTableModule,
+    MatIconModule
 
 
   ],
