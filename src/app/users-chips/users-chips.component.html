@@ -1,6 +1,6 @@
-<mat-form-field>
+<mat-form-field class="chips-form-field" appearance="none">
     <mat-label>Users</mat-label>
-    <mat-chip-list #chipList aria-label="Users selection" class="mat-chip-list">
+    <mat-chip-list #chipList aria-label="Users selection">
       <mat-chip *ngFor="let user of users" [selectable]="selectable"
                [removable]="removable" (removed)="remove(user)">
         {{user}}
@@ -13,4 +13,3 @@
              (matChipInputTokenEnd)="add($event)">
     </mat-chip-list>
   </mat-form-field>
-  
