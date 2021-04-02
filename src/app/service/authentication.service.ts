@@ -1,0 +1,30 @@
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { LoginRequest } from '../model/LoginRequest';
+import { Message } from '../model/Message';
+import { catchError, map, tap } from 'rxjs/operators';
+import { CookieService } from 'ngx-cookie-service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthenticationService {
+
+  private loginUrl = 'http://localhost:8080/login';
+
+  constructor(private http: HttpClient, private cookieServzice: CookieService) {
+  }
+
+  loginUser(loginRequest: LoginRequest): any {
+    let enco: any = new HttpHeaders()
+      .set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post<Message>(this.loginUrl, loginRequest, {headers: enco, withCredentials: true});
+  }
+
+  private handleError<T>(operation = 'operation') {
+    return (error: any): Observable<Message> => {
+      return of(new Message(error.message));
+    };
+  }
+}

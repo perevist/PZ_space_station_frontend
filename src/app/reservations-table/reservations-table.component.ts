@@ -4,8 +4,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortable } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { ReservationsTableDataSource } from './reservations-table-datasource';
-import { Reservation } from 'src/app/reservations';
-import { ReservationsService } from 'src/app/reservations.service';
+import { Reservation } from 'src/app/model/reservations';
+import { ReservationsService } from 'src/app/service/reservations.service';
 
 @Component({
   selector: 'app-reservations-table',

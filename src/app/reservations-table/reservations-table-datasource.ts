@@ -3,14 +3,16 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
-import { ReservationsService } from 'src/app/reservations.service';
-import { Reservation } from 'src/app/reservations';
+import { ReservationsService } from 'src/app/service/reservations.service';
+import { Reservation } from 'src/app/model/reservations';
 import { Component, Directive, Injectable, OnInit } from '@angular/core';
 
 @Injectable()
 export class ReservationsTableDataSource extends DataSource<Reservation> implements OnInit{
   data: Reservation[];/// = [{id:1, ownerFirstName:"w", ownerLastName:"a", workSiteId: 3, startDate: "123", endDate: "654"}];
   reservations: Reservation[];
+
+  test: Reservation;
   
 //  paginator: MatPaginator | undefined;
 //  sort: MatSort | undefined;

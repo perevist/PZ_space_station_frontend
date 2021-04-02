@@ -1,9 +1,9 @@
 <mat-card class="card">
     <mat-card-content>
 
-        <mat-form-field appearance="fill" [floatLabel]="loginValue" class="input-form-field">
+        <mat-form-field appearance="fill" [floatLabel]="loginValue" class="input-form-field" [formGroup]="loginControl">
             <mat-label> Nazwa użytkownika </mat-label>
-            <input matInput placeholder="Nazwa użtykownika" #login required minlength="6">
+            <input matInput placeholder="Nazwa użytkownika" #login required minlength="4" formControlName="username">
             <button mat-button *ngIf="loginValue" matSuffix mat-icon-button aria-label="Clear" (click)="login.value=''">
                 <mat-icon>close</mat-icon>
             </button>
@@ -13,7 +13,7 @@
 
     <mat-card-content>
 
-    <mat-form-field appearance="fill" [floatLabel]="passwordValue" class="input-form-field" hintLabel="Max 30 znaków" [formGroup]="passwordControl">
+    <mat-form-field appearance="fill" [floatLabel]="passwordValue" class="input-form-field" hintLabel="Max 30 znaków" [formGroup]="loginControl">
         <mat-label>Hasło</mat-label>
         <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required placeholder="Hasło" #password minlength="6" maxlength="30">
         <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -23,7 +23,7 @@
     </mat-card-content>
 
     <mat-card-actions>
-        <button mat-stroked-button class="input-form-field">
+        <button mat-stroked-button class="input-form-field" (click)="onSubmit()">
             Zaloguj
         </button>
     </mat-card-actions>

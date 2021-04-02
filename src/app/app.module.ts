@@ -24,6 +24,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { UsersChipsComponent } from './users-chips/users-chips.component';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 
   ],
   providers: [
-    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher  }],
+    { 
+      provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher
+    },
+    CookieService
+  ],
+    
   bootstrap: [AppComponent]
 })
 export class AppModule { }
