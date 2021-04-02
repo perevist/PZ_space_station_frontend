@@ -1,15 +1,30 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm, FormControl, Validators, FormGroupDirective } from '@angular/forms';
+import { ErrorStateMatcher} from '@angular/material/core';
 import { User } from 'src/app/user'
 import { RegistrationService } from '../registration.service';
 import { UserRegistrationData } from '../user-registration-data';
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
-export class RegistrationComponent implements OnInit {
 
+export class RegistrationComponent implements OnInit {
+  emailFormControl = new FormControl('', [
+    Validators.required,
+    Validators.email,
+  ])
+
+  matcher = new MyErrorStateMatcher();
   constructor(private registrationService : RegistrationService) { }
 
   ngOnInit(): void {
@@ -33,7 +48,6 @@ export class RegistrationComponent implements OnInit {
     user.username = this.usernameValue
 
     let user2 : User;
-  
 
     this.registrationService.registerUser(user).subscribe( u => this.firstNameValue = u.id.toString()) // return user
   }

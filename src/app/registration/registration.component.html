@@ -1,63 +1,65 @@
 <mat-card class="card">
     <mat-card-content>
-        <mat-form-field appearance="fill" [floatLabel]="usernameValue" class="input-form-field" hintLabel="Max 15 znaków">
+        <mat-form-field appearance="fill" [floatLabel]="usernameValue" class="input-form-field" hintLabel="Min. 6 znaków">
             <mat-label> Nazwa użytkownika </mat-label>
-            <input matInput placeholder="Nazwa użytkownika" #username maxlength="15">
+            <input matInput placeholder="Nazwa użytkownika" #username required minlength="6">
             <button mat-button *ngIf="usernameValue" matSuffix mat-icon-button aria-label="Clear" (click)="username.value=''">
                 <mat-icon>close</mat-icon>
             </button>
-            <mat-hint align="end">{{username.value?.length || 0}}/15</mat-hint>
         </mat-form-field>
     
         <pre></pre>
 
-        <mat-form-field appearance="fill" [floatLabel]="passwordValue" class="input-form-field" hintLabel="Max 20 znaków">
+        <mat-form-field appearance="fill" [floatLabel]="passwordValue" class="input-form-field" hintLabel="Hasło musi mieć 6-30 znaków">
             <mat-label>Hasło</mat-label>
-            <input matInput type="text" placeholder="Hasło" #password maxlength="20">
+            <input matInput type="text" placeholder="Hasło" #password required minlength="6" maxlength="30">
             <button mat-button *ngIf="passwordValue" matSuffix mat-icon-button aria-label="Clear" (click)="password.value=''">
                 <mat-icon>close</mat-icon>
             </button>
-            <mat-hint align="end">{{password.value?.length || 0}}/20</mat-hint>
+            <mat-hint align="end">{{password.value?.length || 0}}/30</mat-hint>
         </mat-form-field>
 
         <pre></pre>
 
-        <mat-form-field appearance="fill" [floatLabel]="firstNameValue" class="input-form-field" hintLabel="Max 20 znaków">
+        <mat-form-field appearance="fill" [floatLabel]="firstNameValue" class="input-form-field">
             <mat-label>Imię</mat-label>
-            <input matInput type="text" placeholder="Imie" #firstName maxlength="20">
+            <input matInput type="text" placeholder="Imie" #firstName required>
             <button mat-button *ngIf="firstNameValue" matSuffix mat-icon-button aria-label="Clear" (click)="firstName.value=''">
                 <mat-icon>close</mat-icon>
             </button>
-            <mat-hint align="end">{{firstName.value?.length || 0}}/20</mat-hint>
         </mat-form-field>
 
         <pre></pre>
 
-        <mat-form-field appearance="fill" [floatLabel]="lastNameValue" class="input-form-field" hintLabel="Max 20 znaków">
+        <mat-form-field appearance="fill" [floatLabel]="lastNameValue" class="input-form-field">
             <mat-label>Nazwisko</mat-label>
-            <input matInput type="text" placeholder="Nazwisko" #lastName maxlength="20">
+            <input matInput type="text" placeholder="Nazwisko" #lastName required>
             <button mat-button *ngIf="lastNameValue" matSuffix mat-icon-button aria-label="Clear" (click)="lastName.value=''">
                 <mat-icon>close</mat-icon>
             </button>
-            <mat-hint align="end">{{lastName.value?.length || 0}}/20</mat-hint>
         </mat-form-field>
 
         <pre></pre>
 
-        <mat-form-field appearance="fill" [floatLabel]="emailValue" class="input-form-field" hintLabel="Max 20 znaków">
+        <mat-form-field appearance="fill" [floatLabel]="emailValue" class="input-form-field">
             <mat-label>Email</mat-label>
-            <input matInput type="text" placeholder="Email" #email maxlength="20">
+            <input matInput type="email" [formControl]="emailFormControl" [errorStateMatcher]="matcher" placeholder="Email" #email required>
             <button mat-button *ngIf="emailValue" matSuffix mat-icon-button aria-label="Clear" (click)="email.value=''">
                 <mat-icon>close</mat-icon>
             </button>
-            <mat-hint align="end">{{email.value?.length || 0}}/20</mat-hint>
+            <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                Proszę wprowadzić prawidłowy email
+            </mat-error>
+            <mat-error *ngIf="emailFormControl.hasError('required')">
+                Pole musi być wypełnione
+            </mat-error>
         </mat-form-field>
 
         <pre></pre>
 
         <mat-form-field appearance="fill" [floatLabel]="phoneNumberValue" class="input-form-field" hintLabel="Numer telefonu musi mieć 9 cyfr">
             <mat-label>Numer telefonu</mat-label>
-            <input matInput type="text" placeholder="Numer telefonu" #phoneNumber maxlength="9">
+            <input matInput type="text" placeholder="Numer telefonu" #phoneNumber required maxlength="9">
             <button mat-button *ngIf="phoneNumberValue" matSuffix mat-icon-button aria-label="Clear" (click)="phoneNumber.value=''">
                 <mat-icon>close</mat-icon>
             </button>

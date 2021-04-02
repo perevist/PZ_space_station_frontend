@@ -1,9 +1,9 @@
-<mat-form-field>
+<mat-form-field class="chips-form-field" appearance="none">
     <mat-label>Users</mat-label>
-    <mat-chip-list #chipList aria-label="Fruit selection">
+    <mat-chip-list #chipList aria-label="Users selection">
       <mat-chip *ngFor="let user of users" [selectable]="selectable"
                [removable]="removable" (removed)="remove(user)">
-        {{user.name}}
+        {{user}}
         <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
       </mat-chip>
       <input placeholder="Nowy użytkownik"
@@ -13,4 +13,3 @@
              (matChipInputTokenEnd)="add($event)">
     </mat-chip-list>
   </mat-form-field>
-  

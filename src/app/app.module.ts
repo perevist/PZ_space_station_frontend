@@ -15,13 +15,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule} from '@angular/material/chips';
 import { MatSliderModule} from '@angular/material/slider';
-import { MatNativeDateModule} from '@angular/material/core';
+import { ErrorStateMatcher, MatNativeDateModule, ShowOnDirtyErrorStateMatcher} from '@angular/material/core';
 import { ReservationsTableComponent } from './reservations-table/reservations-table.component';
 import { MatTableModule } from '@angular/material/table'; 
 import { LoginInputComponent } from './login-input/login-input.component';
 import { MatIconModule } from '@angular/material/icon';
 import { RegistrationComponent } from './registration/registration.component';
 import { UsersChipsComponent } from './users-chips/users-chips.component';
+import { MatSelectModule } from '@angular/material/select';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,7 @@ import { UsersChipsComponent } from './users-chips/users-chips.component';
       { path: 'registration', component: RegistrationComponent }
     ]),
     BrowserAnimationsModule,
+    ReactiveFormsModule,
 
     // Material Components
     MatButtonModule,
@@ -54,11 +57,13 @@ import { UsersChipsComponent } from './users-chips/users-chips.component';
     MatSliderModule,
     MatNativeDateModule,
     MatTableModule,
-    MatIconModule
+    MatIconModule,
+    MatSelectModule
 
 
   ],
-  providers: [],
+  providers: [
+    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
