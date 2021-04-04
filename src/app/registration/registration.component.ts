@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm, FormControl, Validators, FormGroupDirective } from '@angular/forms';
+import { NgForm, FormControl, Validators, FormGroupDirective, FormGroup } from '@angular/forms';
 import { ErrorStateMatcher} from '@angular/material/core';
-// import { User } from 'src/app/user'
-// import { RegistrationService } from '../registration.service';
-// import { UserRegistrationData } from '../user';
+import { RegistrationRequest } from '../model/RegistrationRequest';
+import { RegistrationService } from '../service/registration.service';
+import { RegistrationResponse } from '../model/RegistrationResponse';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -19,17 +19,22 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 
 export class RegistrationComponent implements OnInit {
-  emailFormControl = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ])
+  emailFormControl = new FormControl('', [ Validators.required, Validators.email ])
+
+  registrationFormGroup: FormGroup = new FormGroup({
+    email: this.emailFormControl,
+    firstName: new FormControl(),
+    lastName: new FormControl(),
+    password: new FormControl(),
+    phoneNumber: new FormControl(),
+    username: new FormControl()
+  })
 
   matcher = new MyErrorStateMatcher();
-  // constructor(private registrationService : RegistrationService) { }
-  constructor() { }
 
-  ngOnInit(): void {
-  }
+  constructor( private registrationService: RegistrationService ) { }
+
+  ngOnInit(): void { }
 
   emailValue = 'Email';
   firstNameValue = 'First name';
@@ -38,20 +43,15 @@ export class RegistrationComponent implements OnInit {
   phoneNumberValue = 'Phone number';
   usernameValue = 'Username';
 
+  registrationRequest: RegistrationRequest;
+
   registrationUser(){
-    // let user : UserRegistrationData;
-    
-    // user.email = this.emailValue,
-    // user.firstName = this.firstNameValue,
-    // user.lastName = this.lastNameValue,
-    // user.password = this.passwordValue,
-    // user.phoneNumber = this.phoneNumberValue,
-    // user.username = this.usernameValue
-
-    // let user2 : User;
-
-    // this.registrationService.registerUser(user).subscribe( u => this.firstNameValue = u.id.toString()) // return user
+    this.registrationRequest = this.registrationFormGroup.value;
+    this.registrationService.registerUser(this.registrationRequest)
+        .subscribe(msg => {
+          console.log(msg) // RegistrationResponse
+        }, error => {
+          console.log(error.message)
+        });
   }
-  
-
 }

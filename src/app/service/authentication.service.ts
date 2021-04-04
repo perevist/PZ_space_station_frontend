@@ -11,15 +11,15 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class AuthenticationService {
 
-  private loginUrl = 'http://localhost:8080/login';
+  private LOGIN_URL = 'http://localhost:8080/login';
 
-  constructor(private http: HttpClient, private cookieServzice: CookieService) {
+  constructor(private http: HttpClient, private cookieService: CookieService) {
   }
 
   loginUser(loginRequest: LoginRequest): any {
     let enco: any = new HttpHeaders()
       .set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.post<Message>(this.loginUrl, loginRequest, {headers: enco, withCredentials: true});
+    return this.http.post<Message>(this.LOGIN_URL, loginRequest, {headers: enco, withCredentials: true});
   }
 
   private handleError<T>(operation = 'operation') {
