@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 
+export var logged: boolean = false;
+export var firstName: string;
+export var lastName: string;
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,5 +11,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'SpaceStation-frontend';
-  logged: boolean = false;
+
 }

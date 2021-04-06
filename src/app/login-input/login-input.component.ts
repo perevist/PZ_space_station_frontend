@@ -5,6 +5,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { LoginInfoComponent } from '../login-info/login-info.component';
 import { LoginRequest } from '../model/LoginRequest';
 import { AuthenticationService } from '../service/authentication.service';
+import { logged, firstName, lastName } from 'src/app/app.component';
+import { CurrentUserService } from '../service/current-user.service';
+import { UserResponseDto } from '../model/UserResponseDto';
 
 @Component({
     selector: 'app-login-input',
@@ -14,7 +17,8 @@ import { AuthenticationService } from '../service/authentication.service';
 
 export class LoginInputComponent{
     constructor(private authService: AuthenticationService,
-                public dialog: MatDialog) {}
+                public dialog: MatDialog
+                ) {}
 
     loginControl: FormGroup = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.min(3)]),
@@ -23,10 +27,8 @@ export class LoginInputComponent{
 
     info: string;
     success: boolean;
-
     loginValue = 'Enter login';
     passwordValue = 'Enter passoword';
-
     hide = true;
 
     loginRequest: LoginRequest;
@@ -42,6 +44,7 @@ export class LoginInputComponent{
           console.log(msg.message);
           this.info = "Pomyślnie zalogowano";
           this.success = true;
+          
         }, error => {
           console.log(error.message);
           this.info = "Nie udało się zalogować";
@@ -51,6 +54,7 @@ export class LoginInputComponent{
         1000);
         
     }
+
 
     openDialog(): void{
       console.log(this.success);

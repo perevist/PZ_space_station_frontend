@@ -12,10 +12,23 @@ export class RoomsService {
 
   constructor(private http: HttpClient) { }
 
-  getRooms(): Observable<Room[]>{
+  getRooms(floor?: string, startDate?: string, endDate?:string): Observable<Room[]>{
     let enco: any = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    var startDateSearch = "";
+    var endDateSearch = "";
+    var floorSearch = "";
+    if(startDate && endDate){
+      startDateSearch = "&startDate=";
+      endDateSearch = "?endDate=";
+    } else{
+      floorSearch = "?floor=";
+    }
+    if (floor && endDate && startDate){
+      floorSearch = "&floor=";
+    }
 
-    return this.http.get<Room[]>(this.GET_ROOMS, {headers: enco, withCredentials: true});
+
+    return this.http.get<Room[]>(this.GET_ROOMS+endDateSearch+endDate+floorSearch+floor+startDateSearch+startDate, {headers: enco, withCredentials: true});
   }
 
   private handleError<T>(operation = 'operation') {

@@ -7,6 +7,7 @@ import {AuthenticationService} from "../service/authentication.service";
 import { FloorsService } from '../service/floors.service';
 import { UsersService } from '../service/users.service';
 import {RoomsService} from '../service/rooms.service';
+import { WorksitesService } from '../service/worksites.service';
 
 
 export interface ReservatedWorkSite{
@@ -25,7 +26,8 @@ export interface ReservatedWorkSite{
 export class AddReservationComponent implements OnInit {
   constructor(private usersService: UsersService,
               private floorsService: FloorsService,
-              private roomsService: RoomsService) { }
+              private roomsService: RoomsService,
+              private worksiteService: WorksitesService) { }
 
   rangeOfDateReservation: FormGroup = new FormGroup({
     start: new FormControl(new Date()),
@@ -46,7 +48,6 @@ export class AddReservationComponent implements OnInit {
   ngOnInit(): void {
     this.getUsers();
     this.getFloors();
-    this.getRooms();
   }
 
   getUsers(){

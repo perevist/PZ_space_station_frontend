@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {Observable, of} from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Reservation } from '../model/ReservationRequest';
-import {Message} from '../model/Message';
+import { Message } from '../model/Message';
 
 
 @Injectable({
