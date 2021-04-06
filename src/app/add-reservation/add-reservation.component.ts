@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthenticationService} from "../service/authentication.service";
 
 export interface ReservatedWorkSite{
+  
   room: number;
   workSite: number;
 }

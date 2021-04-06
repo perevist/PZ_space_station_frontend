@@ -1,8 +1,6 @@
-export interface Reservation{
+export interface ReservationRequest{
   startDate: string;
   endDate: string;
-  ownerFirstName: string;
+  ownerId: string;
   workSiteId: number;
-  roomId: number;
-  roomWorkSiteId: number;
 }
