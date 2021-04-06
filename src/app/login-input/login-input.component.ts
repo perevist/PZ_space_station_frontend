@@ -12,12 +12,12 @@ import { AuthenticationService } from '../service/authentication.service';
 
 export class LoginInputComponent{
     constructor(private authService: AuthenticationService) {}
-    
+
     loginControl: FormGroup = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.min(3)]),
         password: new FormControl('', [Validators.required, Validators.min(3)])
-    })
-    
+    });
+
     loginValue = 'Enter login';
     passwordValue = 'Enter passoword';
 
@@ -25,15 +25,17 @@ export class LoginInputComponent{
 
     loginRequest: LoginRequest;
 
+  // tslint:disable-next-line:use-lifecycle-interface
     ngOnInit(): void {}
 
+  // tslint:disable-next-line:typedef
     onSubmit() {
         this.loginRequest = this.loginControl.value;
         this.authService.loginUser(this.loginRequest)
         .subscribe(msg => {
-          console.log(msg.message)
+          console.log(msg.message);
         }, error => {
-          console.log(error.message)
+          console.log(error.message);
         });
     }
 }
