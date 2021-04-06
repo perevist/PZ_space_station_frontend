@@ -25,6 +25,8 @@ import { UsersChipsComponent } from './users-chips/users-chips.component';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
+import { LoginInfoComponent } from './login-info/login-info.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { CookieService } from 'ngx-cookie-service';
     ReservationsTableComponent,
     LoginInputComponent,
     RegistrationComponent,
-    UsersChipsComponent
+    UsersChipsComponent,
+    LoginInfoComponent
   ],
   imports: [
     BrowserModule,
@@ -59,7 +62,8 @@ import { CookieService } from 'ngx-cookie-service';
     MatNativeDateModule,
     MatTableModule,
     MatIconModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDialogModule
 
 
   ],

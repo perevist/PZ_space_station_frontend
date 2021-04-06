@@ -1,0 +1,10 @@
+<div mat-dialog-content>
+    <mat-label>{{data.message}}</mat-label>
+</div>
+<pre></pre>
+<div *ngIf="data.success; else elseBlock" class="button-form">
+    <button mat-raised-button mat-dialog-close [routerLink]="['/']">Ok</button>
+</div>
+<ng-template #elseBlock class="button-form">
+    <button mat-raised-button mat-dialog-close>Nie Ok</button>
+</ng-template>
