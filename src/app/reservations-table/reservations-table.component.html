@@ -19,10 +19,23 @@
     </ng-container>
 
     <!-- Worksite ID Column -->
-    <ng-container matColumnDef="workSiteId">
+    <ng-container matColumnDef="worksiteId">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Worksite ID</th>
-      <td mat-cell *matCellDef="let row">{{row.workSiteId}}</td>
+      <td mat-cell *matCellDef="let row">{{row.worksiteId}}</td>
     </ng-container>
+
+    <!-- Reservations maker first name Column -->
+   <ng-container matColumnDef="reservationMakerFirstName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Imię twórcy rezerwacji</th>
+      <td mat-cell *matCellDef="let row">{{row.reservationMakerFirstName}}</td>
+    </ng-container>
+
+    <!-- Reservations maker last name Column -->
+  <ng-container matColumnDef="reservationMakerLastName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nazwisko twórcy rezerwacji</th>
+      <td mat-cell *matCellDef="let row">{{row.reservationMakerLastName}}</td>
+    </ng-container>
+
 
     <!-- Start Date Column -->
     <ng-container matColumnDef="startDate">

@@ -9,7 +9,7 @@ import {Message} from '../model/Message';
   providedIn: 'root'
 })
 export class ReservationsService {
-  readonly GET_RESERVATIONS = 'http://localhost:8080/api/reservations/';
+  readonly GET_RESERVATIONS = 'http://localhost:8080/api/reservations/list';
 
   constructor(private http: HttpClient) { }
 

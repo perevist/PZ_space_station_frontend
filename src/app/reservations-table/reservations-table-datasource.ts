@@ -4,12 +4,12 @@ import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
 import { ReservationsService } from 'src/app/service/reservations.service';
-import { Reservation } from 'src/app/model/reservations';
+import { Reservation } from 'src/app/model/reservationRequest';
 import { Component, Directive, Injectable, OnInit } from '@angular/core';
 
 @Injectable()
 export class ReservationsTableDataSource extends DataSource<Reservation> implements OnInit{
-  data: Reservation[];/// = [{id:1, ownerFirstName:"w", ownerLastName:"a", workSiteId: 3, startDate: "123", endDate: "654"}];
+  data: Reservation[];
   reservations: Reservation[];
 
   test: Reservation;
@@ -24,6 +24,7 @@ export class ReservationsTableDataSource extends DataSource<Reservation> impleme
   }
   ngOnInit(): void {
     this.getReservations();
+    console.log(this.reservations);
     //this.data = this.reservations;
   }
 
