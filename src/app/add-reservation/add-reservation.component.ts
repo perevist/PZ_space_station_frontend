@@ -27,10 +27,15 @@ export class AddReservationComponent implements OnInit {
               private floorsService: FloorsService,
               private roomsService: RoomsService) { }
 
-  rangeOfDateReservation: FormGroup = new FormGroup({
+  dateRange = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl()
+  });
+
+  /*rangeOfDateReservation: FormGroup = new FormGroup({
     start: new FormControl(new Date()),
     end: new FormControl(new Date())
-  }); 
+  }); */
 
   reservatedWorkSites: ReservatedWorkSite[] = [];
   visibleWorkSitesChips = true;
@@ -59,7 +64,7 @@ export class AddReservationComponent implements OnInit {
     this.floorsService.getFloors().subscribe(
       numberOfFloors => {
         for(var i=1; i <= numberOfFloors.numberOfFloors; i++){
-          this.floors[i] = i; 
+          this.floors[i] = i;
         }
       }
     );
@@ -83,7 +88,7 @@ export class AddReservationComponent implements OnInit {
       roomName: string,
       worksiteId: number,
       rangeOfDateReservation: FormGroup): void{
-    
+
     // this.reservatedWorkSites.push({owner, floorNumber, roomName, worksiteId, startDate, endDate});
     const index = this.workSitesIds.indexOf(worksiteId);
     this.workSitesIds.splice(index, 1);
