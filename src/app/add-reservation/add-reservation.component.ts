@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import { Floors } from '../model/Floors';
+import { UserResponseDto } from '../model/UserResponseDto';
 import {AuthenticationService} from "../service/authentication.service";
+import { FloorsService } from '../service/floors.service';
+import { UsersService } from '../service/users.service';
+
 
 export interface ReservatedWorkSite{
   
@@ -14,13 +19,16 @@ export interface ReservatedWorkSite{
 })
 
 export class AddReservationComponent implements OnInit {
-  constructor(private authService: AuthenticationService) { }
+  constructor(private authService: AuthenticationService,
+              private usersService: UsersService,
+              private floorsService: FloorsService) { }
 
   reservatedWorkSites: ReservatedWorkSite[] = [];
   visibleWorkSitesChips = true;
   selectableWorkSitesChips = true;
   removableWorkSitesChips = true;
   addOnBlurWorkSitesChips = true;
+  usersList: UserResponseDto[] = [];
 
   /*reservationControl: FormGroup = new FormGroup({
     startDate: new FormControl('', [Validators.required, Validators.min(3)]),
@@ -30,12 +38,32 @@ export class AddReservationComponent implements OnInit {
     roomId: new FormControl('', [Validators.required, Validators.min(3)])
   });*/
 
-  floors: number[] = [1, 2]; //TODO Zmienić przykład na interface z bazy danych
   rooms: number[] = [1, 2, 3, 4, 5]; //TODO Zmienić przykład na interface z bazy danych
   workSitesIds: number[] = [1, 2, 3, 4, 5] //TODO Zmienić przykład na interface z bazy danych
 
+  numberOfFloors: Floors;
+  floors: number[] = [];
+  ngOnInit(): void {
+    this.getUsers();
+    this.getFloors();
+  }
 
-  ngOnInit(): void {}
+  getUsers(){
+    this.usersService.getUsers().subscribe(
+      users => this.usersList = users
+    );
+  }
+
+  getFloors(){
+    this.floorsService.getFloors().subscribe(
+      numberOfFloors => this.numberOfFloors = numberOfFloors
+    );
+    console.log(this.numberOfFloors);
+    //for(var i=0; i < +this.numberOfFloors.numberOfFloors; i++){
+    //  this.floors[i] = i+1; 
+    //}
+
+  }
 
   add(room:number, workSite:number):void{
     this.reservatedWorkSites.push({room: room, workSite:workSite});
