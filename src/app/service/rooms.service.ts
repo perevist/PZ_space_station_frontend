@@ -28,7 +28,7 @@ export class RoomsService {
     }
 
 
-    return this.http.get<Room[]>(this.GET_ROOMS+endDateSearch+endDate+floorSearch+floor+startDateSearch+startDate, {headers: enco, withCredentials: true});
+    return this.http.get<Room[]>(this.GET_ROOMS, {headers: enco, withCredentials: true});
   }
 
   private handleError<T>(operation = 'operation') {

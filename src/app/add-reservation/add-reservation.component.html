@@ -45,52 +45,49 @@
   <mat-card-content>
       <mat-label>Pokój:</mat-label>
       <mat-form-field apperance="fill" class="input-form">
-          <mat-select #Room [value]="1">
-              <mat-option *ngFor="let room of roomsList" [value]="room">
-                  {{room.name}}
+        <mat-select #Room [value]="1">
+            <mat-option *ngFor="let room of roomsList" [value]="room">
+              {{room.name}}
+            </mat-option>
+        </mat-select>
+      </mat-form-field>
+  </mat-card-content>
+
+
+   <mat-card-content>
+      <mat-label>Numer stanowiska:</mat-label>
+      <mat-form-field apperance="fill" class="input-form">
+          <mat-select #WorkSite>
+              <mat-option *ngFor="let workSite of worksitesList" [value]="workSite">
+                  {{workSite.worksiteInRoomId}}
               </mat-option>
           </mat-select>
       </mat-form-field>
   </mat-card-content>
-<<<<<<< HEAD
-  
-   <mat-card-content>
-=======
 
-
-<!--   <mat-card-content>
->>>>>>> 515715c9bffad14be84a523abf3a92e7b3ce4195
-      <mat-label>Numer stanowiska:</mat-label>
-      <mat-form-field apperance="fill" class="input-form">
-          <mat-select #WorkSite>
-              <mat-option *ngFor="let workSite of workSitesIds" [value]="workSite">
-                  {{workSite}}
-              </mat-option>
-          </mat-select>
-      </mat-form-field>
-<<<<<<< HEAD
-  </mat-card-content> 
-=======
-  </mat-card-content>-->
->>>>>>> 515715c9bffad14be84a523abf3a92e7b3ce4195
-
-<!--
+<mat-card-content>
   <mat-form-field class="chips-form" appearance="none">
     <mat-chip-list #chipList aria-label="WorkSites" class="mat-chip-list-wrapper" required>
-      <mat-chip *ngFor="let workSite of reservatedWorkSites" [selectable]="selectableWorkSitesChips"
-               [removable]="removableWorkSitesChips" (removed)="remove(workSite)">
-         Pokój:{{workSite.room}} Miejsce:{{workSite.workSite}}
+      <mat-chip *ngFor="let worksite of reservatedWorkSites" [selectable]="selectableWorkSitesChips">
+         {{worksite.owner.firstName}} {{worksite.owner.lastName}} Piętro:{{worksite.floorNumber}} {{worksite.roomName}}
+         Numer miejsca:{{worksite.worksiteId}} Od: {{worksite.startDate}} do {{worksite.endDate}}
         <mat-icon matChipRemove *ngIf="removableWorkSitesChips">cancel</mat-icon>
       </mat-chip>
     </mat-chip-list>
   </mat-form-field>
 </mat-card-content>
--->
+
 
     <mat-card-actions>
-        <button mat-stroked-button class ="input-form-field">
-            Dodaj
+        <button mat-stroked-button class ="input-form-field" (click)="add(User.value, Floor.value, Room.value.name, WorkSite.value.worksiteId, dateRange.value.start,dateRange.value.end)" >
+            Dodaj rezerwację
         </button>
     </mat-card-actions>
+
+    <mat-card-actions>
+      <button mat-stroked-button class ="input-form-field">
+          Zarezerwuj
+      </button>
+  </mat-card-actions>
 
   </mat-card>

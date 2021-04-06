@@ -12,7 +12,7 @@ export class WorksitesService {
 
   constructor(private http: HttpClient) { }
 
-  getUsers(): Observable<Worksite[]>{
+  getWorksites(): Observable<Worksite[]>{
     let enco: any = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.get<Worksite[]>(this.GET_WORKSITES, {headers: enco, withCredentials: true});

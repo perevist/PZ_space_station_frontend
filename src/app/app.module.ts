@@ -27,6 +27,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginInfoComponent } from './login-info/login-info.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     { 
       provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher
     },
-    CookieService
+    CookieService,
+    DatePipe
   ],
     
   bootstrap: [AppComponent]
