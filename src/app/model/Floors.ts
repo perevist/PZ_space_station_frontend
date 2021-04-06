@@ -1,3 +1,3 @@
 export interface Floors{
-    numberOfFloors: string;
+    numberOfFloors: number;
 }

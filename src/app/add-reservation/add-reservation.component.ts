@@ -1,16 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import { Floors } from '../model/Floors';
+import { Room } from '../model/Room';
 import { UserResponseDto } from '../model/UserResponseDto';
 import {AuthenticationService} from "../service/authentication.service";
 import { FloorsService } from '../service/floors.service';
 import { UsersService } from '../service/users.service';
+import {RoomsService} from '../service/rooms.service';
 
 
 export interface ReservatedWorkSite{
-  
-  room: number;
-  workSite: number;
+  owner:	UserResponseDto;
+  floorNumber: number;
+  roomName: string;
+  worksiteId: number;
+  rangeOfDateReservation: FormGroup;
 }
 
 @Component({
@@ -19,9 +23,14 @@ export interface ReservatedWorkSite{
 })
 
 export class AddReservationComponent implements OnInit {
-  constructor(private authService: AuthenticationService,
-              private usersService: UsersService,
-              private floorsService: FloorsService) { }
+  constructor(private usersService: UsersService,
+              private floorsService: FloorsService,
+              private roomsService: RoomsService) { }
+
+  rangeOfDateReservation: FormGroup = new FormGroup({
+    start: new FormControl(new Date()),
+    end: new FormControl(new Date())
+  }); 
 
   reservatedWorkSites: ReservatedWorkSite[] = [];
   visibleWorkSitesChips = true;
@@ -29,19 +38,10 @@ export class AddReservationComponent implements OnInit {
   removableWorkSitesChips = true;
   addOnBlurWorkSitesChips = true;
   usersList: UserResponseDto[] = [];
+  roomsList: Room[] = [];
 
-  /*reservationControl: FormGroup = new FormGroup({
-    startDate: new FormControl('', [Validators.required, Validators.min(3)]),
-    endDate: new FormControl('', [Validators.required, Validators.min(3)]),
-    ownerFirstName: new FormControl('', [Validators.required, Validators.min(3)]),
-    workSiteId: new FormControl('', [Validators.required, Validators.min(3)]),
-    roomId: new FormControl('', [Validators.required, Validators.min(3)])
-  });*/
-
-  rooms: number[] = [1, 2, 3, 4, 5]; //TODO Zmienić przykład na interface z bazy danych
   workSitesIds: number[] = [1, 2, 3, 4, 5] //TODO Zmienić przykład na interface z bazy danych
 
-  numberOfFloors: Floors;
   floors: number[] = [];
   ngOnInit(): void {
     this.getUsers();
@@ -56,18 +56,33 @@ export class AddReservationComponent implements OnInit {
 
   getFloors(){
     this.floorsService.getFloors().subscribe(
-      numberOfFloors => this.numberOfFloors = numberOfFloors
+      numberOfFloors => {
+        for(var i=1; i <= numberOfFloors.numberOfFloors; i++){
+          this.floors[i] = i; 
+        }
+      }
     );
-    console.log(this.numberOfFloors);
-    //for(var i=0; i < +this.numberOfFloors.numberOfFloors; i++){
-    //  this.floors[i] = i+1; 
-    //}
+  }
+
+  getRooms(){
+    this.roomsService.getRooms().subscribe(
+      rooms => this.roomsList = rooms
+    );
 
   }
 
-  add(room:number, workSite:number):void{
-    this.reservatedWorkSites.push({room: room, workSite:workSite});
-    const index = this.workSitesIds.indexOf(workSite);
+  testpicker(picker: string){
+    console.log(picker)
+  }
+
+  add(owner:	UserResponseDto,
+      floorNumber: number,
+      roomName: string,
+      worksiteId: number,
+      rangeOfDateReservation: FormGroup): void{
+    
+    // this.reservatedWorkSites.push({owner, floorNumber, roomName, worksiteId, startDate, endDate});
+    const index = this.workSitesIds.indexOf(worksiteId);
     this.workSitesIds.splice(index, 1);
   }
 
@@ -76,7 +91,7 @@ export class AddReservationComponent implements OnInit {
 
     if (index >= 0){
       this.reservatedWorkSites.splice(index, 1);
-      this.workSitesIds.push(workSite.workSite);
+      this.workSitesIds.push(workSite.worksiteId);
       this.workSitesIds.sort();
     }
   }
