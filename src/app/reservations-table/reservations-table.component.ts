@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortable } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { ReservationsTableDataSource } from './reservations-table-datasource';
-import { Reservation } from 'src/app/model/reservations';
+import { Reservation } from 'src/app/model/ReservationRequest';
 import { ReservationsService } from 'src/app/service/reservations.service';
 
 @Component({
@@ -19,7 +19,7 @@ export class ReservationsTableComponent implements AfterViewInit{
   dataSource: ReservationsTableDataSource;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns: string[] = ['id', 'ownerFirstName', 'ownerLastName', 'workSiteId', 'startDate', 'endDate'];
+  displayedColumns: string[] = ['id', 'ownerFirstName', 'ownerLastName', 'worksiteId', 'reservationMakerFirstName', 'reservationMakerLastName', 'startDate', 'endDate'];
 
   constructor(private reservationsService: ReservationsService) {
     this.dataSource = new ReservationsTableDataSource(this.reservationsService);

@@ -1,4 +1,3 @@
-import { A } from '@angular/cdk/keycodes';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
@@ -19,11 +18,6 @@ export class FloorsService {
     let enco: any = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.get<Floors>(this.GET_FLOORS, {headers: enco, withCredentials: true});
-
-    // console.log(A);
-
-    // return A;
-    // // return this.http.get<Floors>(this.GET_FLOORS);
   }
 
   private handleError<T>(operation = 'operation') {

@@ -46,6 +46,7 @@ export class AddReservationComponent implements OnInit {
   ngOnInit(): void {
     this.getUsers();
     this.getFloors();
+    this.getRooms();
   }
 
   getUsers(){
@@ -66,7 +67,9 @@ export class AddReservationComponent implements OnInit {
 
   getRooms(){
     this.roomsService.getRooms().subscribe(
-      rooms => this.roomsList = rooms
+      rooms => {
+        this.roomsList = rooms;
+    }
     );
 
   }
@@ -95,10 +98,4 @@ export class AddReservationComponent implements OnInit {
       this.workSitesIds.sort();
     }
   }
-
-  /*reservationRequest: ReservationRequest;
-
-  onSubmit() {
-
-  }*/
 }
