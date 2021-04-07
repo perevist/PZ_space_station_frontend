@@ -19,7 +19,7 @@ export interface ReservatedWorkSite{
   floorNumber: number;
   roomName: string;
   worksiteId: number;
-  startDate: string;
+  startDate: string
   endDate: string;
  // rangeOfDateReservation: FormGroup;
 }
@@ -48,9 +48,10 @@ export class AddReservationComponent implements OnInit {
   }); */
 
   reservatedWorkSites: ReservatedWorkSite[] = [];
+  reservated: ReservatedWorkSite;
   visibleWorkSitesChips = true;
   selectableWorkSitesChips = true;
-  removableWorkSitesChips = true;
+  removable = true;
   addOnBlurWorkSitesChips = true;
   usersList: UserResponseDto[] = [];
   roomsList: Room[] = [];
@@ -61,8 +62,6 @@ export class AddReservationComponent implements OnInit {
   ngOnInit(): void {
     this.getUsers();
     this.getFloors();
-    this.getRooms();
-    this.getWorksites();
   }
 
   getUsers(){
@@ -81,17 +80,16 @@ export class AddReservationComponent implements OnInit {
     );
   }
 
-  getRooms(){
-    this.roomsService.getRooms().subscribe(
+  getRooms(floors?: number, start?:Date, end?:Date){
+    this.roomsService.getRooms(floors.toString(), start, end).subscribe(
       rooms => {
         this.roomsList = rooms;
     }
     );
-
   }
 
-  getWorksites(){
-    this.worksiteService.getWorksites().subscribe(
+  getWorksites(roomId?: string, start?:Date, end?:Date){
+    this.worksiteService.getWorksites(roomId[roomId.length-1], start, end).subscribe(
       worksite => {this.worksitesList = worksite;}
     )
   }
@@ -124,18 +122,49 @@ export class AddReservationComponent implements OnInit {
 
     let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
     let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
-    this.reservatedWorkSites.push({owner, floorNumber, roomName, worksiteId, startDate:start, endDate:end});
-    //const index = this.worksitesList.indexOf(worksiteId);
-    //this.worksitesList.splice(index, 1);
-  }
-/*
-  remove(workSite: ReservatedWorkSite): void{
-    const index = this.reservatedWorkSites.indexOf(workSite);
 
+    if(!this.check(owner, floorNumber, roomName, worksiteId, start, end)){
+      this.reservatedWorkSites.push({owner, floorNumber, roomName, worksiteId, startDate:start, endDate:end});
+    }
+  }
+
+  check(owner:	UserResponseDto,
+      floorNumber: number,
+      roomName: string,
+      worksiteId: number,
+      startDate: string,
+      endDate: string){
+        for(let i of this.reservatedWorkSites){
+          if(i.owner === owner && i.floorNumber === floorNumber && i.roomName === roomName &&
+            i.worksiteId === worksiteId && i.startDate === startDate && i.endDate === endDate){
+              return true;
+            }
+        }
+        return false;
+      }
+
+
+  checkIndex(owner:	UserResponseDto,
+    floorNumber: number,
+    roomName: string,
+    worksiteId: number,
+    startDate: string,
+    endDate: string){
+      let k = 0;
+      for(let i of this.reservatedWorkSites){
+        if(i.owner === owner && i.floorNumber === floorNumber && i.roomName === roomName &&
+          i.worksiteId === worksiteId && i.startDate === startDate && i.endDate === endDate){
+            return k;
+          }
+          k++;
+      }
+    }
+
+  remove(reservated: ReservatedWorkSite): void{
+
+    let index = this.checkIndex(reservated.owner, reservated.floorNumber, reservated.roomName, reservated.worksiteId, reservated.startDate, reservated.endDate);
     if (index >= 0){
       this.reservatedWorkSites.splice(index, 1);
-      this.worksitesList.push(workSite.worksiteId);
-      this.worksitesList.sort();
     }
-  }*/
+  }
 }
