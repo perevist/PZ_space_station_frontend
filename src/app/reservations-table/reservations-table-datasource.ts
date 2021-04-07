@@ -4,15 +4,15 @@ import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
 import { ReservationsService } from 'src/app/service/reservations.service';
-import { Reservation } from 'src/app/model/reservationRequest';
+import { ReservationResponse } from 'src/app/model/ReservationResponse';
 import { Component, Directive, Injectable, OnInit } from '@angular/core';
 
 @Injectable()
-export class ReservationsTableDataSource extends DataSource<Reservation> implements OnInit{
-  data: Reservation[];
-  reservations: Reservation[];
+export class ReservationsTableDataSource extends DataSource<ReservationResponse> implements OnInit{
+  data: ReservationResponse[];
+  reservations: ReservationResponse[];
 
-  test: Reservation;
+  test: ReservationResponse;
   
 //  paginator: MatPaginator | undefined;
 //  sort: MatSort | undefined;
@@ -34,7 +34,7 @@ export class ReservationsTableDataSource extends DataSource<Reservation> impleme
     );
   }
 
-  connect(): Observable<Reservation[]> {
+  connect(): Observable<ReservationResponse[]> {
  //   console.log(this.sort);
  //   console.log(this.paginator);
  /*   if (this.paginator && this.sort) {

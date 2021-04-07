@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortable } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { ReservationsTableDataSource } from './reservations-table-datasource';
-import { Reservation } from 'src/app/model/ReservationRequest';
+import { ReservationResponse } from 'src/app/model/ReservationResponse';
 import { ReservationsService } from 'src/app/service/reservations.service';
 
 @Component({
@@ -15,7 +15,7 @@ import { ReservationsService } from 'src/app/service/reservations.service';
 export class ReservationsTableComponent implements AfterViewInit{
  // @ViewChild(MatPaginator) paginator!: MatPaginator;
  // @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable) table!: MatTable<Reservation>;
+  @ViewChild(MatTable) table!: MatTable<ReservationResponse>;
   dataSource: ReservationsTableDataSource;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */

@@ -10,6 +10,8 @@ import {RoomsService} from '../service/rooms.service';
 import { WorksitesService } from '../service/worksites.service';
 import { Worksite } from '../model/Worksite';
 import { DatePipe } from '@angular/common';
+import { ReservationsService } from '../service/reservations.service';
+import {ReservationRequest} from '../model/ReservationRequest';
 
 
 export interface ReservatedWorkSite{
@@ -32,6 +34,7 @@ export class AddReservationComponent implements OnInit {
               private floorsService: FloorsService,
               private roomsService: RoomsService,
               private worksiteService: WorksitesService,
+              private reservationService: ReservationsService,
               private datepipe: DatePipe) { }
 
   dateRange = new FormGroup({
@@ -91,6 +94,24 @@ export class AddReservationComponent implements OnInit {
     this.worksiteService.getWorksites().subscribe(
       worksite => {this.worksitesList = worksite;}
     )
+  }
+
+  reservation: ReservationRequest;
+  postReservations(){
+    for(var reservatedWorkSite of this.reservatedWorkSites){
+      this.reservation = {startDate:reservatedWorkSite.startDate,
+                          endDate:reservatedWorkSite.endDate,
+                          ownerId:reservatedWorkSite.owner.id,
+                          worksiteId:reservatedWorkSite.worksiteId};
+      console.log(this.reservation);
+      this.reservationService.postReservation(this.reservation)
+      .subscribe(msg => {
+        console.log(msg) // RservationResponse
+      }, error => {
+        console.log(error.message)
+      });
+    }
+    this.reservatedWorkSites = [];
   }
 
 
