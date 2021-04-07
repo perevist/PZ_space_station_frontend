@@ -51,7 +51,7 @@
 
 
    <mat-card-content>
-      <mat-label>Numer stanowiska:</mat-label>
+      <mat-label>Numer stanowiska w pokoju:</mat-label>
       <mat-form-field apperance="fill" class="input-form">
           <mat-select #WorkSite>
               <mat-option *ngFor="let workSite of worksitesList" [value]="workSite">
@@ -63,11 +63,15 @@
 
 <mat-card-content>
   <mat-form-field class="chips-form" appearance="none">
-    <mat-chip-list #chipList aria-label="WorkSites" class="mat-chip-list-wrapper" required>
+    <mat-chip-list #chipList aria-label="WorkSites" class="chips-form" required>
       <mat-chip *ngFor="let worksite of reservatedWorkSites" [selectable]="selectableWorkSitesChips" [removable]="removable"
       (removed)="remove(worksite)">
          {{worksite.owner.firstName}} {{worksite.owner.lastName}} Piętro:{{worksite.floorNumber}} {{worksite.roomName}}
+<<<<<<< HEAD
          Numer miejsca:{{worksite.worksite.worksiteInRoomId}} Od: {{worksite.startDate}} do {{worksite.endDate}}
+=======
+         Numer stanowiska:{{worksite.worksiteId}} Od: {{worksite.startDate}} do {{worksite.endDate}}
+>>>>>>> fef7f279a81b0b8137e88c1ab8b94edc8ef46179
         <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
       </mat-chip>
     </mat-chip-list>
