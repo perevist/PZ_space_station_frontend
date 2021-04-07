@@ -57,7 +57,6 @@ export class LoginInputComponent{
 
 
     openDialog(): void{
-      console.log(this.success);
       const dialogRef = this.dialog.open(LoginInfoComponent, {data: {message:this.info, success:this.success},width: '250px'});
     }
 

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
@@ -10,21 +11,45 @@ import { Room } from '../model/Room';
 export class RoomsService {
   private GET_ROOMS = "http://localhost:8080/api/rooms/list";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private datepipe: DatePipe) { }
 
-  getRooms(floor?: string, startDate?: string, endDate?:string): Observable<Room[]>{
+  getRooms(floor?: string, startDate?: Date, endDate?:Date): Observable<Room[]>{
     let enco: any = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     var startDateSearch = "";
     var endDateSearch = "";
     var floorSearch = "";
-    if(startDate && endDate){
+    let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
+    let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
+    if(startDate && !floor && !endDate){
+      startDateSearch = "?startDate=";
+      let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
+      return this.http.get<Room[]>(this.GET_ROOMS+startDateSearch+start, {headers: enco, withCredentials: true});
+    }
+    if(startDate && endDate && !floor){
+      endDateSearch = "?endDate=";
+      startDateSearch = "&startDate=";
+      let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
+      let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
+      return this.http.get<Room[]>(this.GET_ROOMS+endDateSearch+end+startDateSearch+start, {headers: enco, withCredentials: true});
+    }
+    if(floor && !startDate){
+      floorSearch = "?floor=";
+      return this.http.get<Room[]>(this.GET_ROOMS+floorSearch+floor, {headers: enco, withCredentials: true});
+    }
+    if(floor && startDate && !endDate){
+      floorSearch = "?floor=";
+      startDateSearch = "&startDate=";
+      let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
+      return this.http.get<Room[]>(this.GET_ROOMS+floorSearch+floor+startDateSearch+start, {headers: enco, withCredentials: true});
+    }
+    if(floor && startDate && endDate){
+      floorSearch = "&floor=";
       startDateSearch = "&startDate=";
       endDateSearch = "?endDate=";
-    } else{
-      floorSearch = "?floor=";
-    }
-    if (floor && endDate && startDate){
-      floorSearch = "&floor=";
+      let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
+      let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
+      return this.http.get<Room[]>(this.GET_ROOMS+endDateSearch+end+floorSearch+floor+startDateSearch+start, {headers: enco, withCredentials: true});
     }
 
 

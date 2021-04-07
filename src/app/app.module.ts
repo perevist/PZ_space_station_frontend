@@ -28,6 +28,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { LoginInfoComponent } from './login-info/login-info.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
+import { RegistrationInfoComponent } from './registration-info/registration-info.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { DatePipe } from '@angular/common';
     LoginInputComponent,
     RegistrationComponent,
     UsersChipsComponent,
-    LoginInfoComponent
+    LoginInfoComponent,
+    RegistrationInfoComponent
   ],
   imports: [
     BrowserModule,
