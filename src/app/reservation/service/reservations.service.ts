@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ReservationResponse } from '../model/ReservationResponse';
-import { Message } from '../model/Message';
-import { ReservationRequest } from '../model/ReservationRequest';
+import { Message } from 'src/app/model/Message';
 import { CookieService } from 'ngx-cookie-service';
+import { ReservationRequest } from '../model/ReservationRequest';
+import { ReservationResponse } from '../model/ReservationResponse';
 
 
 @Injectable({

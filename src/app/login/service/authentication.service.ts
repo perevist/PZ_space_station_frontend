@@ -2,7 +2,7 @@ import {HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse} from '@angular
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { LoginRequest } from '../model/LoginRequest';
-import { Message } from '../model/Message';
+import { Message } from 'src/app/model/Message';
 import { catchError, map, tap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 

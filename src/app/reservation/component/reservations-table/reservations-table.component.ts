@@ -4,14 +4,15 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortable } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { ReservationsTableDataSource } from './reservations-table-datasource';
-import { ReservationResponse } from 'src/app/model/ReservationResponse';
-import { ReservationsService } from 'src/app/service/reservations.service';
+import { ReservationResponse } from '../../model/ReservationResponse';
+import { ReservationsService } from '../../service/reservations.service';
 
 @Component({
   selector: 'app-reservations-table',
   templateUrl: './reservations-table.component.html',
   styleUrls: ['./reservations-table.component.css']
 })
+
 export class ReservationsTableComponent implements AfterViewInit{
  // @ViewChild(MatPaginator) paginator!: MatPaginator;
  // @ViewChild(MatSort) sort!: MatSort;

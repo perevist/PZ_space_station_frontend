@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Message } from '../model/Message';
+import { Message } from '../../model/Message';
 import { RegistrationRequest } from '../model/RegistrationRequest';
 
 const httpOptions = {

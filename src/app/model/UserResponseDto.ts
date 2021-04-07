@@ -1,9 +1,8 @@
 export interface UserResponseDto{
-    email: string;
-    firstName: string;
     id: number;
+    username: string;
+    firstName: string;
     lastName: string;
     phoneNumber: string;
-    username: string;
-    
+    email: string;
 }

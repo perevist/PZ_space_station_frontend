@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm, FormControl, Validators, FormGroupDirective, FormGroup } from '@angular/forms';
 import { ErrorStateMatcher} from '@angular/material/core';
-import { RegistrationRequest } from '../model/RegistrationRequest';
-import { RegistrationService } from '../service/registration.service';
-import { RegistrationResponse } from '../model/RegistrationResponse';
+import { RegistrationRequest } from '../../model/RegistrationRequest';
+import { RegistrationService } from '../../service/registration.service';
 import { MatDialog } from '@angular/material/dialog';
 import { RegistrationInfoComponent } from '../registration-info/registration-info.component';
 
@@ -21,6 +20,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 
 export class RegistrationComponent implements OnInit {
+
   emailFormControl = new FormControl('', [ Validators.required, Validators.email ])
 
   registrationFormGroup: FormGroup = new FormGroup({
@@ -34,17 +34,13 @@ export class RegistrationComponent implements OnInit {
 
   matcher = new MyErrorStateMatcher();
 
-  constructor( private registrationService: RegistrationService,
-               public dialog: MatDialog ) { }
+  constructor( 
+    private registrationService: RegistrationService,
+    public dialog: MatDialog 
+  ) { }
 
   ngOnInit(): void { }
 
-  emailValue = 'Email';
-  firstNameValue = 'First name';
-  lastNameValue = 'Last name';
-  passwordValue = 'Password';
-  phoneNumberValue = 'Phone number';
-  usernameValue = 'Username';
   info = '';
   success: boolean = false;
 
@@ -53,21 +49,22 @@ export class RegistrationComponent implements OnInit {
   registrationUser(){
     this.registrationRequest = this.registrationFormGroup.value;
     this.registrationService.registerUser(this.registrationRequest)
-        .subscribe(msg => {
-          console.log(msg) // RegistrationResponse
-          this.info = "Pomyślnie zarejestrowano";
-          this.success = true;
-        }, error => {
-          console.log(error.message)
-          this.info = 'Rejeestracja nie powiodła się';
-          this.success = false;
-        });
-        setTimeout(() => {this.openDialog();},
-        1500);
-    }
+      .subscribe(msg => {
+        console.log(msg) // RegistrationResponse
+        this.info = "Pomyślnie zarejestrowano";
+        this.success = true;
+      }, error => {
+        console.log(error.message)
+        this.info = 'Rejeestracja nie powiodła się';
+        this.success = false;
+      }
+    );
+    setTimeout(() => {this.openDialog();},
+    1500);
+  }
 
-    openDialog(): void{
-      const dialogRef = this.dialog.open(RegistrationInfoComponent, {data: {message:this.info, success:this.success},width: '250px'});
-    }
+  openDialog(): void{
+    const dialogRef = this.dialog.open(RegistrationInfoComponent, {data: {message:this.info, success:this.success},width: '250px'});
+  }
   
 }

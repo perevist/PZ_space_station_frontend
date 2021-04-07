@@ -4,71 +4,31 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AddReservationComponent } from './add-reservation/add-reservation.component';
-
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatChipsModule} from '@angular/material/chips';
-import { MatSliderModule} from '@angular/material/slider';
-import { ErrorStateMatcher, MatNativeDateModule, ShowOnDirtyErrorStateMatcher} from '@angular/material/core';
-import { ReservationsTableComponent } from './reservations-table/reservations-table.component';
-import { MatTableModule } from '@angular/material/table'; 
-import { LoginInputComponent } from './login-input/login-input.component';
-import { MatIconModule } from '@angular/material/icon';
-import { RegistrationComponent } from './registration/registration.component';
-import { UsersChipsComponent } from './users-chips/users-chips.component';
-import { MatSelectModule } from '@angular/material/select';
+import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher} from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
-import { LoginInfoComponent } from './login-info/login-info.component';
-import { MatDialogModule } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
-import { RegistrationInfoComponent } from './registration-info/registration-info.component';
+import { ReservationModule } from './reservation/reservation.module';
+import { LoginModule } from './login/login.module';
+import { RegistrationModule } from './registration/registration.module';
+import { RoomModule } from './room/room.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    AddReservationComponent,
-    ReservationsTableComponent,
-    LoginInputComponent,
-    RegistrationComponent,
-    UsersChipsComponent,
-    LoginInfoComponent,
-    RegistrationInfoComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    RouterModule.forRoot([
-      { path: 'reservations-table', component: ReservationsTableComponent },
-      { path: 'add-reservation', component: AddReservationComponent },
-      { path: 'login-input', component: LoginInputComponent },
-      { path: 'registration', component: RegistrationComponent }
-    ]),
     BrowserAnimationsModule,
     ReactiveFormsModule,
 
-    // Material Components
-    MatButtonModule,
-    MatCardModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatChipsModule,
-    MatSliderModule,
-    MatNativeDateModule,
-    MatTableModule,
-    MatIconModule,
-    MatSelectModule,
-    MatDialogModule
-
-
+    LoginModule,
+    RegistrationModule,
+    ReservationModule,
+    RoomModule
   ],
   providers: [
     { 

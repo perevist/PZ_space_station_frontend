@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from "@angular/forms";
 import { DatePipe } from '@angular/common';
-import { UsersService } from '../service/users.service';
-import { FloorsService } from '../service/floors.service';
-import { RoomsService } from '../service/rooms.service';
-import { WorksitesService } from '../service/worksites.service';
-import { UserResponseDto } from '../model/UserResponseDto';
-import { Room } from '../model/Room';
-import { Worksite } from '../model/Worksite';
-import { ReservationsService } from '../service/reservations.service';
-import { ReservationRequest } from '../model/ReservationRequest';
+import { UsersService } from 'src/app/service/users.service';
+import { FloorsService } from 'src/app/service/floors.service';
+import { RoomsService } from 'src/app/service/rooms.service';
+import { WorksitesService } from 'src/app/service/worksites.service';
+import { UserResponseDto } from 'src/app/model/UserResponseDto';
+import { Room } from 'src/app/model/Room';
+import { Worksite } from 'src/app/model/Worksite';
+import { ReservationsService } from '../../service/reservations.service';
+import { ReservationRequest } from '../../model/ReservationRequest';
 
 export interface ReservatedWorkSite{
   owner:	UserResponseDto;

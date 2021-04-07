@@ -1,7 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { LoginInputComponent } from '../login-input/login-input.component';
-import { LoginInfoData } from '../model/LoginInfoData';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   templateUrl: './login-info.component.html',
@@ -15,8 +13,6 @@ export class LoginInfoComponent implements OnInit {
   onOkClick(): void{
     this.dialogRef.close();
   }
-
-
 
   ngOnInit(): void {
   }

@@ -3,8 +3,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
-import { ReservationsService } from 'src/app/service/reservations.service';
-import { ReservationResponse } from 'src/app/model/ReservationResponse';
+import { ReservationsService } from '../../service/reservations.service';
+import { ReservationResponse } from '../../model/ReservationResponse';
 import { Component, Directive, Injectable, OnInit } from '@angular/core';
 
 @Injectable()
