@@ -18,10 +18,9 @@ export interface ReservatedWorkSite{
   owner:	UserResponseDto;
   floorNumber: number;
   roomName: string;
-  worksiteId: number;
+  worksite: Worksite;
   startDate: string
   endDate: string;
- // rangeOfDateReservation: FormGroup;
 }
 
 @Component({
@@ -42,23 +41,20 @@ export class AddReservationComponent implements OnInit {
     end: new FormControl()
   });
 
-  /*rangeOfDateReservation: FormGroup = new FormGroup({
-    start: new FormControl(new Date()),
-    end: new FormControl(new Date())
-  }); */
-
-  reservatedWorkSites: ReservatedWorkSite[] = [];
-  reservated: ReservatedWorkSite;
   visibleWorkSitesChips = true;
   selectableWorkSitesChips = true;
   removable = true;
   addOnBlurWorkSitesChips = true;
+  floors: number[] = [];
   usersList: UserResponseDto[] = [];
   roomsList: Room[] = [];
   worksitesList: Worksite[] = [];
+  
+  reservatedWorkSites: ReservatedWorkSite[] = [];
+  reservated: ReservatedWorkSite;
+  reservation: ReservationRequest;
 
 
-  floors: number[] = [];
   ngOnInit(): void {
     this.getUsers();
     this.getFloors();
@@ -94,13 +90,12 @@ export class AddReservationComponent implements OnInit {
     )
   }
 
-  reservation: ReservationRequest;
   postReservations(){
     for(var reservatedWorkSite of this.reservatedWorkSites){
       this.reservation = {startDate:reservatedWorkSite.startDate,
                           endDate:reservatedWorkSite.endDate,
                           ownerId:reservatedWorkSite.owner.id,
-                          worksiteId:reservatedWorkSite.worksiteId};
+                          worksiteId:reservatedWorkSite.worksite.worksiteId};
       console.log(this.reservation);
       this.reservationService.postReservation(this.reservation)
       .subscribe(msg => {
@@ -116,27 +111,27 @@ export class AddReservationComponent implements OnInit {
   add(owner:	UserResponseDto,
       floorNumber: number,
       roomName: string,
-      worksiteId: number,
+      worksite: Worksite,
       startDate: Date,
       endDate: Date): void{
 
     let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
     let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
 
-    if(!this.check(owner, floorNumber, roomName, worksiteId, start, end)){
-      this.reservatedWorkSites.push({owner, floorNumber, roomName, worksiteId, startDate:start, endDate:end});
+    if(!this.check(owner, floorNumber, roomName, worksite, start, end)){
+      this.reservatedWorkSites.push({owner, floorNumber, roomName, worksite, startDate:start, endDate:end});
     }
   }
 
   check(owner:	UserResponseDto,
       floorNumber: number,
       roomName: string,
-      worksiteId: number,
+      worksite: Worksite,
       startDate: string,
       endDate: string){
         for(let i of this.reservatedWorkSites){
           if(i.owner === owner && i.floorNumber === floorNumber && i.roomName === roomName &&
-            i.worksiteId === worksiteId && i.startDate === startDate && i.endDate === endDate){
+            i.worksite === worksite && i.startDate === startDate && i.endDate === endDate){
               return true;
             }
         }
@@ -147,13 +142,13 @@ export class AddReservationComponent implements OnInit {
   checkIndex(owner:	UserResponseDto,
     floorNumber: number,
     roomName: string,
-    worksiteId: number,
+    worksite: Worksite,
     startDate: string,
     endDate: string){
       let k = 0;
       for(let i of this.reservatedWorkSites){
         if(i.owner === owner && i.floorNumber === floorNumber && i.roomName === roomName &&
-          i.worksiteId === worksiteId && i.startDate === startDate && i.endDate === endDate){
+          i.worksite === worksite && i.startDate === startDate && i.endDate === endDate){
             return k;
           }
           k++;
@@ -161,8 +156,7 @@ export class AddReservationComponent implements OnInit {
     }
 
   remove(reservated: ReservatedWorkSite): void{
-
-    let index = this.checkIndex(reservated.owner, reservated.floorNumber, reservated.roomName, reservated.worksiteId, reservated.startDate, reservated.endDate);
+    let index = this.checkIndex(reservated.owner, reservated.floorNumber, reservated.roomName, reservated.worksite, reservated.startDate, reservated.endDate);
     if (index >= 0){
       this.reservatedWorkSites.splice(index, 1);
     }

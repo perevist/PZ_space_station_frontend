@@ -67,7 +67,7 @@
       <mat-chip *ngFor="let worksite of reservatedWorkSites" [selectable]="selectableWorkSitesChips" [removable]="removable"
       (removed)="remove(worksite)">
          {{worksite.owner.firstName}} {{worksite.owner.lastName}} Piętro:{{worksite.floorNumber}} {{worksite.roomName}}
-         Numer miejsca:{{worksite.worksiteId}} Od: {{worksite.startDate}} do {{worksite.endDate}}
+         Numer miejsca:{{worksite.worksite.worksiteInRoomId}} Od: {{worksite.startDate}} do {{worksite.endDate}}
         <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
       </mat-chip>
     </mat-chip-list>
@@ -76,7 +76,7 @@
 
 
     <mat-card-actions>
-        <button mat-stroked-button class ="input-form-field" (click)="add(User.value, Floor.value, Room.value.name, WorkSite.value.worksiteId, dateRange.value.start,dateRange.value.end)" >
+        <button mat-stroked-button class ="input-form-field" (click)="add(User.value, Floor.value, Room.value.name, WorkSite.value, dateRange.value.start,dateRange.value.end)" >
             Dodaj rezerwację
         </button>
     </mat-card-actions>
