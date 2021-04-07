@@ -115,7 +115,7 @@ export class AddReservationComponent implements OnInit {
       startDate: string,
       endDate: string){
         for(let i of this.reservatedWorkSites){
-          if(i.owner === owner && i.floorNumber === floorNumber && i.roomName === roomName &&
+          if(i.floorNumber === floorNumber && i.roomName === roomName &&
             i.worksiteId === worksiteId && i.startDate === startDate && i.endDate === endDate){
               return true;
             }
