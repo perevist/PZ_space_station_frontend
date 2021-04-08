@@ -21,20 +21,15 @@ export class RoomsService {
     var floorSearch = "floor=";
     let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
     let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
-    if(startDate && !floor && !endDate){
-      // startDateSearch = "?startDate=";
-      // let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
+
+  /*  if(startDate && !floor && !endDate){
       return this.http.get<Room[]>(
         this.GET_ROOMS 
         + "?" + startDateSearch + start, 
         {headers: enco, withCredentials: true}
       );
-    }
+    }*/
     if(startDate && endDate && !floor){
-      // endDateSearch = "?endDate=";
-      // startDateSearch = "&startDate=";
-      // let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
-      // let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
       return this.http.get<Room[]>(
         this.GET_ROOMS
         + "?" + endDateSearch + end
@@ -43,35 +38,26 @@ export class RoomsService {
       );
     }
     if(floor && !startDate){
-      // floorSearch = "?floor=";
       return this.http.get<Room[]>(
         this.GET_ROOMS
         + "?" + floorSearch + floor, 
         {headers: enco, withCredentials: true}
       );
     }
-    if(floor && startDate && !endDate){
-      // floorSearch = "?floor=";
-      // startDateSearch = "&startDate=";
-      // let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
+ /*   if(floor && startDate && !endDate){
       return this.http.get<Room[]>(
         this.GET_ROOMS 
         + "?" + floorSearch + floor
         + "&" + startDateSearch + start, 
         {headers: enco, withCredentials: true}
       );
-    }
+    }*/
     if(floor && startDate && endDate){
-      // floorSearch = "&floor=";
-      // startDateSearch = "&startDate=";
-      // endDateSearch = "?endDate=";
-      // let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
-      // let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
       return this.http.get<Room[]>(
         this.GET_ROOMS
-        + "&" + endDateSearch + end
-        + "?" + floorSearch + floor 
-        + "?" + startDateSearch + start, 
+        + "?" + endDateSearch + end
+        + "&" + floorSearch + floor 
+        + "&" + startDateSearch + start, 
         {headers: enco, withCredentials: true}
       );
     }

@@ -23,7 +23,7 @@ import { RouterModule } from '@angular/router';
 import { ReservationsTableComponent } from './component/reservations-table/reservations-table.component';
 import { AddReservationComponent } from './component/add-reservation/add-reservation.component';
 import { UsersChipsComponent } from './component/users-chips/users-chips.component';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -55,7 +55,8 @@ import { UsersChipsComponent } from './component/users-chips/users-chips.compone
     MatTableModule,
     MatIconModule,
     MatSelectModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSnackBarModule
 
 
   ],
