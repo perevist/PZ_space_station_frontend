@@ -45,8 +45,9 @@ export class AddReservationComponent implements OnInit {
     availableRooms = true;
     selectableAvailableRooms = false;
 
-    flo: number = 1;
-
+    defualtFloor: number = 1;
+    lastWorksite: Worksite = {roomId:0, worksiteId: 0,worksiteInRoomId: 0};
+    
     removable = true;
     visibleWorkSitesChips = true;
     addOnBlurWorkSitesChips = true;
@@ -61,7 +62,6 @@ export class AddReservationComponent implements OnInit {
     ngOnInit(): void {
         this.getUsers();
         this.getFloors();
-        console.log(this.floors);
     }
 
     getUsers(): void{
@@ -115,8 +115,7 @@ export class AddReservationComponent implements OnInit {
         }
         this.reservatedWorkSites = [];
         this.getRooms(floor, start,end);
-        this.worksitesList = [];
-        
+        this.worksitesList = [];        
     }
 
     addChipToList(  
@@ -127,15 +126,24 @@ export class AddReservationComponent implements OnInit {
         startDate: Date,
         endDate: Date
     ): void{
-        var date = new Date();
-        if(startDate < date){
-            this.showToast('Wybrany termin jest nie poprawny', 'OK');
+        if(this.lastWorksite.worksiteId === worksite.worksiteId){
+            this.showToast('Wybierz inne stanowisko', 'OK');
         }else{
-            let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
-            let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
+            var date = new Date();
+            if(startDate < date){
+                this.showToast('Wybrany termin jest nie poprawny(na dzisiaj też nie można)', 'OK');
+            }else{
+                this.lastWorksite = {
+                    roomId: worksite.roomId,
+                    worksiteId: worksite.worksiteId,
+                    worksiteInRoomId: worksite.worksiteInRoomId};
 
-            if(!this.checkIfChipExist(worksite, start, end)){
-                this.reservatedWorkSites.push({owner, floorNumber, roomName, worksite, startDate:start, endDate:end});
+                let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
+                let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
+
+                if(!this.checkIfChipExist(worksite, start, end)){
+                    this.reservatedWorkSites.push({owner, floorNumber, roomName, worksite, startDate:start, endDate:end});
+                }
             }
         }
     }

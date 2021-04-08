@@ -31,8 +31,8 @@
     <mat-card-content>
         <mat-label>Piętro: </mat-label>
         <mat-form-field appearance="fill" class="input-form">
-        <mat-select #Floor (selectionChange)="getRooms(Floor.value, dateRange.value.start, dateRange.value.end)" [(value)]="flo">
-            <mat-option *ngFor="let floor of floors" [value]="floor">
+        <mat-select #Floor (selectionChange)="getRooms(Floor.value, dateRange.value.start, dateRange.value.end)" [(value)]="defualtFloor">
+            <mat-option *ngFor="let floor of floors.slice(1, floors.length)" [value]="floor">
             {{floor}}
             </mat-option>
         </mat-select>
