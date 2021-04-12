@@ -7,9 +7,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddRoomComponent implements OnInit {
 
+  floors: number[] = [];
+
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
+    this.getFloors();
+  }
+
+  getFloors(): void{
+
+  }
+
+  postRoom(
+    floorNumber: number,
+    roomName: string,
+    workSiteNumber: number
+  ): void{
+
   }
 
 }

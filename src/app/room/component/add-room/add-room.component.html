@@ -1,1 +1,56 @@
-<p>add-room works!</p>
+<mat-card class="card">
+
+    <!-- Title of component -->
+    <mat-card-title>
+        Dodaj pokój
+    </mat-card-title>
+
+    <!-- Field to select number of floor where room will be add -->
+    <mat-card-content>
+        <mat-label>Piętro: </mat-label>
+        <mat-form-field appearance="fill" class="input-form">
+        <mat-select #floorNumber>
+            <mat-option *ngFor="let floor of floors.slice(1, floors.length)" [value]="floor">
+            {{ floor }}
+            </mat-option>
+        </mat-select>
+        </mat-form-field>
+    </mat-card-content>
+
+    <!-- Textfield to write name of the new room -->
+    <mat-card-content>
+		<mat-form-field appearance="fill" 
+			class="input-form-field" >
+			<mat-label> Nazwa pokoju </mat-label>
+			<input matInput placeholder="Wpisz nazwę pokoju (np. 'Pokój 6C')" #roomName>
+			<button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="roomName.value=''">
+				<mat-icon>close</mat-icon>
+			</button>
+		</mat-form-field>
+	</mat-card-content>
+
+    <!-- Text Field to write number of work sites -->
+    <mat-card-content>
+		<mat-form-field appearance="fill" 
+			class="input-form-field">
+			<mat-label> Liczba miejsc </mat-label>
+			<input matInput placeholder="Wpisz liczbę miejsc w pokoju" #workSiteNumber>
+			<button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="workSiteNumber.value=''">
+				<mat-icon>close</mat-icon>
+			</button>
+		</mat-form-field>
+	</mat-card-content>
+
+    <!-- Button to send the new room to the DataBase -->
+    <mat-card-actions>
+        <button mat-stroked-button class ="input-form-field" 
+        (click)="postRoom(
+            floorNumber.value,
+            roomName.value,
+            workSiteNumber.value
+        )" >
+        Dodaj pokój
+        </button>
+    </mat-card-actions>
+
+</mat-card>

@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Message } from '../model/Message';
+import { Message } from 'src/app/model/Message';
 import { Room } from '../model/Room';
 
 @Injectable({
