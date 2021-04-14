@@ -1,19 +1,21 @@
 <mat-card class="card">
 
     <!-- Title of component -->
-    <mat-card-title>
-        Dodaj pokój
+    <mat-card-title class="title">
+        Dodawanie nowego pokoju
     </mat-card-title>
 
     <!-- Field to select number of floor where room will be add -->
     <mat-card-content>
-        <mat-label>Piętro: </mat-label>
-        <mat-form-field appearance="fill" class="input-form">
-        <mat-select #floorNumber>
-            <mat-option *ngFor="let floor of floors.slice(1, floors.length)" [value]="floor">
-            {{ floor }}
-            </mat-option>
-        </mat-select>
+        <mat-form-field 
+        appearance="fill" 
+        class="input-form">
+            <mat-label> Piętro </mat-label> 
+            <mat-select #floorNumber>
+                <mat-option *ngFor="let floor of floors.slice(1, floors.length)" [value]="floor">
+                {{ floor }}
+                </mat-option>
+            </mat-select>
         </mat-form-field>
     </mat-card-content>
 
@@ -43,7 +45,8 @@
 
     <!-- Button to send the new room to the DataBase -->
     <mat-card-actions>
-        <button mat-stroked-button class ="input-form-field" 
+        <button mat-stroked-button
+        class="button-add"
         (click)="postRoom(
             floorNumber.value,
             roomName.value,
