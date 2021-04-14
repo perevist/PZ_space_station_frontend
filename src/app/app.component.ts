@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { KeycloakService } from 'keycloak-angular';
+import { KeycloakProfile } from 'keycloak-js';
 
-export var logged: boolean = false;
-export var firstName: string;
-export var lastName: string;
 
 @Component({
   selector: 'app-root',
@@ -11,5 +10,27 @@ export var lastName: string;
 })
 export class AppComponent {
   title = 'SpaceStation-frontend';
+
+ // public isLoggedIn = false;
+ // public userProfile: KeycloakProfile | null = null;
+
+ // constructor(private readonly keycloak: KeycloakService){}
+    constructor() {}
+ /*
+  public async ngOnInit(){
+      this.isLoggedIn = await this.keycloak.isLoggedIn();
+
+      if (this.isLoggedIn){
+          this.userProfile = await this.keycloak.loadUserProfile();
+      }
+  }
+
+  public login(){
+      this.keycloak.login();
+  }
+
+  public logout(){
+      this.keycloak.logout();
+  }*/
 
 }

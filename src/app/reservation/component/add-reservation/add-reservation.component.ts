@@ -207,6 +207,11 @@ export class AddReservationComponent implements OnInit {
         reservated.endDate 
         );
         if (index >= 0){
+            this.lastWorksite = {
+                roomId: 0,
+                worksiteId: 0,
+                worksiteInRoomId: 0
+            };
             this.reservatedWorkSites.splice(index, 1);
         }
     }

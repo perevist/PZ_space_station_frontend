@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -13,6 +14,9 @@ import { ReservationModule } from './reservation/reservation.module';
 import { LoginModule } from './login/login.module';
 import { RegistrationModule } from './registration/registration.module';
 import { RoomModule } from './room/room.module';
+import { initializer } from 'src/Appinit';
+import { AuthService } from './service/auth.service';
+
 
 @NgModule({
   declarations: [
@@ -24,6 +28,7 @@ import { RoomModule } from './room/room.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    KeycloakAngularModule,
 
     LoginModule,
     RegistrationModule,
@@ -31,11 +36,21 @@ import { RoomModule } from './room/room.module';
     RoomModule
   ],
   providers: [
+    KeycloakService,
     { 
-      provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher
+        provide: APP_INITIALIZER, 
+        useFactory: initializer,
+        multi: true,
+        deps: [KeycloakService]
+    }, AuthService,
+
+    {
+        provide: ErrorStateMatcher,
+        useClass: ShowOnDirtyErrorStateMatcher,
     },
     CookieService,
-    DatePipe
+    DatePipe,
+
   ],
     
   bootstrap: [AppComponent]
