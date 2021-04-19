@@ -298,33 +298,36 @@
   }
 </style>
 
-<!-- Toolbar -->
-<div class="toolbar" role="banner">
-     
+<!-- Toolbar-->
+<div class="toolbar" role="banner" > 
+
     <a [routerLink]="['/']">
     Stacja kosmiczna
     </a>
-  <!--  <div *ngIf="isLoggedIn; else notLogged">-->
-        <pre>    </pre>
-        <a routerLink="/reservations-table">
-        Rezerwacje
-        </a>
-     <!--    <pre class='spacer'></pre>
-        <a>
-            {{ userProfile.firstName }} {{ userProfile.lastName }}
-        </a>
-        <a routerLink="/logout">
-            Wyloguj
-        </a>
-     </div>-->
+    <pre>   </pre>
+    <div *ngIf="isLoggedIn;then logged else notLogged"></div>
+        <ng-template #logged>
+            <a routerLink="/reservations-table">
+                Rezerwacje
+            </a>
+            <pre class="spacer"></pre>
+            <a>
+                {{ userProfile.name }}
+            </a>
+            <pre>   </pre>
+            <a href="#" (click)="logout()">
+                Wyloguj
+            </a>
+        </ng-template>
+    
     <ng-template #notLogged>
         <pre class="spacer"></pre>
-        <a routerLink='/login-input'>
-        Logowanie
+        <a href="#" (click)="login()">
+            Logowanie
         </a>
         <pre>    </pre>
-        <a routerLink='/registration'>
-        Rejestracja 
+        <a href="#" (click)="register()">
+         Rejestracja 
         </a>
     </ng-template>
 </div>

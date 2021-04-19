@@ -5,10 +5,16 @@
 export const environment = {
   production: false,
   keycloakConfig: {
-      clientId: 'space-station-app',
-      realm: 'SpaceStation',
-      url: 'http://localhost:8080/auth'
+    "realm": "SpaceStation",
+    "auth-server-url": "http://localhost:8080/auth",
+    //"ssl-required": "external",
+   // "public-client": true,
+  //  "confidential-port": 0,
+    "url": 'http://localhost:8080/auth',
+    "clientId": 'space-station-app',
+  //  "enable-cors": true
   }
+
 };
 
 /*

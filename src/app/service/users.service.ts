@@ -10,7 +10,7 @@ import { UserResponseDto } from '../model/UserResponseDto';
   providedIn: 'root'
 })
 export class UsersService {
-  readonly GET_USERS = 'http://localhost:8080/api/users/list';
+  readonly GET_USERS = 'http://localhost:8081/api/users/list';
 
   constructor(private http: HttpClient) { }
 

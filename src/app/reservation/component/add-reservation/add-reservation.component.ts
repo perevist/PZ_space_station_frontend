@@ -11,6 +11,8 @@ import { Worksite } from 'src/app/model/Worksite';
 import { ReservationsService } from '../../service/reservations.service';
 import { ReservationRequest } from '../../model/ReservationRequest';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { KeycloakService } from 'keycloak-angular';
+import { Router } from '@angular/router';
 
 export interface ReservatedWorkSite{
     owner:	UserResponseDto;
@@ -22,8 +24,9 @@ export interface ReservatedWorkSite{
 }
 
     @Component({
-    templateUrl: './add-reservation.component.html',
-    styleUrls: ['./add-reservation.component.css']
+        selector: 'app-add-reservation',
+        templateUrl: './add-reservation.component.html',
+        styleUrls: ['./add-reservation.component.css']
     })
 
 export class AddReservationComponent implements OnInit {
@@ -34,7 +37,9 @@ export class AddReservationComponent implements OnInit {
         private worksiteService: WorksitesService,
         private reservationService: ReservationsService,
         private datepipe: DatePipe,
-        private _snackBar: MatSnackBar
+        private _snackBar: MatSnackBar,             
+        protected router: Router, 
+        protected keycloakAngular: KeycloakService
     ) {}
 
     dateRange = new FormGroup({
@@ -60,8 +65,14 @@ export class AddReservationComponent implements OnInit {
     reservation: ReservationRequest;
 
     ngOnInit(): void {
+        try{
+            let userDetails = this.keycloakAngular.getKeycloakInstance().tokenParsed["userDetails"];
+        } catch(e){
+            console.log('Failed to load user details', e);
+        }
         this.getUsers();
         this.getFloors();
+
     }
 
     getUsers(): void{

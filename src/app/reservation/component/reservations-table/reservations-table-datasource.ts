@@ -8,7 +8,7 @@ import { ReservationResponse } from '../../model/ReservationResponse';
 import { Component, Directive, Injectable, OnInit } from '@angular/core';
 
 @Injectable()
-export class ReservationsTableDataSource extends DataSource<ReservationResponse> implements OnInit{
+export class ReservationsTableDataSource extends DataSource<ReservationResponse>{
   data: ReservationResponse[];
   reservations: ReservationResponse[];
 
@@ -21,17 +21,15 @@ export class ReservationsTableDataSource extends DataSource<ReservationResponse>
   constructor(private reservationsService: ReservationsService) {
     super();
     this.getReservations();
-  }
-  ngOnInit(): void {
-    this.getReservations();
     console.log(this.reservations);
-    //this.data = this.reservations;
   }
 
-  getReservations(){
+  getReservations(): void{
     this.reservationsService.getReservations().subscribe(
-      reservations => this.reservations = reservations
+      reservations => {this.reservations = reservations
+        console.log(this.reservations);}
     );
+
   }
 
   connect(): Observable<ReservationResponse[]> {
