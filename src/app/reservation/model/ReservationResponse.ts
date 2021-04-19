@@ -3,7 +3,7 @@ export interface ReservationResponse{
   reservationMakerId: number;
   reservationMakerFirstName: string;
   reservationMakerLastName:	string;
-  ownerId: number;
+  ownerId: string;
   ownerFirstName: string;
   ownerLastName: string;
   worksiteId: number;
