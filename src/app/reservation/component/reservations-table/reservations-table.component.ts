@@ -26,6 +26,10 @@ export class ReservationsTableComponent implements AfterViewInit{
     this.dataSource = new ReservationsTableDataSource(this.reservationsService);
   }
 
+  deleteReservation(id: number): any {
+    this.reservationsService.deleteReservation(id);
+    this.dataSource = new ReservationsTableDataSource(this.reservationsService);
+  }
 
   ngAfterViewInit(): void {
 //    this.dataSource.sort = this.sort;

@@ -13,6 +13,8 @@ import { ReservationResponse } from '../model/ReservationResponse';
 export class ReservationsService {
   readonly GET_RESERVATIONS = 'http://localhost:8080/api/reservations/list';
   readonly POST_RESERVATIONS = 'http://localhost:8080/api/reservations';
+  readonly DEL_RESERVATIONS = 'http://localhost:8080/api/reservations/2';
+  
 
   constructor(private http: HttpClient, private cookieService: CookieService) { }
 
@@ -25,6 +27,10 @@ export class ReservationsService {
   postReservation(reservationRequest: ReservationRequest): any {
     let enco: any = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.post<ReservationResponse>(this.POST_RESERVATIONS, reservationRequest, {headers: enco, withCredentials: true});
+  }
+
+  deleteReservation(id: number): any {
+    return this.http.delete(this.DEL_RESERVATIONS)  
   }
 
   private handleError<T>(operation = 'operation') {
