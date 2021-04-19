@@ -20,7 +20,7 @@ export class ReservationsTableComponent implements AfterViewInit{
   dataSource: ReservationsTableDataSource;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns: string[] = ['id', 'ownerFirstName', 'ownerLastName', 'worksiteId', 'reservationMakerFirstName', 'reservationMakerLastName', 'startDate', 'endDate'];
+  displayedColumns: string[] = ['id', 'ownerFirstName', 'ownerLastName', 'worksiteId', 'reservationMakerFirstName', 'reservationMakerLastName', 'startDate', 'endDate', 'action'];
 
   constructor(private reservationsService: ReservationsService) {
     this.dataSource = new ReservationsTableDataSource(this.reservationsService);

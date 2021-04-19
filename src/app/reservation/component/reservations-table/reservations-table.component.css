@@ -10,6 +10,15 @@ table {
   width: 100%;
 }
 
+td, th {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.mat-sort-header-container {
+  justify-content: center !important;
+}
+
 .button-class{
   top: 3%;
   left: 1%;
