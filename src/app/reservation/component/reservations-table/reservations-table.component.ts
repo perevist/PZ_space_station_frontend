@@ -8,6 +8,7 @@ import { ReservationResponse } from '../../model/ReservationResponse';
 import { ReservationsService } from '../../service/reservations.service';
 import { Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
+import { AuthService } from 'src/app/service/auth.service';
 
 @Component({
   selector: 'app-reservations-table',
@@ -26,22 +27,26 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit{
 
   constructor(private reservationsService: ReservationsService,
              protected router: Router, 
-             protected keycloakAngular: KeycloakService) {
+             protected keycloakService: AuthService) {
     this.dataSource = new ReservationsTableDataSource(this.reservationsService);
   }
 
   ngOnInit(){
-    try{
-        let userDetails = this.keycloakAngular.getKeycloakInstance().tokenParsed["userDetails"];
-    } catch(e){
-        console.log('Failed to load user details', e);
-    }
+    let user = this.keycloakService.getLoggedUser();
   }
 
   ngAfterViewInit(): void {
 //    this.dataSource.sort = this.sort;
 //    this.dataSource.paginator = this.paginator;
-    this.table.dataSource = this.dataSource;
+    setTimeout( () => {this.table.dataSource = this.dataSource;}, 500);
 
+  }
+
+  goToAddReservations($myParam: string = ''): void {
+    const navigationDetails: string[] = ['/add-reservation'];
+    if($myParam.length) {
+      navigationDetails.push($myParam);
+    }
+    this.router.navigate(navigationDetails);
   }
 }

@@ -6,9 +6,12 @@ import { Observable, of as observableOf, merge } from 'rxjs';
 import { ReservationsService } from '../../service/reservations.service';
 import { ReservationResponse } from '../../model/ReservationResponse';
 import { Component, Directive, Injectable, OnInit } from '@angular/core';
+import { KeycloakService } from 'keycloak-angular';
 
-@Injectable()
-export class ReservationsTableDataSource extends DataSource<ReservationResponse>{
+@Injectable({
+    providedIn: 'root',
+})
+export class ReservationsTableDataSource extends DataSource<ReservationResponse> implements OnInit{
   data: ReservationResponse[];
   reservations: ReservationResponse[];
 
@@ -21,14 +24,18 @@ export class ReservationsTableDataSource extends DataSource<ReservationResponse>
   constructor(private reservationsService: ReservationsService) {
     super();
     this.getReservations();
-    console.log(this.reservations);
+    setTimeout( () => { console.log(this.reservations); }, 500);
   }
+    ngOnInit(): void {
+        this.getReservations();
+    }
 
-  getReservations(): void{
+    getReservations(){
     this.reservationsService.getReservations().subscribe(
       reservations => {this.reservations = reservations
         console.log(this.reservations);}
     );
+    
 
   }
 

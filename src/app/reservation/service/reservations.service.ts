@@ -21,6 +21,7 @@ export class ReservationsService {
 
   getReservations(): Observable<ReservationResponse[]>{
     console.log(this.keycloakService.getToken());
+    
     return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS);
   }
 

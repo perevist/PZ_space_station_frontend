@@ -20,7 +20,7 @@ export class AppComponent implements OnInit{
   //  constructor() {}
 
   public async ngOnInit(){
-      let user = this.keycloak.getLoggedUser();
+        let user = this.keycloak.getLoggedUser();
         this.userProfile = user;
        if (this.userProfile != undefined){
            this.isLoggedIn = true;
@@ -30,8 +30,6 @@ export class AppComponent implements OnInit{
   public login(){
       
       this.keycloak.login();
-      //this.keycloak.loadUserProfile().then(userProfile => this.userProfile = userProfile);
-      //console.log("wczytało?")
   }
 
   public register(){

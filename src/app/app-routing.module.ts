@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { MatTable } from '@angular/material/table';
 import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { LoginInputComponent } from './login/component/login-input/login-input.component';
@@ -14,17 +15,18 @@ const routes: Routes = [
         data: { roles: ['offline_access']}
     },
     {
+        path: 'add-reservation',
+        component: AddReservationComponent,
+        canActivate: [ AuthGuard ],
+        data: { roles: ['user', 'admin'] }
+    },
+    {
         path: 'reservations-table',
         component: ReservationsTableComponent,
         canActivate: [ AuthGuard ],
         data: { roles: ['user', 'admin'] },
     },
-        {
-                path: 'add-reservation',
-                component: AddReservationComponent,
-                canActivate: [ AuthGuard ],
-                data: { roles: ['user', 'admin'] }
-            }
+
         
     
 ];

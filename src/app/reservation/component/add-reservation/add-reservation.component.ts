@@ -11,8 +11,8 @@ import { Worksite } from 'src/app/model/Worksite';
 import { ReservationsService } from '../../service/reservations.service';
 import { ReservationRequest } from '../../model/ReservationRequest';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { KeycloakService } from 'keycloak-angular';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/service/auth.service';
 
 export interface ReservatedWorkSite{
     owner:	UserResponseDto;
@@ -23,14 +23,16 @@ export interface ReservatedWorkSite{
     endDate: string;
 }
 
-    @Component({
-        selector: 'app-add-reservation',
-        templateUrl: './add-reservation.component.html',
-        styleUrls: ['./add-reservation.component.css']
-    })
+@Component({
+    selector: 'app-add-reservation',
+    templateUrl: './add-reservation.component.html',
+    styleUrls: ['./add-reservation.component.css']
+})
 
-export class AddReservationComponent implements OnInit {
+export class AddReservationComponent implements OnInit{
     constructor(
+        protected router: Router, 
+        protected keycloakService: AuthService,
         private usersService: UsersService,
         private floorsService: FloorsService,
         private roomsService: RoomsService,
@@ -38,9 +40,8 @@ export class AddReservationComponent implements OnInit {
         private reservationService: ReservationsService,
         private datepipe: DatePipe,
         private _snackBar: MatSnackBar,             
-        protected router: Router, 
-        protected keycloakAngular: KeycloakService
     ) {}
+
 
     dateRange = new FormGroup({
         start: new FormControl(),
@@ -53,6 +54,7 @@ export class AddReservationComponent implements OnInit {
     defualtFloor: number = 1;
     lastWorksite: Worksite = {roomId:0, worksiteId: 0,worksiteInRoomId: 0};
     
+    user: any;
     removable = true;
     visibleWorkSitesChips = true;
     addOnBlurWorkSitesChips = true;
@@ -65,13 +67,9 @@ export class AddReservationComponent implements OnInit {
     reservation: ReservationRequest;
 
     ngOnInit(): void {
-        try{
-            let userDetails = this.keycloakAngular.getKeycloakInstance().tokenParsed["userDetails"];
-        } catch(e){
-            console.log('Failed to load user details', e);
-        }
-        this.getUsers();
-        this.getFloors();
+        this.user = this.keycloakService.getLoggedUser();
+        //this.getUsers();
+        //this.getFloors();
 
     }
 
