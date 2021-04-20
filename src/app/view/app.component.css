@@ -1,3 +1,15 @@
 div a {
     color: white;
 }
+
+.example-spacer{
+    flex: 1 1 auto;
+
+    justify-content: space-between;
+}
+
+.toolbar{
+    display: flex;
+    position: fixed;
+
+}

@@ -10,14 +10,14 @@ import { UserResponseDto } from '../model/UserResponseDto';
   providedIn: 'root'
 })
 export class UsersService {
-  readonly GET_USERS = 'http://localhost:8080/api/users/list';
-
+  //readonly GET_USERS = 'http://localhost:8081/api/users/list';
+    readonly GET_USERS = 'http://localhost:8080/auth/admin/realms/SpaceStation/users';
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<UserResponseDto[]>{
-    let enco: any = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    //let enco: any = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.get<UserResponseDto[]>(this.GET_USERS, {headers: enco, withCredentials: true});
+    return this.http.get<UserResponseDto[]>(this.GET_USERS);
   }
 
   private handleError<T>(operation = 'operation'){

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { KeycloakService } from 'keycloak-angular';
-import { KeycloakProfile } from 'keycloak-js';
+import { KeycloakTokenParsed } from 'keycloak-js';
+import { AuthService } from './service/auth.service';
 
 
 @Component({
@@ -8,29 +8,41 @@ import { KeycloakProfile } from 'keycloak-js';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'SpaceStation-frontend';
 
- // public isLoggedIn = false;
- // public userProfile: KeycloakProfile | null = null;
+  public isLoggedIn = false;
+  userProfile : KeycloakTokenParsed;
+  constructor(private readonly keycloak: AuthService){}
 
- // constructor(private readonly keycloak: KeycloakService){}
-    constructor() {}
- /*
   public async ngOnInit(){
-      this.isLoggedIn = await this.keycloak.isLoggedIn();
-
-      if (this.isLoggedIn){
-          this.userProfile = await this.keycloak.loadUserProfile();
-      }
+        let user = this.keycloak.getLoggedUser();
+        this.userProfile = user;
+       if (this.userProfile != undefined){
+           this.isLoggedIn = true;
+        }
   }
 
   public login(){
       this.keycloak.login();
+      let user = this.keycloak.getLoggedUser();
+      this.userProfile = user;
+     if (this.userProfile != undefined){
+         this.isLoggedIn = true;
+      }
+  }
+
+  public register(){
+      this.keycloak.register();
   }
 
   public logout(){
-      this.keycloak.logout();
-  }*/
+        this.keycloak.logout();
+        if(this.keycloak.getLoggedUser() == undefined){
+            this.isLoggedIn = false;
+        } 
+
+  }
+
 
 }

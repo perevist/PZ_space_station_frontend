@@ -9,7 +9,7 @@ import { Worksite } from '../model/Worksite';
   providedIn: 'root'
 })
 export class WorksitesService {
-  readonly GET_WORKSITES = 'http://localhost:8080/api/worksites/list';
+  readonly GET_WORKSITES = 'http://localhost:8081/api/worksites/list';
 
   constructor(private http: HttpClient,
               private datepipe: DatePipe) { }

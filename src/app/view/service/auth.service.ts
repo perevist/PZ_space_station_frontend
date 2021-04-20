@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  Router,
-  RouterStateSnapshot,
-} from '@angular/router';
-import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
+import { KeycloakService } from 'keycloak-angular';
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +11,15 @@ export class AuthService{
   getLoggedUser(){
       try {
           let userDetails = this.keycloakService.getKeycloakInstance().idTokenParsed;
-          console.log('UserDetails', userDetails);
-          console.log('UserRoles', this.keycloakService.getUserRoles());
           return userDetails;
       } catch(e){
           console.log('getLoggedUser Exception', e);
           return undefined;
       }
+  }
+
+  login(){
+      this.keycloakService.login();
   }
 
   logout() {
@@ -35,5 +32,14 @@ export class AuthService{
 
   getRoles(): string[]{
       return this.keycloakService.getUserRoles();
+  }
+
+  
+  getToken(): string{
+      return this.keycloakService.getKeycloakInstance().token;
+  }
+
+  register(){
+      this.keycloakService.register();
   }
 }

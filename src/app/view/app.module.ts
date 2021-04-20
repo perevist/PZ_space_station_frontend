@@ -16,8 +16,6 @@ import { RegistrationModule } from './registration/registration.module';
 import { RoomModule } from './room/room.module';
 import { initializer } from 'src/app/utility/app.init';
 import { AuthService } from './service/auth.service';
-
-
 @NgModule({
   declarations: [
     AppComponent

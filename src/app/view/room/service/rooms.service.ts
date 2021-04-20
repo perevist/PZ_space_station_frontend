@@ -9,7 +9,7 @@ import { Room } from '../model/Room';
   providedIn: 'root'
 })
 export class RoomsService {
-  private GET_ROOMS = "http://localhost:8080/api/rooms/list";
+  private GET_ROOMS = "http://localhost:8081/api/rooms/list";
 
   constructor(private http: HttpClient,
               private datepipe: DatePipe) { }
