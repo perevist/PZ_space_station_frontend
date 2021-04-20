@@ -8,6 +8,7 @@ import { ReservationResponse } from '../../model/ReservationResponse';
 import { ReservationsService } from '../../service/reservations.service';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-reservations-table',
@@ -26,12 +27,15 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit{
 
   constructor(private reservationsService: ReservationsService,
              protected router: Router, 
-             protected keycloakService: AuthService) {
+             protected keycloakService: AuthService,
+             private _snackBar: MatSnackBar) {
     this.dataSource = new ReservationsTableDataSource(this.reservationsService);
   }
 
-  deleteReservation(id: number): any {
-    this.reservationsService.deleteReservation(id);
+  async deleteReservation(id: number){
+    let del = await this.reservationsService.deleteReservation(id);
+    this.dataSource.getReservations().then((reservations) => this.table.dataSource=reservations);
+    this.showToast('Pomyślnie usunięto rezerwację', 'OK');
   }
 
   ngOnInit(){
@@ -42,7 +46,6 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit{
 //    this.dataSource.sort = this.sort;
 //    this.dataSource.paginator = this.paginator;
     this.dataSource.getReservations().then((reservations) => this.table.dataSource=reservations);
-
   }
 
   goToAddReservations($myParam: string = ''): void {
@@ -51,5 +54,9 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit{
       navigationDetails.push($myParam);
     }
     this.router.navigate(navigationDetails);
+  }
+
+  showToast(message: string, action: string): void{
+    this._snackBar.open(message, action);
   }
 }
