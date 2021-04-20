@@ -33,8 +33,7 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDest
              protected router: Router, 
              protected keycloakService: AuthService,
              private _snackBar: MatSnackBar,
-             private dataService: DataflowService
-             ) {
+             private dataService: DataflowService) {
     this.dataSource = new ReservationsTableDataSource(this.reservationsService);
   }
   ngOnDestroy(): void {
