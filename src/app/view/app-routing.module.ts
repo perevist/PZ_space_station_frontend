@@ -3,9 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { AddReservationComponent } from './reservation/component/add-reservation/add-reservation.component';
 import { ReservationsTableComponent } from './reservation/component/reservations-table/reservations-table.component';
-import { AuthGuard } from './service/auth-guard.guard';
+import { AuthGuard } from 'src/app/utility/auth.guard';
 
 const routes: Routes = [
+    
     /*{
         path: '',
         component: AppComponent,

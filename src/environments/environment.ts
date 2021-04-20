@@ -5,9 +5,10 @@
 export const environment = {
   production: false,
   keycloakConfig: {
+      redirecturi: 'http://localhost:8081/hello',
       clientId: 'space-station-app',
       realm: 'SpaceStation',
-      url: 'http://localhost:8080/auth'
+      url: 'http://localhost:8080/auth',
   }
 };
 
