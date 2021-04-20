@@ -11,7 +11,7 @@ import { KeycloakService } from 'keycloak-angular';
 @Injectable({
     providedIn: 'root',
 })
-export class ReservationsTableDataSource extends DataSource<ReservationResponse> implements OnInit{
+export class ReservationsTableDataSource extends DataSource<ReservationResponse> {
   data: ReservationResponse[];
   reservations: ReservationResponse[];
 
@@ -21,22 +21,13 @@ export class ReservationsTableDataSource extends DataSource<ReservationResponse>
 //  sort: MatSort | undefined;
 
 
-  constructor(private reservationsService: ReservationsService) {
+    constructor(private reservationsService: ReservationsService) {
     super();
-    this.getReservations();
-    setTimeout( () => { console.log(this.reservations); }, 500);
   }
-    ngOnInit(): void {
-        this.getReservations();
-    }
 
-    getReservations(){
-    this.reservationsService.getReservations().subscribe(
-      reservations => {this.reservations = reservations
-        console.log(this.reservations);}
-    );
-    
-
+    async getReservations(): Promise<ReservationResponse[]>{
+        this.reservations = await this.reservationsService.getReservations();
+        return this.reservations;
   }
 
   connect(): Observable<ReservationResponse[]> {

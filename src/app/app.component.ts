@@ -1,8 +1,5 @@
-import { TranslationWidth } from '@angular/common';
-import { HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { KeycloakProfile, KeycloakTokenParsed } from 'keycloak-js';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+import { KeycloakTokenParsed } from 'keycloak-js';
 import { AuthService } from './service/auth.service';
 
 
@@ -17,7 +14,6 @@ export class AppComponent implements OnInit{
   public isLoggedIn = false;
   userProfile : KeycloakTokenParsed;
   constructor(private readonly keycloak: AuthService){}
-  //  constructor() {}
 
   public async ngOnInit(){
         let user = this.keycloak.getLoggedUser();
@@ -28,8 +24,12 @@ export class AppComponent implements OnInit{
   }
 
   public login(){
-      
       this.keycloak.login();
+      let user = this.keycloak.getLoggedUser();
+      this.userProfile = user;
+     if (this.userProfile != undefined){
+         this.isLoggedIn = true;
+      }
   }
 
   public register(){
@@ -37,8 +37,11 @@ export class AppComponent implements OnInit{
   }
 
   public logout(){
-      this.keycloak.logout();
-      this.isLoggedIn = false;
+        this.keycloak.logout();
+        if(this.keycloak.getLoggedUser() == undefined){
+            this.isLoggedIn = false;
+        } 
+
   }
 
 

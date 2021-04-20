@@ -68,8 +68,8 @@ export class AddReservationComponent implements OnInit{
 
     ngOnInit(): void {
         this.user = this.keycloakService.getLoggedUser();
-        //this.getUsers();
-        //this.getFloors();
+        this.getUsers();
+        this.getFloors();
 
     }
 

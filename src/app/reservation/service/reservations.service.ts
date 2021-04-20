@@ -19,10 +19,9 @@ export class ReservationsService {
   constructor(private http: HttpClient, //private cookieService: CookieService,
             private keycloakService: AuthService) { }
 
-  getReservations(): Observable<ReservationResponse[]>{
+  getReservations(): Promise<ReservationResponse[]>{
     console.log(this.keycloakService.getToken());
-    
-    return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS);
+    return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS).toPromise();
   }
 
   /** POST: add a new Reservation to the database */

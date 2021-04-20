@@ -7,7 +7,6 @@ import { ReservationsTableDataSource } from './reservations-table-datasource';
 import { ReservationResponse } from '../../model/ReservationResponse';
 import { ReservationsService } from '../../service/reservations.service';
 import { Router } from '@angular/router';
-import { KeycloakService } from 'keycloak-angular';
 import { AuthService } from 'src/app/service/auth.service';
 
 @Component({
@@ -38,7 +37,7 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit{
   ngAfterViewInit(): void {
 //    this.dataSource.sort = this.sort;
 //    this.dataSource.paginator = this.paginator;
-    setTimeout( () => {this.table.dataSource = this.dataSource;}, 500);
+    this.dataSource.getReservations().then((reservations) => this.table.dataSource=reservations);
 
   }
 
