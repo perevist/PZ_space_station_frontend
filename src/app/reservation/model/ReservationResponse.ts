@@ -1,6 +1,6 @@
 export interface ReservationResponse{
   id: number;
-  reservationMakerId: number;
+  reservationMakerId: string;
   reservationMakerFirstName: string;
   reservationMakerLastName:	string;
   ownerId: string;

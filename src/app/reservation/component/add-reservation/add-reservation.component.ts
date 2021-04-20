@@ -11,6 +11,8 @@ import { Worksite } from 'src/app/model/Worksite';
 import { ReservationsService } from '../../service/reservations.service';
 import { ReservationRequest } from '../../model/ReservationRequest';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/service/auth.service';
 
 export interface ReservatedWorkSite{
     owner:	UserResponseDto;
@@ -21,21 +23,25 @@ export interface ReservatedWorkSite{
     endDate: string;
 }
 
-    @Component({
+@Component({
+    selector: 'app-add-reservation',
     templateUrl: './add-reservation.component.html',
     styleUrls: ['./add-reservation.component.css']
-    })
+})
 
-export class AddReservationComponent implements OnInit {
+export class AddReservationComponent implements OnInit{
     constructor(
+        protected router: Router, 
+        protected keycloakService: AuthService,
         private usersService: UsersService,
         private floorsService: FloorsService,
         private roomsService: RoomsService,
         private worksiteService: WorksitesService,
         private reservationService: ReservationsService,
         private datepipe: DatePipe,
-        private _snackBar: MatSnackBar
+        private _snackBar: MatSnackBar,             
     ) {}
+
 
     dateRange = new FormGroup({
         start: new FormControl(),
@@ -48,6 +54,7 @@ export class AddReservationComponent implements OnInit {
     defualtFloor: number = 1;
     lastWorksite: Worksite = {roomId:0, worksiteId: 0,worksiteInRoomId: 0};
     
+    user: any;
     removable = true;
     visibleWorkSitesChips = true;
     addOnBlurWorkSitesChips = true;
@@ -60,8 +67,10 @@ export class AddReservationComponent implements OnInit {
     reservation: ReservationRequest;
 
     ngOnInit(): void {
+        this.user = this.keycloakService.getLoggedUser();
         this.getUsers();
         this.getFloors();
+
     }
 
     getUsers(): void{
@@ -207,6 +216,11 @@ export class AddReservationComponent implements OnInit {
         reservated.endDate 
         );
         if (index >= 0){
+            this.lastWorksite = {
+                roomId: 0,
+                worksiteId: 0,
+                worksiteInRoomId: 0
+            };
             this.reservatedWorkSites.splice(index, 1);
         }
     }

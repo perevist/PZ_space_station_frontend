@@ -5,22 +5,25 @@ import { Message } from 'src/app/model/Message';
 import { CookieService } from 'ngx-cookie-service';
 import { ReservationRequest } from '../model/ReservationRequest';
 import { ReservationResponse } from '../model/ReservationResponse';
+import { KeycloakService } from 'keycloak-angular';
+import { AuthService } from 'src/app/service/auth.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReservationsService {
-  readonly GET_RESERVATIONS = 'http://localhost:8080/api/reservations/list';
-  readonly POST_RESERVATIONS = 'http://localhost:8080/api/reservations';
-  readonly DEL_RESERVATIONS = 'http://localhost:8080/api/reservations/2';
+
+  readonly GET_RESERVATIONS = 'http://localhost:8081/api/reservations/list';
+  readonly POST_RESERVATIONS = 'http://localhost:8081/api/reservations';
+  readonly DEL_RESERVATIONS = 'http://localhost:8081/api/reservations/';
   
+  constructor(private http: HttpClient, //private cookieService: CookieService,
+            private keycloakService: AuthService) { }
 
-  constructor(private http: HttpClient, private cookieService: CookieService) { }
-
-  getReservations(): Observable<ReservationResponse[]>{
-    let enco: any = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-    return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS, {headers: enco, withCredentials: true});
+  getReservations(): Promise<ReservationResponse[]>{
+    console.log(this.keycloakService.getToken());
+    return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS).toPromise();
   }
 
   /** POST: add a new Reservation to the database */

@@ -10,7 +10,7 @@ import { Message } from '../model/Message';
 })
 export class FloorsService {
 
-  private GET_FLOORS = "http://localhost:8080/api/floors";
+  private GET_FLOORS = "http://localhost:8081/api/floors";
 
   constructor(private http: HttpClient) { }
 

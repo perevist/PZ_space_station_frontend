@@ -6,6 +6,8 @@ import { MatTable } from '@angular/material/table';
 import { ReservationsTableDataSource } from './reservations-table-datasource';
 import { ReservationResponse } from '../../model/ReservationResponse';
 import { ReservationsService } from '../../service/reservations.service';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/service/auth.service';
 
 @Component({
   selector: 'app-reservations-table',
@@ -13,7 +15,7 @@ import { ReservationsService } from '../../service/reservations.service';
   styleUrls: ['./reservations-table.component.css']
 })
 
-export class ReservationsTableComponent implements AfterViewInit{
+export class ReservationsTableComponent implements AfterViewInit, OnInit{
  // @ViewChild(MatPaginator) paginator!: MatPaginator;
  // @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<ReservationResponse>;
@@ -22,19 +24,32 @@ export class ReservationsTableComponent implements AfterViewInit{
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns: string[] = ['id', 'ownerFirstName', 'ownerLastName', 'worksiteId', 'reservationMakerFirstName', 'reservationMakerLastName', 'startDate', 'endDate', 'action'];
 
-  constructor(private reservationsService: ReservationsService) {
+  constructor(private reservationsService: ReservationsService,
+             protected router: Router, 
+             protected keycloakService: AuthService) {
     this.dataSource = new ReservationsTableDataSource(this.reservationsService);
   }
 
   deleteReservation(id: number): any {
     this.reservationsService.deleteReservation(id);
-    this.dataSource = new ReservationsTableDataSource(this.reservationsService);
+  }
+
+  ngOnInit(){
+    let user = this.keycloakService.getLoggedUser();
   }
 
   ngAfterViewInit(): void {
 //    this.dataSource.sort = this.sort;
 //    this.dataSource.paginator = this.paginator;
-    this.table.dataSource = this.dataSource;
+    this.dataSource.getReservations().then((reservations) => this.table.dataSource=reservations);
 
+  }
+
+  goToAddReservations($myParam: string = ''): void {
+    const navigationDetails: string[] = ['/add-reservation'];
+    if($myParam.length) {
+      navigationDetails.push($myParam);
+    }
+    this.router.navigate(navigationDetails);
   }
 }
