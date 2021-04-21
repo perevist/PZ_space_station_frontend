@@ -10,12 +10,25 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { ViewRoomComponent } from './component/view-room/view-room.component';
 import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSliderModule } from '@angular/material/slider';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { AppRoutingModule } from '../app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
 @NgModule({
   declarations: [AddRoomComponent, ViewRoomComponent],
   imports: [
+    BrowserModule,
+    HttpClientModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
     CommonModule,
 
     RouterModule.forRoot([
@@ -29,8 +42,10 @@ import { MatTableModule } from '@angular/material/table';
     MatSelectModule,
     MatButtonModule,
     MatCardModule,
-    MatTableModule
-
+    MatTableModule,
+    MatSliderModule,
+    MatDialogModule,
+    MatSnackBarModule
   ]
 })
 export class RoomModule { }

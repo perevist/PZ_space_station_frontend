@@ -1,0 +1,28 @@
+.full-width-table {
+    width: 90%;
+}
+  
+.not-full-width{
+    width: 75%;
+}
+  
+table {
+    width: 100%;
+}
+  
+td, th {
+    text-align: center !important;
+    vertical-align: middle !important;
+ }
+  
+.mat-sort-header-container {
+    justify-content: center !important;
+}
+ 
+.button-class{
+    /* top: 2%; */
+    left: 40%;
+    width: 20%;
+    background-color: #1976D2;
+    color: white;
+}
