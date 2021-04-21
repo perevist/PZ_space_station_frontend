@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/view/service/auth.service';
 import { FloorsService } from 'src/app/view/service/floors.service';
+import { Room } from '../../model/Room';
+import { RoomRequest } from '../../model/RoomRequest';
 import { RoomsService } from '../../service/rooms.service';
 
 @Component({
@@ -12,12 +16,21 @@ import { RoomsService } from '../../service/rooms.service';
 export class AddRoomComponent implements OnInit {
 
   floors: number[] = [];
+  newRoom: RoomRequest;
+
+  // TODO Add validators of new room fields in formm
+  // newRoomFormGroup: FormGroup = new FormGroup({
+  //   floor: new FormControl(),
+  //   name: new FormControl(),
+  //   numberOfWorksites: new FormControl()
+  // })
 
   constructor(
     protected router: Router, 
     protected keycloakService: AuthService,
     private floorsService: FloorsService,
-    private roomsService: RoomsService
+    private roomsService: RoomsService,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void { 
@@ -32,37 +45,26 @@ export class AddRoomComponent implements OnInit {
         }
     }
     );
-}
+  }
 
   postRoom(
     floorNumber: number,
     roomName: string,
     workSiteNumber: number
   ): void{
-    this.roomsService.postReservation( this.reservation )
+    this.newRoom = {floor: floorNumber, name: roomName, numberOfWorksites: workSiteNumber}
+    this.roomsService.postRoom( this.newRoom )
       .subscribe(msg => {
-      console.log(msg); // RservationResponse
-      this.showToast('Udało się dokonać rezerwacji', 'OK');
+      console.log(msg); 
+      this.showToast('Udało się utworzyć nowy pokój', 'OK');
       }, error => {
       console.log(error.message);
-      this.showToast('Nie udało się dokonać rezerwacji', 'OK');
+      this.showToast('Utworzenie pokoju nie powiodło się', 'OK');
       });
   }
 
-  postReservations(floor?:number, start?:Date, end?:Date){
-
-    for(var reservatedWorkSite of this.reservatedWorkSites){
-        this.reservation = {
-            startDate:reservatedWorkSite.startDate,
-            endDate:reservatedWorkSite.endDate,
-            ownerId:reservatedWorkSite.owner.id,
-            worksiteId:reservatedWorkSite.worksite.worksiteId
-        };
-        
+  showToast(message: string, action: string): void{
+        this._snackBar.open(message, action);
     }
-    this.reservatedWorkSites = [];
-    this.getRooms(floor, start,end);
-    this.worksitesList = [];        
-}
 
 }

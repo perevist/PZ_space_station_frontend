@@ -74,7 +74,7 @@ export class AddReservationComponent implements OnInit{
 
     getUsers(): void{
         this.usersService.getUsers().subscribe(
-        users => this.usersList = users
+            users => this.usersList = users
         );
     }
 

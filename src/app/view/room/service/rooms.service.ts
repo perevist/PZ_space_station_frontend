@@ -4,12 +4,14 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Message } from 'src/app/view/model/Message';
 import { Room } from '../model/Room';
+import { RoomRequest } from '../model/RoomRequest';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoomsService {
   private GET_ROOMS = "http://localhost:8081/api/rooms/list";
+  private POST_ROOMS = "http://localhost:8081/api/rooms";
 
   constructor(private http: HttpClient,
               private datepipe: DatePipe) { }
@@ -63,6 +65,12 @@ export class RoomsService {
     }
 
     return this.http.get<Room[]>(this.GET_ROOMS, {headers: enco, withCredentials: true});
+  }
+
+  /** POST: add a new Room to the database */
+  postRoom(roomRequest: RoomRequest): any {
+    let enco: any = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.post<RoomRequest>(this.POST_ROOMS, roomRequest, {headers: enco, withCredentials: true});
   }
 
   private handleError<T>(operation = 'operation') {
