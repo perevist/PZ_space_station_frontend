@@ -16,6 +16,10 @@ import { RegistrationModule } from './registration/registration.module';
 import { RoomModule } from './room/room.module';
 import { initializer } from 'src/Appinit';
 import { AuthService } from './service/auth.service';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 @NgModule({
   declarations: [
     AppComponent
@@ -27,7 +31,10 @@ import { AuthService } from './service/auth.service';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     KeycloakAngularModule,
-
+    MatInputModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,  
     LoginModule,
     RegistrationModule,
     ReservationModule,

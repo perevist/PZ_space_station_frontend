@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Message } from 'src/app/model/Message';
@@ -7,6 +7,7 @@ import { ReservationRequest } from '../model/ReservationRequest';
 import { ReservationResponse } from '../model/ReservationResponse';
 import { KeycloakService } from 'keycloak-angular';
 import { AuthService } from 'src/app/service/auth.service';
+import { map } from 'rxjs/operators';
 
 
 @Injectable({
@@ -37,6 +38,22 @@ export class ReservationsService {
       return this.http.delete(this.DEL_RESERVATIONS+id).toPromise();
       ;
   }
+
+  findReservations(
+    id:number, filter = '', sortOrder = 'asc',
+    pageNumber = 0, pageSize = 3):  Observable<ReservationResponse[]> {
+
+    return this.http.get(this.GET_RESERVATIONS, {
+        params: new HttpParams()
+            .set('reservationId', id.toString())
+            .set('filter', filter)
+            .set('sortOrder', sortOrder)
+            .set('pageNumber', pageNumber.toString())
+            .set('pageSize', pageSize.toString())
+    }).pipe(
+        map(res =>  res["payload"])
+    );
+}
 
   private handleError<T>(operation = 'operation') {
     return (error: any): Observable<Message> => {
