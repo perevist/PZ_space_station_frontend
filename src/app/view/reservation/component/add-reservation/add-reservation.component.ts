@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from "@angular/forms";
 import { DatePipe } from '@angular/common';
-import { UsersService } from '../../../service/users.service';
-import { FloorsService } from '../../../service/floors.service';
-import { RoomsService } from '../../../room/service/rooms.service';
-import { WorksitesService } from '../../../service/worksites.service';
-import { UserResponseDto } from '../../../model/UserResponseDto';
-import { Room } from '../../../room/model/Room';
-import { Worksite } from '../../../model/Worksite';
+import { UsersService } from 'src/app/view/service/users.service';
+import { FloorsService } from 'src/app/view/service/floors.service';
+import { RoomsService } from 'src/app/view/room/service/rooms.service';
+import { WorksitesService } from 'src/app/view/service/worksites.service';
+import { UserResponseDto } from 'src/app/view/model/UserResponseDto';
+import { Room } from 'src/app/view/room/model/Room';
+import { Worksite } from 'src/app/view/model/Worksite';
 import { ReservationsService } from '../../service/reservations.service';
 import { ReservationRequest } from '../../model/ReservationRequest';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/view/service/auth.service';
-// import { AuthService } from 'src/app/service/auth.service';
 
 export interface ReservatedWorkSite{
     owner:	UserResponseDto;
@@ -71,7 +70,6 @@ export class AddReservationComponent implements OnInit{
         this.user = this.keycloakService.getLoggedUser();
         this.getUsers();
         this.getFloors();
-
     }
 
     getUsers(): void{

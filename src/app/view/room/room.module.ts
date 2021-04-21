@@ -8,16 +8,19 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { ViewRoomComponent } from './component/view-room/view-room.component';
+import { MatTableModule } from '@angular/material/table';
 
 
 
 @NgModule({
-  declarations: [AddRoomComponent],
+  declarations: [AddRoomComponent, ViewRoomComponent],
   imports: [
     CommonModule,
 
     RouterModule.forRoot([
-      { path: 'add-room', component: AddRoomComponent }
+      { path: 'add-room', component: AddRoomComponent },
+      { path: 'view-room', component: ViewRoomComponent }
     ]),
 
     MatFormFieldModule,
@@ -25,7 +28,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule,
     MatSelectModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatTableModule
 
   ]
 })

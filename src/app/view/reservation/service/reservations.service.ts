@@ -32,8 +32,10 @@ export class ReservationsService {
     return this.http.post<ReservationResponse>(this.POST_RESERVATIONS, reservationRequest, {headers: enco, withCredentials: true});
   }
 
-  deleteReservation(id: number): any {
-    return this.http.delete(this.DEL_RESERVATIONS)  
+  deleteReservation(id: number): Promise<any>{
+      console.log(this.DEL_RESERVATIONS+id);
+      return this.http.delete(this.DEL_RESERVATIONS+id).toPromise();
+      ;
   }
 
   private handleError<T>(operation = 'operation') {
