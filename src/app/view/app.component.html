@@ -159,12 +159,12 @@
   a,
   a:visited,
   a:hover {
-    color: #1976d2;
+    color: white;
     text-decoration: none;
   }
 
   a:hover {
-    color: #125699;
+    color: #6b9ac9
   }
 
   .terminal {
@@ -299,9 +299,8 @@
 </style>
 
 <!-- Toolbar-->
-<div class="toolbar" role="banner" >
-    <pre>    </pre>
 
+<mat-toolbar> 
     <a [routerLink]="['/']">
     Stacja kosmiczna
     </a>
@@ -317,15 +316,25 @@
               Pokoje
             </a>
             <pre class="spacer"></pre>
-            <a>
-                {{ userProfile.name }}
-                
+
+
+            <a href="#" 
+              [matMenuTriggerFor]="menu" 
+              aria-label="Users menu"
+            >
+              <mat-icon>person</mat-icon> {{ userProfile.name }}
             </a>
-            <pre>   </pre>
-            <a href="#" (click)="logout()">
-                Wyloguj
-            </a>
-            <pre>    </pre>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item (click)="logout()">
+                <mat-icon>highlight_off</mat-icon>
+                <span>Wyloguj</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon>delete_forever</mat-icon>
+                <span>Skasuj wszechświat</span>
+              </button>
+            </mat-menu>
+
         </ng-template>
     
     <ng-template #notLogged>
@@ -337,10 +346,8 @@
         <a href="#" (click)="register()">
          Rejestracja 
         </a>
-        
     </ng-template>
-    <pre>    </pre>
-</div>
+</mat-toolbar>
 
 <div class="content" role="main">
 

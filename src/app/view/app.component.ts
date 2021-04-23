@@ -27,7 +27,7 @@ export class AppComponent implements OnInit{
       this.keycloak.login();
       let user = this.keycloak.getLoggedUser();
       this.userProfile = user;
-     if (this.userProfile != undefined){
+      if (this.userProfile != undefined){
          this.isLoggedIn = true;
       }
   }

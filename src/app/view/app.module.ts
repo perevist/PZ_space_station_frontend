@@ -16,6 +16,9 @@ import { RegistrationModule } from './registration/registration.module';
 import { RoomModule } from './room/room.module';
 import { initializer } from 'src/app/utility/app.init';
 import { AuthService } from './service/auth.service';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 @NgModule({
   declarations: [
     AppComponent
@@ -31,7 +34,11 @@ import { AuthService } from './service/auth.service';
     LoginModule,
     RegistrationModule,
     ReservationModule,
-    RoomModule
+    RoomModule,
+
+    MatIconModule,
+    MatToolbarModule,
+    MatMenuModule
   ],
   providers: [
     KeycloakService,

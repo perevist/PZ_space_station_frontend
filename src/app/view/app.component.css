@@ -11,5 +11,13 @@ div a {
 .toolbar{
     display: flex;
     position: fixed;
+}
 
+.mat-toolbar{
+    background-color: #1976d2;
+    color: white;
+}
+.material-icons {
+    position: relative;
+    top: 4px; /*Change this to adjust the icon*/
 }
