@@ -42,7 +42,7 @@
     <mat-card-content>
         <mat-label>Pokój:</mat-label>
             <mat-form-field appearance="fill" class="input-form">
-                    <mat-select #Room (selectionChange)="getWorksites(Room.value.name, dateRange.value.start, dateRange.value.end)">
+                    <mat-select #Room (selectionChange)="getWorksites(Room.value.id, dateRange.value.start, dateRange.value.end)">
                         <div *ngIf="this.roomsList.length !== 0; else noRoomBlock"  >
                             <mat-option *ngFor="let room of roomsList" [value]="room" >
                                 {{room.name}}

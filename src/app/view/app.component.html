@@ -299,7 +299,8 @@
 </style>
 
 <!-- Toolbar-->
-<div class="toolbar" role="banner" > 
+<div class="toolbar" role="banner" >
+    <pre>    </pre>
 
     <a [routerLink]="['/']">
     Stacja kosmiczna
@@ -324,6 +325,7 @@
             <a href="#" (click)="logout()">
                 Wyloguj
             </a>
+            <pre>    </pre>
         </ng-template>
     
     <ng-template #notLogged>
@@ -335,7 +337,9 @@
         <a href="#" (click)="register()">
          Rejestracja 
         </a>
+        
     </ng-template>
+    <pre>    </pre>
 </div>
 
 <div class="content" role="main">

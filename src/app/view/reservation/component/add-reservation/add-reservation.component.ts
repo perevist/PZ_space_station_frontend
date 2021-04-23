@@ -82,7 +82,7 @@ export class AddReservationComponent implements OnInit{
         this.floorsService.getFloors().subscribe(
         numberOfFloors => {
             for(var i=1; i <= numberOfFloors.numberOfFloors; i++){
-            this.floors[i] = i;
+                this.floors[i] = i;
             }
         }
         );
@@ -91,15 +91,15 @@ export class AddReservationComponent implements OnInit{
     getRooms(floors?: number, start?:Date, end?:Date): void{
         if(start < end){
             this.roomsService.getRooms(floors.toString(), start, end).subscribe(
-            rooms => this.roomsList = rooms
+                rooms => this.roomsList = rooms
             );
             this.worksitesList = [];
         }
     }
 
-    getWorksites(roomId?: string, start?:Date, end?:Date){
-        this.worksiteService.getWorksites(roomId[roomId.length-1], start, end).subscribe(
-        worksite => {this.worksitesList = worksite;}
+    getWorksites(roomId?: number, start?:Date, end?:Date){
+        this.worksiteService.getWorksites(roomId.toString(), start, end).subscribe(
+            worksite => this.worksitesList = worksite
         )
     }
 
@@ -114,11 +114,11 @@ export class AddReservationComponent implements OnInit{
             };
             this.reservationService.postReservation( this.reservation )
                 .subscribe(msg => {
-                console.log(msg); // RservationResponse
-                this.showToast('Udało się dokonać rezerwacji', 'OK');
+                    console.log(msg); // RservationResponse
+                    this.showToast('Udało się dokonać rezerwacji', 'OK');
                 }, error => {
-                console.log(error.message);
-                this.showToast('Nie udało się dokonać rezerwacji', 'OK');
+                    console.log(error.message);
+                    this.showToast('Nie udało się dokonać rezerwacji', 'OK');
                 });
         }
         this.reservatedWorkSites = [];
@@ -199,7 +199,7 @@ export class AddReservationComponent implements OnInit{
         for(let i of this.reservatedWorkSites){
         if(i.owner === owner && i.floorNumber === floorNumber && i.roomName === roomName &&
             i.worksite === worksite && i.startDate === startDate && i.endDate === endDate){
-            return k;
+                return k;
             }
             k++;
         }

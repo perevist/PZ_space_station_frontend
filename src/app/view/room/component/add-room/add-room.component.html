@@ -12,8 +12,8 @@
         class="input-form">
             <mat-label> Piętro </mat-label> 
             <mat-select #floorNumber>
-                <mat-option *ngFor="let floor of floors.slice(1, floors.length)" [value]="floor">
-                {{ floor }}
+                <mat-option *ngFor="let floorNumber of floors.slice(1, floors.length)" [value]="floorNumber">
+                {{ floorNumber }}
                 </mat-option>
             </mat-select>
         </mat-form-field>
@@ -21,10 +21,15 @@
 
     <!-- Textfield to write name of the new room -->
     <mat-card-content>
-		<mat-form-field appearance="fill" 
-			class="input-form-field" >
+		<mat-form-field 
+            appearance="fill" 
+			class="input-form-field"
+            [formGroup]="newRoomFormGroup" >
 			<mat-label> Nazwa pokoju </mat-label>
-			<input matInput placeholder="Wpisz nazwę pokoju (np. 'Pokój 6C')" #roomName>
+			<input 
+                matInput placeholder="Wpisz nazwę pokoju (np. 'Pokój 6C')" 
+                formControlName="name"
+                #roomName>
 			<button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="roomName.value=''">
 				<mat-icon>close</mat-icon>
 			</button>
@@ -34,9 +39,16 @@
     <!-- Text Field to write number of work sites -->
     <mat-card-content>
 		<mat-form-field appearance="fill" 
-			class="input-form-field">
+			class="input-form-field"
+            [formGroup]="newRoomFormGroup">
 			<mat-label> Liczba miejsc </mat-label>
-			<input matInput placeholder="Wpisz liczbę miejsc w pokoju" #workSiteNumber>
+			<input 
+                matInput placeholder="Wpisz liczbę miejsc w pokoju" 
+                type="number"
+                min="1"
+                formControlName="numberOfWorksites"
+                #workSiteNumber 
+            />
 			<button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="workSiteNumber.value=''">
 				<mat-icon>close</mat-icon>
 			</button>

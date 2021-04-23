@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/view/service/auth.service';
@@ -19,11 +19,11 @@ export class AddRoomComponent implements OnInit {
   newRoom: RoomRequest;
 
   // TODO Add validators of new room fields in formm
-  // newRoomFormGroup: FormGroup = new FormGroup({
-  //   floor: new FormControl(),
-  //   name: new FormControl(),
-  //   numberOfWorksites: new FormControl()
-  // })
+  newRoomFormGroup: FormGroup = new FormGroup({
+    // floor: new FormControl(),
+    name: new FormControl('', Validators.required),
+    numberOfWorksites: new FormControl('', Validators.required)
+  })
 
   constructor(
     protected router: Router, 
@@ -39,11 +39,11 @@ export class AddRoomComponent implements OnInit {
 
   getFloors(): void{
     this.floorsService.getFloors().subscribe(
-    numberOfFloors => {
+      numberOfFloors => {
         for(var i=1; i <= numberOfFloors.numberOfFloors; i++){
-        this.floors[i] = i;
+          this.floors[i] = i;
         }
-    }
+      }
     );
   }
 
@@ -52,19 +52,28 @@ export class AddRoomComponent implements OnInit {
     roomName: string,
     workSiteNumber: number
   ): void{
-    this.newRoom = {floor: floorNumber, name: roomName, numberOfWorksites: workSiteNumber}
-    this.roomsService.postRoom( this.newRoom )
-      .subscribe(msg => {
-      console.log(msg); 
-      this.showToast('Udało się utworzyć nowy pokój', 'OK');
-      }, error => {
-      console.log(error.message);
-      this.showToast('Utworzenie pokoju nie powiodło się', 'OK');
-      });
+    if( this.newRoomFormGroup.valid ){
+      this.newRoom = {floor: floorNumber, name: roomName, numberOfWorksites: workSiteNumber}
+      this.roomsService.postRoom( this.newRoom )
+        .subscribe(msg => {
+          console.log(msg); 
+          this.showToast('Udało się utworzyć nowy pokój', 'OK');
+        }, error => {
+          console.log(error.message);
+          this.showToast('Utworzenie pokoju nie powiodło się', 'OK');
+        });
+        this.newRoomFormGroup.reset({
+          name : '',
+          workSiteNumber : ''
+        });
+    }
+    else {
+      this.showToast('Niepoprawne wypełnienie pola', 'OK');
+    }
   }
 
   showToast(message: string, action: string): void{
-        this._snackBar.open(message, action);
-    }
+    this._snackBar.open(message, action);
+  }
 
 }
