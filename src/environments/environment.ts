@@ -11,7 +11,7 @@ export const environment = {
    // "public-client": true,
   //  "confidential-port": 0,
     "url": 'http://localhost:8080/auth',
-    "clientId": 'space-station-app',
+    "clientId": 'space-station-app-frontend',
   //  "enable-cors": true
   }
 
