@@ -161,6 +161,7 @@
   a:hover {
     color: white;
     text-decoration: none;
+    cursor: pointer;
   }
 
   a:hover {
@@ -306,25 +307,43 @@
     </a>
 
     <pre>   </pre>
-    <div *ngIf="isLoggedIn;then logged else notLogged"></div>
+    <div *ngIf="isLoggedIn; then logged else notLogged"></div>
+    
         <ng-template #logged>
             <a routerLink="/reservations-table">
                 Rezerwacje
             </a>
             <pre>    </pre>
-            <a routerLink='/view-room'>
+            <!-- <a routerLink='room/view'>
+              Pokoje
+            </a> -->
+
+            <a [matMenuTriggerFor]="menuRooms" 
+              aria-label="Rooms menu"
+            >
               Pokoje
             </a>
+            <mat-menu #menuRooms="matMenu" xPosition="after">
+              <button mat-menu-item routerLink='room/view'>
+                <span>Tabela pokoi</span>
+              </button>
+              <div *ngIf="isAdmin; then admin else notAdmin"></div>
+              <ng-template #admin>
+                <button mat-menu-item routerLink='room/add' >
+                  <span>Dodaj nowy pokój</span>
+                </button>
+              </ng-template>             
+            </mat-menu>
+
             <pre class="spacer"></pre>
 
 
-            <a href="#" 
-              [matMenuTriggerFor]="menu" 
+            <a [matMenuTriggerFor]="menuUser" 
               aria-label="Users menu"
             >
               <mat-icon>person</mat-icon> {{ userProfile.name }}
             </a>
-            <mat-menu #menu="matMenu" xPosition="before">
+            <mat-menu #menuUser="matMenu" xPosition="before">
               <button mat-menu-item (click)="logout()">
                 <mat-icon>highlight_off</mat-icon>
                 <span>Wyloguj</span>

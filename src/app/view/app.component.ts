@@ -12,37 +12,40 @@ export class AppComponent implements OnInit{
   title = 'SpaceStation-frontend';
 
   public isLoggedIn = false;
+  public isAdmin = false;
   userProfile : KeycloakTokenParsed;
   constructor(private readonly keycloak: AuthService){}
 
   public async ngOnInit(){
-        let user = this.keycloak.getLoggedUser();
-        this.userProfile = user;
-       if (this.userProfile != undefined){
-           this.isLoggedIn = true;
-        }
+    this.setLogin();       
   }
 
   public login(){
-      this.keycloak.login();
-      let user = this.keycloak.getLoggedUser();
-      this.userProfile = user;
-      if (this.userProfile != undefined){
-         this.isLoggedIn = true;
-      }
+    this.keycloak.login();
+    this.setLogin();
   }
 
   public register(){
-      this.keycloak.register();
+    this.keycloak.register();
   }
 
   public logout(){
-        this.keycloak.logout();
-        if(this.keycloak.getLoggedUser() == undefined){
-            this.isLoggedIn = false;
-        } 
-
+    this.keycloak.logout();
+    if(this.keycloak.getLoggedUser() == undefined){
+      this.isLoggedIn = false;
+      this.isAdmin = false;
+    } 
   }
 
+  private setLogin(){
+    this.userProfile = this.keycloak.getLoggedUser();
+    if (this.userProfile != undefined){
+      this.isLoggedIn = true;
+      if(this.keycloak.getRoles().includes('admin')){
+        this.isAdmin = true;
+      }
+      console.log(this.isAdmin);
+    }
+  }
 
 }

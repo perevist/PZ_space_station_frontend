@@ -18,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from '../app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RoomRoutingModule } from './room-routing.module';
 
 
 
@@ -30,10 +31,21 @@ import { ReactiveFormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     CommonModule,
+    RoomRoutingModule,
+
+    // RouterModule.forRoot([
+    //   { path: 'room/add-room', component: AddRoomComponent },
+    //   { path: 'view-room', component: ViewRoomComponent }
+    // ]),
 
     RouterModule.forRoot([
-      { path: 'add-room', component: AddRoomComponent },
-      { path: 'view-room', component: ViewRoomComponent }
+      { 
+        path: 'room',
+        children: [
+          { path: 'add', component: AddRoomComponent },
+          { path: 'view', component: ViewRoomComponent }
+        ]
+      }
     ]),
 
     MatFormFieldModule,

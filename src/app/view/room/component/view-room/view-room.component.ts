@@ -42,10 +42,13 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
   }
 
   goToAddRoom($myParam: string = ''): void {
-    const navigationDetails: string[] = ['/add-room'];
+    const navigationDetails: string[] = ['room/add'];
     if($myParam.length) {
       navigationDetails.push($myParam);
     }
+    console.log(navigationDetails);
+    console.log(this.router);
+
     this.router.navigate(navigationDetails);
   }
 
