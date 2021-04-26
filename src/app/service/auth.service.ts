@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 
@@ -22,7 +23,8 @@ export class AuthService{
       this.keycloakService.login();
   }
 
-  logout() {
+  async logout() {
+      this.keycloakService.clearToken();
       this.keycloakService.logout();
   }
 

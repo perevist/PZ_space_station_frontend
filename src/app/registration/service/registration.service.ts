@@ -13,7 +13,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class RegistrationService {
-  private readonly POST_REGISTRATION = 'http://localhost:8080/registration';
+  private readonly POST_REGISTRATION = 'http://localhost:8080/auth/realms/SpaceStation/users';
 
   constructor(private http: HttpClient) { }
 

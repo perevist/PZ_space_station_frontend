@@ -19,6 +19,7 @@
             <mat-hint align="end">{{password.value?.length || 0}}/30</mat-hint>
         </mat-form-field>
 
+
         <pre></pre>
 
         <mat-form-field appearance="fill" class="input-form-field" [formGroup]="registrationFormGroup">
@@ -57,14 +58,14 @@
 
         <pre></pre>
 
-        <mat-form-field appearance="fill" class="input-form-field" hintLabel="Numer telefonu musi mieć 9 cyfr" [formGroup]="registrationFormGroup">
+   <!--      <mat-form-field appearance="fill" class="input-form-field" hintLabel="Numer telefonu musi mieć 9 cyfr" [formGroup]="registrationFormGroup">
             <mat-label>Numer telefonu</mat-label>
             <input matInput type="text" placeholder="Numer telefonu" #phoneNumber required maxlength="9" formControlName="phoneNumber">
             <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="phoneNumber.value=''">
                 <mat-icon>close</mat-icon>
             </button>
             <mat-hint align="end">{{phoneNumber.value?.length || 0}}/9</mat-hint>
-        </mat-form-field>
+        </mat-form-field> -->
 
     </mat-card-content>
 
