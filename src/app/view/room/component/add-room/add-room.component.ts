@@ -73,7 +73,8 @@ export class AddRoomComponent implements OnInit {
   }
 
   showToast(message: string, action: string): void{
-    this._snackBar.open(message, action);
+    this._snackBar.open(message, action, {
+      duration: 3000
+    });
   }
-
 }

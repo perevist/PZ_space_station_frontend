@@ -19,6 +19,7 @@ import { AuthService } from './service/auth.service';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { RoomPlanComponent } from './room/component/room-plan/room-plan.component';
 @NgModule({
   declarations: [
     AppComponent

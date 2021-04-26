@@ -19,11 +19,12 @@ import { AppRoutingModule } from '../app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RoomRoutingModule } from './room-routing.module';
+import { RoomPlanComponent } from './component/room-plan/room-plan.component';
 
 
 
 @NgModule({
-  declarations: [AddRoomComponent, ViewRoomComponent],
+  declarations: [AddRoomComponent, ViewRoomComponent, RoomPlanComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -33,17 +34,13 @@ import { RoomRoutingModule } from './room-routing.module';
     CommonModule,
     RoomRoutingModule,
 
-    // RouterModule.forRoot([
-    //   { path: 'room/add-room', component: AddRoomComponent },
-    //   { path: 'view-room', component: ViewRoomComponent }
-    // ]),
-
     RouterModule.forRoot([
       { 
         path: 'room',
         children: [
           { path: 'add', component: AddRoomComponent },
-          { path: 'view', component: ViewRoomComponent }
+          { path: 'view', component: ViewRoomComponent },
+          { path: 'plan', component: RoomPlanComponent } // After work this line should be DESTROY
         ]
       }
     ]),

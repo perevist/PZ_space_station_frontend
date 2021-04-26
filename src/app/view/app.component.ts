@@ -14,7 +14,9 @@ export class AppComponent implements OnInit{
   public isLoggedIn = false;
   public isAdmin = false;
   userProfile : KeycloakTokenParsed;
-  constructor(private readonly keycloak: AuthService){}
+  constructor(private readonly keycloak: AuthService){
+    
+  }
 
   public async ngOnInit(){
     this.setLogin();       
