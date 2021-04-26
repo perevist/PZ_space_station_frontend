@@ -14,8 +14,7 @@ export class WorksitesService {
   constructor(private http: HttpClient,
               private datepipe: DatePipe) { }
 
-  getWorksites(roomId?: string, startDate?: Date, endDate?:Date): Observable<Worksite[]>{
-    let enco: any = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+  getWorksites(roomId?: string, startDate?: Date, endDate?:Date): Promise<Worksite[]>{
 
     var startDateSearch = "";
     var endDateSearch = "";
@@ -25,24 +24,24 @@ export class WorksitesService {
     if(startDate && !roomId && !endDate){
       startDateSearch = "?startDate=";
       let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
-      return this.http.get<Worksite[]>(this.GET_WORKSITES+startDateSearch+start, {headers: enco, withCredentials: true});
+      return this.http.get<Worksite[]>(this.GET_WORKSITES+startDateSearch+start).toPromise();
     }
     if(startDate && endDate && !roomId){
       endDateSearch = "?endDate=";
       startDateSearch = "&startDate=";
       let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
       let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
-      return this.http.get<Worksite[]>(this.GET_WORKSITES+endDateSearch+end+startDateSearch+start, {headers: enco, withCredentials: true});
+      return this.http.get<Worksite[]>(this.GET_WORKSITES+endDateSearch+end+startDateSearch+start).toPromise();
     }
     if(roomId && !startDate){
       floorSearch = "?roomId=";
-      return this.http.get<Worksite[]>(this.GET_WORKSITES+floorSearch+roomId, {headers: enco, withCredentials: true});
+      return this.http.get<Worksite[]>(this.GET_WORKSITES+floorSearch+roomId).toPromise();
     }
     if(roomId && startDate && !endDate){
       floorSearch = "?roomId=";
       startDateSearch = "&startDate=";
       let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
-      return this.http.get<Worksite[]>(this.GET_WORKSITES+floorSearch+roomId+startDateSearch+start, {headers: enco, withCredentials: true});
+      return this.http.get<Worksite[]>(this.GET_WORKSITES+floorSearch+roomId+startDateSearch+start).toPromise();
     }
     if(roomId && startDate && endDate){
       floorSearch = "&roomId=";
@@ -50,12 +49,12 @@ export class WorksitesService {
       endDateSearch = "?endDate=";
       let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
       let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
-      return this.http.get<Worksite[]>(this.GET_WORKSITES+endDateSearch+end+floorSearch+roomId+startDateSearch+start, {headers: enco, withCredentials: true});
+      return this.http.get<Worksite[]>(this.GET_WORKSITES+endDateSearch+end+floorSearch+roomId+startDateSearch+start).toPromise();
     }
 
 
 
-    return this.http.get<Worksite[]>(this.GET_WORKSITES, {headers: enco, withCredentials: true});
+    return this.http.get<Worksite[]>(this.GET_WORKSITES).toPromise();
   }
 
   private handleError<T>(operation = 'operation'){

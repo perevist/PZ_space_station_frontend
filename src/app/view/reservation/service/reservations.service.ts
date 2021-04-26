@@ -18,7 +18,7 @@ export class ReservationsService {
   readonly POST_RESERVATIONS = 'http://localhost:8081/api/reservations';
   readonly DEL_RESERVATIONS = 'http://localhost:8081/api/reservations/';
   
-  constructor(private http: HttpClient, //private cookieService: CookieService,
+  constructor(private http: HttpClient, 
             private keycloakService: AuthService) { }
 
   getReservations(): Promise<ReservationResponse[]>{

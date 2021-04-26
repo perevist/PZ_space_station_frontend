@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from "@angular/forms";
 import { DatePipe } from '@angular/common';
 import { UsersService } from 'src/app/view/service/users.service';
@@ -12,7 +12,9 @@ import { ReservationsService } from '../../service/reservations.service';
 import { ReservationRequest } from '../../model/ReservationRequest';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/view/service/auth.service';
+import { AuthService } from 'src/app/service/auth.service';
+import { DataflowService } from '../../service/dataflow.service';
+import { Subscription } from 'rxjs';
 
 export interface ReservatedWorkSite{
     owner:	UserResponseDto;
@@ -29,8 +31,8 @@ export interface ReservatedWorkSite{
     styleUrls: ['./add-reservation.component.css']
 })
 
-export class AddReservationComponent implements OnInit{
-    constructor(
+export class AddReservationComponent implements OnDestroy ,OnInit{
+    constructor(  
         protected router: Router, 
         protected keycloakService: AuthService,
         private usersService: UsersService,
@@ -39,7 +41,8 @@ export class AddReservationComponent implements OnInit{
         private worksiteService: WorksitesService,
         private reservationService: ReservationsService,
         private datepipe: DatePipe,
-        private _snackBar: MatSnackBar,             
+        private _snackBar: MatSnackBar,
+        private dataService: DataflowService
     ) {}
 
 
@@ -48,11 +51,17 @@ export class AddReservationComponent implements OnInit{
         end: new FormControl()
     });
 
+
+    subscription: Subscription;
     availableRooms = true;
     selectableAvailableRooms = false;
 
+    reservationToModify: any = {};
+    preparedReservationToInput: any = {};
+
     defualtFloor: number = 1;
     lastWorksite: Worksite = {roomId:0, worksiteId: 0,worksiteInRoomId: 0};
+    title: string;
     
     user: any;
     removable = true;
@@ -67,15 +76,59 @@ export class AddReservationComponent implements OnInit{
     reservation: ReservationRequest;
 
     ngOnInit(): void {
-        this.user = this.keycloakService.getLoggedUser();
-        this.getUsers();
+        this.getWorksites();
         this.getFloors();
+        this.getRooms();
+        this.getUsers();
+        setTimeout(() =>{
+        this.subscription = this.dataService.currentReservation.subscribe(reservation => this.reservationToModify = reservation);
+        if(this.reservationToModify.worksiteId){
+            this.prepareDataToInput();
+            this.title = 'Zmodyfikuj rezerwację';
+            console.log(this.preparedReservationToInput);
+        }else{
+            this.title = 'Dodaj rezerwacje';
+        };
+        this.user = this.keycloakService.getLoggedUser();
+        console.log(this.reservationToModify);}, 300);
+
+    }
+
+    ngOnDestroy(): void{
+        this.subscription.unsubscribe();
     }
 
     getUsers(): void{
         this.usersService.getUsers().subscribe(
             users => this.usersList = users
         );
+    }
+
+    prepareDataToInput(): void{
+
+        let startDate = new Date(this.reservationToModify.startDate);
+        let endDate = new Date(this.reservationToModify.endDate);
+        let user = this.reservationToModify.ownerFirstName + ' ' + this.reservationToModify.ownerLastName;
+        let worksite = this.reservationToModify.worksiteId;
+        let room;
+        let floor;
+        console.log(this.worksitesList)
+        for(let ws of this.worksitesList){
+            if(ws.worksiteId === worksite){
+                room = ws.roomId;
+                worksite = ws.worksiteInRoomId;
+                break;
+            }
+        }
+        console.log(this.roomsList);
+        for(let rm of this.roomsList){
+            if(rm.id === room){
+                floor = rm.floor;
+            }
+        }
+        room = 'Pokój ' + room;
+        this.preparedReservationToInput = {user: user, startDate: startDate, endDate: endDate, worksiteId: worksite, roomId: room, floor: floor};
+        console.log(this.preparedReservationToInput);
     }
 
     getFloors(): void{
@@ -89,18 +142,28 @@ export class AddReservationComponent implements OnInit{
     }
 
     getRooms(floors?: number, start?:Date, end?:Date): void{
-        if(start < end){
-            this.roomsService.getRooms(floors.toString(), start, end).subscribe(
-            rooms => this.roomsList = rooms
-            );
-            this.worksitesList = [];
+        if(floors !== undefined){
+            if(start < end){
+                this.roomsService.getRooms(floors.toString(), start, end).subscribe(
+                rooms => this.roomsList = rooms
+                );
+                this.worksitesList = [];
+        }}else{
+            this.roomsService.getRooms().subscribe(
+                rooms => this.roomsList = rooms
+                );
         }
     }
 
-    getWorksites(roomId?: string, start?:Date, end?:Date){
-        this.worksiteService.getWorksites(roomId[roomId.length-1], start, end).subscribe(
-        worksite => {this.worksitesList = worksite;}
-        )
+    async getWorksites(roomId?: string, start?:Date, end?:Date){
+        if(roomId !== undefined){
+            await this.worksiteService.getWorksites(roomId[roomId.length-1], start, end).then((worksites) => this.worksitesList = worksites);
+            console.log(this.worksitesList);
+           // this.worksiteService.getWorksites(roomId[roomId.length-1], start, end).subscribe(
+           // worksite => {this.worksitesList = worksite;}
+        }else{
+            await this.worksiteService.getWorksites().then((worksites) => this.worksitesList = worksites);
+        };
     }
 
     postReservations(floor?:number, start?:Date, end?:Date){
