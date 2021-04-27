@@ -16,6 +16,8 @@ import { AuthService } from 'src/app/view/service/auth.service';
 import { DataflowService } from '../../service/dataflow.service';
 import { Subscription } from 'rxjs';
 import { KeycloakProfile} from 'keycloak-js'
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DialogWindowComponent } from '../dialog-window/dialog-window.component';
 
 export interface ReservatedWorkSite{
     owner:	KeycloakProfile;
@@ -44,6 +46,7 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
         private datepipe: DatePipe,
         private _snackBar: MatSnackBar,
         private dataService: DataflowService,
+        private dialog: MatDialog
     ) {}
 
 
@@ -179,17 +182,32 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
             };
             this.reservationService.postReservation( this.reservation )
                 .subscribe(msg => {
-                    console.log(msg); // RservationResponse
-                    this.showToast('Udało się dokonać rezerwacji', 'OK');
+                console.log(msg); // RservationResponse
+                this.openDialog('Sukces', 'Pomyślnie złożono rezerwację!');
                 }, error => {
                     console.log(error.message);
                     this.showToast('Nie udało się dokonać rezerwacji', 'OK');
                 });
         }
-        this.reservatedWorkSites = [];
-        this.getRooms(floor, start,end);
-        this.worksitesList = [];        
     }
+
+    openDialog(state: string, message: string){
+        const dialogConfig =  new MatDialogConfig()
+
+        dialogConfig.disableClose = true
+        dialogConfig.autoFocus = true
+
+        const dialogRef = this.dialog.open(DialogWindowComponent, dialogConfig);
+        dialogRef.afterClosed().subscribe(() => {this.goToReservationsTable});
+    }
+
+    goToReservationsTable($myParam: string = ''): void {
+        const navigationDetails: string[] = ['/reservations-table'];
+        if($myParam.length) {
+          navigationDetails.push($myParam);
+        }
+        this.router.navigate(navigationDetails);
+      }
 
     addChipToList(  
         owner:	KeycloakProfile,

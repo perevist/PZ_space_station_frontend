@@ -24,12 +24,14 @@ import { ReservationsTableComponent } from './component/reservations-table/reser
 import { AddReservationComponent } from './component/add-reservation/add-reservation.component';
 import { UsersChipsComponent } from './component/users-chips/users-chips.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { DialogWindowComponent } from './component/dialog-window/dialog-window.component';
 
 @NgModule({
   declarations: [
     AddReservationComponent,
     ReservationsTableComponent,
     UsersChipsComponent,
+    DialogWindowComponent,
   ],
   imports: [
     BrowserModule,

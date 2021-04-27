@@ -7,9 +7,8 @@
     </mat-card-header>
 
     <mat-card-content>
-        <mat-label>Termin rezerwacji</mat-label>
         <mat-form-field appearance="fill" class="input-form">
-            <mat-label>Wybierz termin:</mat-label>
+            <mat-label>Wybierz termin</mat-label>
             <mat-date-range-input [rangePicker]="picker" [formGroup]="dateRange">
                 <input  matStartDate formControlName="start" placeholder="Początek">
                 <input  matEndDate formControlName="end" placeholder="Koniec" (dateChange)="getRooms(Floor.value, dateRange.value.start, dateRange.value.end)">
@@ -20,8 +19,8 @@
     </mat-card-content>
 
     <mat-card-content>
-        <mat-label>Adresat rezerwacji: </mat-label>
         <mat-form-field appearance="fill" class="input-form">
+        <mat-label>Adresat rezerwacji</mat-label>
         <mat-select #User>
             <mat-option *ngFor="let user of usersList" [value]="user" >
             {{user.firstName}} {{user.lastName}}
@@ -31,8 +30,8 @@
     </mat-card-content>
 
     <mat-card-content>
-        <mat-label>Piętro: </mat-label>
         <mat-form-field appearance="fill" class="input-form">
+        <mat-label>Piętro</mat-label>
         <mat-select #Floor (selectionChange)="getRooms(Floor.value, dateRange.value.start, dateRange.value.end)">
             <mat-option *ngFor="let floor of floors.slice(1, floors.length)" [value]="floor">
             {{floor}}
@@ -42,8 +41,8 @@
     </mat-card-content>
 
     <mat-card-content>
-        <mat-label>Pokój:</mat-label>
-            <mat-form-field appearance="fill" class="input-form">
+        <mat-form-field appearance="fill" class="input-form">
+                <mat-label>Pokój</mat-label>
                     <mat-select #Room (selectionChange)="getWorksites(Room.value.id, dateRange.value.start, dateRange.value.end)">
                         <div *ngIf="this.roomsList.length !== 0; else noRoomBlock"  >
                             <mat-option *ngFor="let room of roomsList" [value]="room" >
@@ -62,8 +61,8 @@
     </mat-card-content>
 
     <mat-card-content>
-        <mat-label>Numer stanowiska w pokoju:</mat-label>
         <mat-form-field appearance="fill" class="input-form">
+            <mat-label>Numer stanowiska w pokoju</mat-label>
             <mat-select #WorkSite>
                 <mat-option *ngFor="let workSite of worksitesList" [value]="workSite">
                     {{workSite.worksiteInRoomId}}
@@ -130,9 +129,8 @@
     </mat-card-title>
 
     <mat-card-content>
-        <mat-label>Termin rezerwacji</mat-label>
         <mat-form-field appearance="fill" class="input-form">
-            <mat-label>Wybierz termin:</mat-label>
+            <mat-label>Wybierz termin</mat-label>
             <mat-date-range-input [rangePicker]="picker" [formGroup]="dateRange">
                 <input  matStartDate formControlName="start" placeholder="Początek">
                 <input  matEndDate formControlName="end" placeholder="Koniec" (dateChange)="getRooms(Floor.value, dateRange.value.start, dateRange.value.end)">
@@ -143,8 +141,8 @@
     </mat-card-content>
 
     <mat-card-content>
-        <mat-label>Adresat rezerwacji: </mat-label>
         <mat-form-field appearance="fill" class="input-form">
+        <mat-label>Adresat rezerwacji</mat-label>
         <mat-select #User  [(value)]="preparedReservationToInput">
             <mat-option *ngFor="let user of usersList" [value]="user" >
             {{user.firstName}} {{user.lastName}}
@@ -154,8 +152,8 @@
     </mat-card-content>
 
     <mat-card-content>
-        <mat-label>Piętro: </mat-label>
         <mat-form-field appearance="fill" class="input-form">
+        <mat-label>Piętro</mat-label>
         <mat-select #Floor (selectionChange)="getRooms(Floor.value, dateRange.value.start, dateRange.value.end)" [(value)]="preparedReservationToInput.floor">
             <mat-option *ngFor="let floor of floors.slice(1, floors.length)" [value]="floor">
             {{floor}}
@@ -165,8 +163,8 @@
     </mat-card-content>
 
     <mat-card-content>
-        <mat-label>Pokój:</mat-label>
-            <mat-form-field appearance="fill" class="input-form">
+        <mat-form-field appearance="fill" class="input-form">
+                <mat-label>Pokój</mat-label>
                     <mat-select #Room (selectionChange)="getWorksites(Room.value.id, dateRange.value.start, dateRange.value.end)"  [(value)]="preparedReservationToInput.roomId"> 
                         <div *ngIf="this.roomsList.length !== 0; else noRoomBlock"  >
                             <mat-option *ngFor="let room of roomsList" [value]="room" >
@@ -185,8 +183,8 @@
     </mat-card-content>
 
     <mat-card-content>
-        <mat-label>Numer stanowiska w pokoju:</mat-label>
         <mat-form-field appearance="fill" class="input-form">
+            <mat-label>Numer stanowiska w pokoju</mat-label>
             <mat-select #WorkSite  [(value)]="preparedReservationToInput.worksiteId">
                 <mat-option *ngFor="let workSite of worksitesList" [value]="workSite">
                     {{workSite.worksiteInRoomId}}
