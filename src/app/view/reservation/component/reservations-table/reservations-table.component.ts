@@ -69,6 +69,11 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDest
     this.router.navigate(navigationDetails);
   }
 
+  modifyReservation(reservation: any){
+      this.dataService.changeReservation(reservation);
+      this.goToAddReservations(true);
+  }
+
   showToast(message: string, action: string): void{
     this._snackBar.open(message, action);
   }
