@@ -9,11 +9,8 @@ import { ReservationsService } from '../../service/reservations.service';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/view/service/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-<<<<<<< HEAD
 import { DataflowService } from '../../service/dataflow.service';
 import { Subscription } from 'rxjs';
-=======
->>>>>>> 0a6e190 (Fix delete reservation)
 
 @Component({
   selector: 'app-reservations-table',
@@ -35,12 +32,9 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDest
   constructor(private reservationsService: ReservationsService,
              protected router: Router, 
              protected keycloakService: AuthService,
-<<<<<<< HEAD
              private _snackBar: MatSnackBar,
-             private dataService: DataflowService) {
-=======
-             private _snackBar: MatSnackBar) {
->>>>>>> 0a6e190 (Fix delete reservation)
+             private dataService: DataflowService
+             ) {
     this.dataSource = new ReservationsTableDataSource(this.reservationsService);
   }
   ngOnDestroy(): void {
@@ -76,14 +70,6 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDest
     this.router.navigate(navigationDetails);
   }
 
-<<<<<<< HEAD
-  modifyReservation(reservation: any){
-      this.dataService.changeReservation(reservation);
-      this.goToAddReservations(true);
-  }
-
-=======
->>>>>>> 0a6e190 (Fix delete reservation)
   showToast(message: string, action: string): void{
     this._snackBar.open(message, action);
   }
