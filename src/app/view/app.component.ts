@@ -19,7 +19,7 @@ export class AppComponent implements OnInit{
   }
 
   public async ngOnInit(){
-    this.setLogin();       
+    this.setLogin();
   }
 
   public login(){
@@ -46,7 +46,6 @@ export class AppComponent implements OnInit{
       if(this.keycloak.getRoles().includes('admin')){
         this.isAdmin = true;
       }
-      console.log(this.isAdmin);
     }
   }
 

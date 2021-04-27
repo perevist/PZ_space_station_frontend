@@ -2,11 +2,9 @@
 
     <mat-card-header>
         <mat-card-title>
-            Dodaj rezerwację
+            {{this.title}}
         </mat-card-title>
     </mat-card-header>
-
-    
 
     <mat-card-content>
         <mat-form-field 
@@ -14,8 +12,12 @@
         class="input-form">
             <mat-label>Wybierz termin</mat-label>
             <mat-date-range-input [rangePicker]="picker" [formGroup]="dateRange">
-                <input matStartDate formControlName="start" placeholder="Początek">
-                <input matEndDate formControlName="end" placeholder="Koniec" (dateChange)="getRooms(Floor.value, dateRange.value.start, dateRange.value.end)">
+                <input *ngIf="!this.reservationToModify.worksiteId" matStartDate formControlName="start" placeholder="Początek">
+                <input *ngIf="!this.reservationToModify.worksiteId" matEndDate formControlName="end" placeholder="Koniec" (dateChange)="getRooms(Floor.value, dateRange.value.start, dateRange.value.end)">
+            
+                <input *ngIf="this.reservationToModify.worksiteId" matStartDate  formControlName="start" placeholder="Początek" value="this.preparedReservationToInput.startDate">
+                <input *ngIf="this.reservationToModify.worksiteId" matEndDate formControlName="end" placeholder="Koniec"  value="this.preparedReservationToInput.endDate" (dateChange)="getRooms(Floor.value, dateRange.value.start, dateRange.value.end)">
+            
             </mat-date-range-input>
             <mat-datepicker-toggle matSuffix [for]="picker" > </mat-datepicker-toggle>
             <mat-date-range-picker #picker > </mat-date-range-picker>
@@ -25,50 +27,70 @@
     <mat-card-content>
         <mat-form-field appearance="fill" class="input-form">
             <mat-label>Na kogo rezerwacja</mat-label>
-            <mat-select #User>
-                <mat-option *ngFor="let user of usersList" [value]="user">
-                    {{user.firstName}} {{user.lastName}}
-                </mat-option>
-            </mat-select>
+        <mat-select #User *ngIf="!this.reservationToModify.worksiteId">
+            <mat-option *ngFor="let user of usersList" [value]="user">
+            {{user.firstName}} {{user.lastName}}
+            </mat-option>
+        </mat-select>
+        <mat-select #User *ngIf="this.reservationToModify.worksiteId"  [(value)]="this.preparedReservationToInput.user">
+            <mat-option *ngFor="let user of usersList"  [value]="user">
+             {{user.firstName}} {{user.lastName}} 
+            </mat-option>
+        </mat-select>
         </mat-form-field>
     </mat-card-content>
 
     <mat-card-content>
         <mat-form-field appearance="fill" class="input-form">
             <mat-label>Piętro</mat-label>
-            <mat-select #Floor (selectionChange)="getRooms(Floor.value, dateRange.value.start, dateRange.value.end)" [(value)]="defualtFloor">
-                <mat-option *ngFor="let floor of floors.slice(1, floors.length)" [value]="floor">
-                    {{floor}}
-                </mat-option>
-            </mat-select>
+        
+        <mat-select #Floor *ngIf="!this.reservationToModify.worksiteId" (selectionChange)="getRooms(Floor.value, dateRange.value.start, dateRange.value.end)" [(value)]="defualtFloor">
+            <mat-option *ngFor="let floor of floors.slice(1, floors.length)" [value]="floor">
+            {{floor}}
+            </mat-option>
+        </mat-select>
+        
+        <mat-select #Floor *ngIf="this.reservationToModify.worksiteId" [(value)]="this.preparedReservationToInput.floor" (selectionChange)="getRooms(Floor.value, dateRange.value.start, dateRange.value.end)">
+            <mat-option *ngFor="let floor of floors.slice(1, floors.length)" [value]="floor">
+            {{floor}}
+            </mat-option>
+        </mat-select>
+
         </mat-form-field>
     </mat-card-content>
 
     <mat-card-content>
         <mat-form-field appearance="fill" class="input-form">
-            <mat-label>Pokój</mat-label>
-                <mat-select #Room (selectionChange)="getWorksites(Room.value.id, dateRange.value.start, dateRange.value.end)">
-                    <div *ngIf="this.roomsList.length !== 0; else noRoomBlock"  >
-                        <mat-option *ngFor="let room of roomsList" [value]="room" >
-                            {{room.name}}
-                        </mat-option>
-                    </div>
-                <ng-template #noRoomBlock>
-                    <option disabled selected>
-                        <mat-option>
-                            Brak wolnych pokoi
-                        </mat-option>
-                    </option>
-                </ng-template>
-                </mat-select>
-<!--
-                    <ng-template #noRoomBlock>
-                        <mat-select>
-                            <mat-option>
-                                Brak pokoi
+                <mat-label>Pokój:</mat-label>
+                    <mat-select #Room *ngIf="!this.reservationToModify.worksiteId" (selectionChange)="getWorksites(Room.value.name, dateRange.value.start, dateRange.value.end)">
+                        <div *ngIf="this.roomsList.length !== 0; else noRoomBlock"  >
+                            <mat-option *ngFor="let room of roomsList" [value]="room" >
+                                {{room.name}}
                             </mat-option>
-                        </mat-select>
-                    </ng-template>-->
+                        </div>
+                    <ng-template #noRoomBlock>
+                        <option disabled selected>
+                            <mat-option>
+                                Brak wolnych pokoi
+                            </mat-option>
+                        </option>
+                    </ng-template>
+                    </mat-select>
+
+                    <mat-select #Room *ngIf="this.reservationToModify.worksiteId" [value]="this.preparedReservationToInput.roomId" (selectionChange)="getWorksites(Room.value.name, dateRange.value.start, dateRange.value.end)">
+                        <div *ngIf="this.roomsList.length !== 0; else noRoomBlock"  >
+                            <mat-option *ngFor="let room of roomsList" [value]="room" >
+                                {{room.name}}
+                            </mat-option>
+                        </div>
+                    <ng-template #noRoomBlock>
+                        <option disabled selected>
+                            <mat-option>
+                                Brak wolnych pokoi
+                            </mat-option>
+                        </option>
+                    </ng-template>
+                    </mat-select>
             
         </mat-form-field>
     </mat-card-content>
@@ -76,7 +98,13 @@
     <mat-card-content>
         <mat-form-field appearance="fill" class="input-form">
             <mat-label>Numer stanowiska</mat-label>
-            <mat-select #WorkSite>
+            <mat-select #WorkSite *ngIf="!this.reservationToModify.worksiteId">
+                <mat-option *ngFor="let workSite of worksitesList" [value]="workSite">
+                    {{workSite.worksiteInRoomId}}
+                </mat-option>
+            </mat-select>
+
+            <mat-select #WorkSite *ngIf="this.reservationToModify.worksiteId" [(value)]="this.preparedReservationToInput.worksiteId">
                 <mat-option *ngFor="let workSite of worksitesList" [value]="workSite">
                     {{workSite.worksiteInRoomId}}
                 </mat-option>
@@ -84,21 +112,7 @@
         </mat-form-field>
     </mat-card-content>
 
-		<mat-card-actions>
-			<button mat-stroked-button class ="input-form-field" 
-			(click)="addChipToList(
-					User.value, 
-					Floor.value, 
-					Room.value.name, 
-					WorkSite.value, 
-					dateRange.value.start,
-					dateRange.value.end
-			)" >
-			Dodaj rezerwację do listy
-			</button>
-	</mat-card-actions>
-
-    <mat-card>
+    <mat-card *ngIf="!this.reservationToModify.worksiteId">
         <mat-card-subtitle>Rezerwacje:</mat-card-subtitle>
         <mat-card-content>
             <mat-form-field class="chips-form" appearance="none">
@@ -122,10 +136,30 @@
         </mat-card-content>
     </mat-card>
 
-    <mat-card-actions>
+    <mat-card-actions *ngIf="!this.reservationToModify.worksiteId">
+        <button mat-stroked-button class ="input-form-field" 
+        (click)="addChipToList(
+            User.value, 
+            Floor.value, 
+            Room.value.name, 
+            WorkSite.value, 
+            dateRange.value.start,
+            dateRange.value.end
+        )" >
+        Dodaj rezerwację do listy
+        </button>
+    </mat-card-actions>
+
+    <mat-card-actions *ngIf="!this.reservationToModify.worksiteId">
         <button mat-stroked-button class ="input-form-field" 
         (click)="postReservations(Floor.value, dateRange.value.start, dateRange.value.end)">
         Zarezerwuj wszystko z listy
+        </button>
+    </mat-card-actions>
+
+    <mat-card-actions *ngIf="this.reservationToModify.worksiteId">
+        <button mat-stroked-button class ="input-form-field" >
+            Zmodyfikuj rezerwację
         </button>
     </mat-card-actions>
 

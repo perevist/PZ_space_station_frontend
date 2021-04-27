@@ -337,14 +337,13 @@
 
             <pre class="spacer"></pre>
 
-
             <a [matMenuTriggerFor]="menuUser" 
               aria-label="Users menu"
             >
               <mat-icon>person</mat-icon> {{ userProfile.name }}
             </a>
             <mat-menu #menuUser="matMenu" xPosition="before">
-              <button mat-menu-item (click)="logout()">
+              <button mat-menu-item href="#" href="http://localhost:8080/auth/realms/SpaceStation/protocol/openid-connect/logout?redirect_uri=http://localhost:4200" (click)="logout()">
                 <mat-icon>highlight_off</mat-icon>
                 <span>Wyloguj</span>
               </button>
