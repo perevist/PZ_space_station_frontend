@@ -95,6 +95,7 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
             this.title = 'Dodaj rezerwacje';
         };
         this.user = this.keycloakService.getLoggedUser();
+        console.log('TO TO')
         console.log(this.reservationToModify);}, 300);
 
     }
@@ -114,7 +115,13 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
 
         let startDate = new Date(this.reservationToModify.startDate);
         let endDate = new Date(this.reservationToModify.endDate);
-        let user = this.reservationToModify.ownerFirstName + ' ' + this.reservationToModify.ownerLastName;
+        let user: KeycloakProfile;
+        for (let u of this.usersList){
+            if (u.firstName === this.reservationToModify.ownerFirstName && u.lastName === this.reservationToModify.ownerLastName){
+                user = u;
+                break
+            }
+        }
         let worksite = this.reservationToModify.worksiteId;
         let room;
         let floor;
@@ -183,7 +190,7 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
             this.reservationService.postReservation( this.reservation )
                 .subscribe(msg => {
                 console.log(msg); // RservationResponse
-                this.openDialog('Sukces', 'Pomyślnie złożono rezerwację!');
+                this.openDialog();
                 }, error => {
                     console.log(error.message);
                     this.showToast('Nie udało się dokonać rezerwacji', 'OK');
@@ -191,23 +198,14 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
         }
     }
 
-    openDialog(state: string, message: string){
+    openDialog(){
         const dialogConfig =  new MatDialogConfig()
 
         dialogConfig.disableClose = true
         dialogConfig.autoFocus = true
 
         const dialogRef = this.dialog.open(DialogWindowComponent, dialogConfig);
-        dialogRef.afterClosed().subscribe(() => {this.goToReservationsTable});
     }
-
-    goToReservationsTable($myParam: string = ''): void {
-        const navigationDetails: string[] = ['/reservations-table'];
-        if($myParam.length) {
-          navigationDetails.push($myParam);
-        }
-        this.router.navigate(navigationDetails);
-      }
 
     addChipToList(  
         owner:	KeycloakProfile,

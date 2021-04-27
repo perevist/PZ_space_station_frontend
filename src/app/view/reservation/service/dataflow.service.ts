@@ -9,7 +9,7 @@ export class DataflowService {
     private reservationToModify = new BehaviorSubject({});
     currentReservation = this.reservationToModify.asObservable();
 
-  constructor() { }
+    constructor() { }
 
     changeReservation(reservation: any){
         this.reservationToModify.next(reservation);
