@@ -5,4 +5,5 @@ export interface UserResponseDto{
     lastName: string;
     phoneNumber: string;
     email: string;
+
 }

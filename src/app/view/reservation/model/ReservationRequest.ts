@@ -1,6 +1,6 @@
 export interface ReservationRequest{
   startDate: string;
   endDate: string;
-  ownerId: number;
+  ownerId: string;
   worksiteId: number;
 }

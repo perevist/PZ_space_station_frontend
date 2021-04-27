@@ -15,9 +15,10 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/view/service/auth.service';
 import { DataflowService } from '../../service/dataflow.service';
 import { Subscription } from 'rxjs';
+import { KeycloakProfile} from 'keycloak-js'
 
 export interface ReservatedWorkSite{
-    owner:	UserResponseDto;
+    owner:	KeycloakProfile;
     floorNumber: number;
     roomName: string;
     worksite: Worksite;
@@ -68,12 +69,13 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
     visibleWorkSitesChips = true;
     addOnBlurWorkSitesChips = true;
     selectableWorkSitesChips = true;
-    usersList: UserResponseDto[] = [];
+    usersList: KeycloakProfile[] = [];
     floors: number[] = [];
     roomsList: Room[] = [];
     worksitesList: Worksite[] = [];
     reservatedWorkSites: ReservatedWorkSite[] = [];  
     reservation: ReservationRequest;
+
 
     ngOnInit(): void {
         this.getWorksites();
@@ -102,6 +104,7 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
         this.usersService.getUsers().subscribe(
             users => this.usersList = users
         );
+        
     }
 
     prepareDataToInput(): void{
@@ -112,7 +115,6 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
         let worksite = this.reservationToModify.worksiteId;
         let room;
         let floor;
-        console.log(this.worksitesList)
         for(let ws of this.worksitesList){
             if(ws.worksiteId === worksite){
                 room = ws.roomId;
@@ -120,7 +122,6 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
                 break;
             }
         }
-        console.log(this.roomsList);
         for(let rm of this.roomsList){
             if(rm.id === room){
                 floor = rm.floor;
@@ -128,7 +129,8 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
         }
         room = 'Pokój ' + room;
         this.preparedReservationToInput = {user: user, startDate: startDate, endDate: endDate, worksiteId: worksite, roomId: room, floor: floor};
-        console.log(this.preparedReservationToInput);
+        this.getRooms(this.reservationToModify.floor, this.reservationToModify.startDate, this.reservationToModify.endDate);
+        this.getWorksites(this.reservationToModify.roomId, this.reservationToModify.startDate, this.reservationToModify.endDate);
     }
 
     getFloors(): void{
@@ -144,7 +146,7 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
     getRooms(floors?: number, start?:Date, end?:Date): void{
         if(floors !== undefined){
             if(start < end){
-                this.roomsService.getRooms(floors.toString(), start, end).subscribe(
+                this.roomsService.getRooms(floors, start, end).subscribe(
                 rooms => this.roomsList = rooms
                 );
                 this.worksitesList = [];
@@ -155,9 +157,9 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
         }
     }
 
-    async getWorksites(roomId?: string, start?:Date, end?:Date){
+    async getWorksites(roomId?: number, start?:Date, end?:Date){
         if(roomId !== undefined){
-            await this.worksiteService.getWorksites(roomId[roomId.length-1], start, end).then((worksites) => this.worksitesList = worksites);
+            await this.worksiteService.getWorksites(roomId, start, end).then((worksites) => this.worksitesList = worksites);
             console.log(this.worksitesList);
            // this.worksiteService.getWorksites(roomId[roomId.length-1], start, end).subscribe(
            // worksite => {this.worksitesList = worksite;}
@@ -190,7 +192,7 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
     }
 
     addChipToList(  
-        owner:	UserResponseDto,
+        owner:	KeycloakProfile,
         floorNumber: number,
         roomName: string,
         worksite: Worksite,
@@ -213,27 +215,11 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
                 let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
 
                 if(!this.checkIfChipExist(worksite, start, end)){
-                    this.reservatedWorkSites.push({owner, floorNumber, roomName, worksite, startDate:start, endDate:end});
+                    this.reservatedWorkSites.push({owner , floorNumber, roomName, worksite, startDate:start, endDate:end});
                 }
             }
         }
     }
-
-  // Backend accepts many of the same bookings to the base. The method can be saved for backend testing.
-  // check(owner:	UserResponseDto,
-  //     floorNumber: number,
-  //     roomName: string,
-  //     worksite: Worksite,
-  //     startDate: string,
-  //     endDate: string){
-  //       for(let i of this.reservatedWorkSites){
-  //         if(i.owner === owner && i.floorNumber === floorNumber && i.roomName === roomName &&
-  //           i.worksite.worksiteId === worksite.worksiteId && i.startDate === startDate && i.endDate === endDate){
-  //             return true;
-  //           }
-  //       }
-  //       return false;
-  //     }  
 
     checkIfChipExist( worksite: Worksite, startDate: string, endDate: string ) {
         
@@ -251,7 +237,7 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
     }
 
     checkIndexChipInList( 
-        owner:	UserResponseDto,
+        owner:	KeycloakProfile,
         floorNumber: number,
         roomName: string,
         worksite: Worksite,
@@ -260,11 +246,11 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
     ){
         let k = 0;
         for(let i of this.reservatedWorkSites){
-        if(i.owner === owner && i.floorNumber === floorNumber && i.roomName === roomName &&
-            i.worksite === worksite && i.startDate === startDate && i.endDate === endDate){
-            return k;
-            }
-            k++;
+            if(i.owner === owner && i.floorNumber === floorNumber && i.roomName === roomName &&
+                i.worksite === worksite && i.startDate === startDate && i.endDate === endDate){
+                return k;
+                }
+                k++;
         }
     }
 

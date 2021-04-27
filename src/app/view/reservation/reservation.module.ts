@@ -25,7 +25,6 @@ import { AddReservationComponent } from './component/add-reservation/add-reserva
 import { UsersChipsComponent } from './component/users-chips/users-chips.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-
 @NgModule({
   declarations: [
     AddReservationComponent,
@@ -56,7 +55,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatIconModule,
     MatSelectModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
 
 
   ],

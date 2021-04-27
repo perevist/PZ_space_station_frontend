@@ -14,11 +14,15 @@ export class WorksitesService {
   constructor(private http: HttpClient,
               private datepipe: DatePipe) { }
 
-  getWorksites(roomId?: string, startDate?: Date, endDate?:Date): Promise<Worksite[]>{
+  getWorksites(room?: number, startDate?: Date, endDate?:Date): Promise<Worksite[]>{
 
     var startDateSearch = "";
     var endDateSearch = "";
     var floorSearch = "";
+    var roomId = "";
+    if (room !== undefined){
+        roomId = room.toString();
+    }
     let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
     let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
     if(startDate && !roomId && !endDate){
