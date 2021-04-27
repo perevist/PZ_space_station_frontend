@@ -12,7 +12,7 @@ import { ReservationsService } from '../../service/reservations.service';
 import { ReservationRequest } from '../../model/ReservationRequest';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/service/auth.service';
+import { AuthService } from 'src/app/view/service/auth.service';
 import { DataflowService } from '../../service/dataflow.service';
 import { Subscription } from 'rxjs';
 
@@ -42,7 +42,7 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
         private reservationService: ReservationsService,
         private datepipe: DatePipe,
         private _snackBar: MatSnackBar,
-        private dataService: DataflowService
+        private dataService: DataflowService,
     ) {}
 
 
