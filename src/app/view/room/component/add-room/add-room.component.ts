@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -7,6 +7,7 @@ import { FloorsService } from 'src/app/view/service/floors.service';
 import { Room } from '../../model/Room';
 import { RoomRequest } from '../../model/RoomRequest';
 import { RoomsService } from '../../service/rooms.service';
+import { RoomPlanComponent } from '../room-plan/room-plan.component';
 
 @Component({
   selector: 'app-add-room',
@@ -15,14 +16,19 @@ import { RoomsService } from '../../service/rooms.service';
 })
 export class AddRoomComponent implements OnInit {
 
+  @ViewChild('planView') planView: RoomPlanComponent;
+
   floors: number[] = [];
   newRoom: RoomRequest;
 
   // TODO Add validators of new room fields in formm
   newRoomFormGroup: FormGroup = new FormGroup({
-    // floor: new FormControl(),
-    name: new FormControl('', Validators.required),
-    numberOfWorksites: new FormControl('', Validators.required)
+    name: new FormControl('', Validators.required)
+  })
+
+  planFormGroup: FormGroup = new FormGroup({
+    numberOfRows: new FormControl('', Validators.required),
+    numberOfColumns: new FormControl('', Validators.required)
   })
 
   constructor(
@@ -37,6 +43,12 @@ export class AddRoomComponent implements OnInit {
     this.getFloors();
   }
 
+  reline(columns: number, rows: number): void {
+    if(this.planFormGroup.valid){
+      this.planView.reline(columns, rows);
+    }
+  }
+
   getFloors(): void{
     this.floorsService.getFloors().subscribe(
       numberOfFloors => {
@@ -49,11 +61,10 @@ export class AddRoomComponent implements OnInit {
 
   postRoom(
     floorNumber: number,
-    roomName: string,
-    workSiteNumber: number
+    roomName: string
   ): void{
     if( this.newRoomFormGroup.valid ){
-      this.newRoom = {floor: floorNumber, name: roomName, numberOfWorksites: workSiteNumber}
+      this.newRoom = {floor: floorNumber, name: roomName, numberOfWorksites: 0}
       this.roomsService.postRoom( this.newRoom )
         .subscribe(msg => {
           console.log(msg); 

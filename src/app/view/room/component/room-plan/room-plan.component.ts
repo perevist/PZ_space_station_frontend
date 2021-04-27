@@ -7,9 +7,10 @@ enum WorkSiteField{
   LACK
 }
 
+
 @Component({
   selector: 'app-room-plan',
-  templateUrl: './room-plan.component.html',
+  template: '<canvas #canvasRoomPlan width=500 height=500 > </canvas>',
   styleUrls: ['./room-plan.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -26,6 +27,10 @@ export class RoomPlanComponent implements AfterViewInit{
   private columns: number;
   private rows: number;
   private readonly font: string = "Arial";
+
+  readonly WrokSiteFreeColor = "#1488E0";
+  readonly WrokSiteReservedColor = "#F05323";
+  readonly WrokSiteLackColor = "#000000";
 
   constructor() {}
 
@@ -76,6 +81,13 @@ export class RoomPlanComponent implements AfterViewInit{
     return worksites;
   }
 
+  public setReserved(positions: [number, number]): void{
+    const workSitePosition = this.workSitePosition;
+    positions.forEach(pos => {
+      workSitePosition[pos[0]][pos[1]] = WorkSiteField.RESERVED;
+    });
+  }
+
   private createUserEvents() {
     const canvas = this.canvasRoomPlan.nativeElement as HTMLCanvasElement;
     canvas.addEventListener("mousedown", this.pressEventHandler);
@@ -97,10 +109,26 @@ export class RoomPlanComponent implements AfterViewInit{
     context.beginPath();
 
     /// Worksite exist
-    context.fillStyle = "#0000FF";
+    context.fillStyle = this.WrokSiteFreeColor;
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < columns; col++) {
-        if(workSitePosition[row][col] === WorkSiteField.LACK){
+        if(workSitePosition[row][col] !== WorkSiteField.FREE){
+          continue;
+        }
+        this.context.fillRect(
+          col * cellWidth,
+          row * cellHeight,
+          cellWidth,
+          cellHeight,
+        );
+      }
+    }
+
+    /// Worksite reserved
+    context.fillStyle = this.WrokSiteReservedColor;
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < columns; col++) {
+        if(workSitePosition[row][col] !== WorkSiteField.RESERVED){
           continue;
         }
         this.context.fillRect(
@@ -113,10 +141,10 @@ export class RoomPlanComponent implements AfterViewInit{
     }
 
     /// Worksite not exist
-    context.fillStyle = "#887711";
+    context.fillStyle = this.WrokSiteLackColor;
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < columns; col++) {
-        if(workSitePosition[row][col] === WorkSiteField.FREE){
+        if(workSitePosition[row][col] !== WorkSiteField.LACK){
           continue;
         }
         this.context.fillRect(
