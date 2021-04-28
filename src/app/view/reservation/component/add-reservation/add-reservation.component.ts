@@ -64,7 +64,7 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
     preparedReservationToInput: any = {};
 
     defualtFloor: number = 1;
-    lastWorksite: Worksite = {roomId:0, worksiteId: 0,worksiteInRoomId: 0};
+    lastWorksite: Worksite = {coordinateX:-1, coordinateY: -1, roomId:0, worksiteId: 0,worksiteInRoomId: 0};
     title: string;
     
     user: any;
@@ -90,13 +90,10 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
         if(this.reservationToModify.worksiteId){
             this.prepareDataToInput();
             this.title = 'Zmodyfikuj rezerwację';
-            console.log(this.preparedReservationToInput);
         }else{
             this.title = 'Dodaj rezerwacje';
         };
-        this.user = this.keycloakService.getLoggedUser();
-        console.log('TO TO')
-        console.log(this.reservationToModify);}, 300);
+        this.user = this.keycloakService.getLoggedUser();}, 400);
 
     }
 
@@ -112,7 +109,6 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
     }
 
     prepareDataToInput(): void{
-
         let startDate = new Date(this.reservationToModify.startDate);
         let endDate = new Date(this.reservationToModify.endDate);
         let user: KeycloakProfile;
@@ -123,24 +119,61 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
             }
         }
         let worksite = this.reservationToModify.worksiteId;
-        let room;
-        let floor;
+        let room: Room;
+        let roomId: number;
+        let floor: number;
         for(let ws of this.worksitesList){
             if(ws.worksiteId === worksite){
-                room = ws.roomId;
-                worksite = ws.worksiteInRoomId;
+                roomId = ws.roomId;
+                worksite = ws
                 break;
             }
         }
-        for(let rm of this.roomsList){
-            if(rm.id === room){
-                floor = rm.floor;
+        for(let r of this.roomsList){
+            if(r.id === roomId){
+                room = r;
+                floor = r.floor;
+                break
             }
         }
-        room = 'Pokój ' + room;
-        this.preparedReservationToInput = {user: user, startDate: startDate, endDate: endDate, worksiteId: worksite, roomId: room, floor: floor};
-        this.getRooms(this.reservationToModify.floor, this.reservationToModify.startDate, this.reservationToModify.endDate);
-        this.getWorksites(this.reservationToModify.roomId, this.reservationToModify.startDate, this.reservationToModify.endDate);
+        this.getRooms(floor, this.reservationToModify.startDate, this.reservationToModify.endDate);
+        this.getWorksites(room.id, this.reservationToModify.startDate, this.reservationToModify.endDate);
+        setTimeout(() => {
+            let i: number = 0;
+            for(let r of this.roomsList){
+                if (r.id === room.id){
+                    this.roomsList[i] = room;
+                    break
+                }
+                console.log(r.name);
+                i++;
+                
+                if(i === this.roomsList.length){
+                    this.roomsList.push(room);
+                }
+            }
+            this.roomsList.sort((room1, room2) => {
+                if (room1.id > room2.id){
+                    return 1;
+                }
+                if (room1.id < room2.id){
+                    return -1;
+                }
+                return 0;
+            })
+
+            this.worksitesList.push(worksite);
+            this.worksitesList.sort((worksite1, worksite2) => {
+                if (worksite1.worksiteId > worksite2.worksiteId){
+                    return 1;
+                }
+                if (worksite1.worksiteId < worksite2.worksiteId){
+                    return -1;
+                }
+                return 0;
+            })
+            this.preparedReservationToInput = {user: user, startDate: startDate, endDate: endDate, worksite: worksite, room: room, floor: floor};
+        }, 300);
     }
 
     getFloors(): void{
@@ -153,33 +186,26 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
         );
     }
 
-    getRooms(floors?: number, start?:Date, end?:Date): void{
+    async getRooms(floors?: number, start?:Date, end?:Date){
         if(floors !== undefined){
             if(start < end){
-                this.roomsService.getRooms(floors, start, end).subscribe(
-                rooms => this.roomsList = rooms
-                );
+                await this.roomsService.getRooms(floors, start, end).then((rooms) => this.roomsList = rooms);
                 this.worksitesList = [];
         }}else{
-            this.roomsService.getRooms().subscribe(
-                rooms => this.roomsList = rooms
-                );
+                this.roomsList = await this.roomsService.getRooms();
         }
     }
 
     async getWorksites(roomId?: number, start?:Date, end?:Date){
         if(roomId !== undefined){
             await this.worksiteService.getWorksites(roomId, start, end).then((worksites) => this.worksitesList = worksites);
-            console.log(this.worksitesList);
-           // this.worksiteService.getWorksites(roomId[roomId.length-1], start, end).subscribe(
-           // worksite => {this.worksitesList = worksite;}
         }else{
             await this.worksiteService.getWorksites().then((worksites) => this.worksitesList = worksites);
         };
     }
 
     postReservations(floor?:number, start?:Date, end?:Date){
-
+        var succeedPost = 0;
         for(var reservatedWorkSite of this.reservatedWorkSites){
             this.reservation = {
                 startDate:reservatedWorkSite.startDate,
@@ -189,8 +215,14 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
             };
             this.reservationService.postReservation( this.reservation )
                 .subscribe(msg => {
-                console.log(msg); // RservationResponse
-                this.openDialog();
+                console.log(msg); // ReservationResponse
+                succeedPost++;
+                if (this.reservatedWorkSites.length === 1){
+                    this.openDialog('Sukces', 'Pomyślnie dodano rezerwację');
+                }else if (succeedPost === this.reservatedWorkSites.length){
+                    this.openDialog('Sukces', 'Pomyślnie dodano wszystkie rezerwacje');
+                }
+                
                 }, error => {
                     console.log(error.message);
                     this.showToast('Nie udało się dokonać rezerwacji', 'OK');
@@ -198,11 +230,40 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
         }
     }
 
-    openDialog(){
+    putReservation(
+        owner: KeycloakProfile,
+        startDate: Date,
+        endDate: Date,
+        worksite: Worksite){
+            let date = new Date();
+            if(startDate < date){
+                this.showToast('Wybrany termin jest nie poprawny(na dzisiaj też nie można)', 'OK');
+            }else if(worksite.worksiteId === this.reservationToModify.worksiteId){
+                this.showToast('Wybrano te same miejsce do zarezerwowania', 'OK');
+            }else{
+                this.reservation = {
+                    ownerId: owner.id,
+                    startDate: this.datepipe.transform(startDate, 'yyyy-MM-dd'),
+                    endDate: this.datepipe.transform(endDate, 'yyyy-MM-dd'),
+                    worksiteId: worksite.worksiteId
+                }
+                this.reservationService.putReservation(this.reservationToModify.id , this.reservation )
+                .subscribe(msg => {
+                console.log(msg); // RservationResponse
+                this.openDialog('Sukces', 'Pomyślnie zmodyfikowano rezerwację');
+                }, error => {
+                    console.log(error.message);
+                    this.showToast('Nie udało się Zmodyfikować rezerwacji', 'OK');
+            });
+        }
+    }
+
+    openDialog(state: string, message: string){
         const dialogConfig =  new MatDialogConfig()
 
         dialogConfig.disableClose = true
         dialogConfig.autoFocus = true
+        dialogConfig.data = {state:state, message:message}
 
         const dialogRef = this.dialog.open(DialogWindowComponent, dialogConfig);
     }
@@ -223,6 +284,8 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
                 this.showToast('Wybrany termin jest nie poprawny(na dzisiaj też nie można)', 'OK');
             }else{
                 this.lastWorksite = {
+                    coordinateX: worksite.coordinateX,
+                    coordinateY: worksite.coordinateY,
                     roomId: worksite.roomId,
                     worksiteId: worksite.worksiteId,
                     worksiteInRoomId: worksite.worksiteInRoomId};
@@ -281,6 +344,8 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
         );
         if (index >= 0){
             this.lastWorksite = {
+                coordinateX: -1,
+                coordinateY: -1,
                 roomId: 0,
                 worksiteId: 0,
                 worksiteInRoomId: 0

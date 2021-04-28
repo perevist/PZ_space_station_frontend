@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+export interface DialogData{
+    state: string,
+    message: string
+}
 
 @Component({
   templateUrl: './dialog-window.component.html',
@@ -6,7 +12,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DialogWindowComponent implements OnInit {
 
-  constructor() { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
   ngOnInit(): void {
   }
