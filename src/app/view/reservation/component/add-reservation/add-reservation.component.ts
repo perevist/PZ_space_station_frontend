@@ -18,6 +18,7 @@ import { Subscription } from 'rxjs';
 import { KeycloakProfile} from 'keycloak-js'
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogWindowComponent } from '../dialog-window/dialog-window.component';
+import { runInThisContext } from 'node:vm';
 
 export interface ReservatedWorkSite{
     owner:	KeycloakProfile;
@@ -67,8 +68,11 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
     lastWorksite: Worksite = {coordinateX:-1, coordinateY: -1, roomId:0, worksiteId: 0,worksiteInRoomId: 0};
     title: string;
     
-    user: any;
     userFromEditedReservation: KeycloakProfile;
+    worskstieFromEditedReservation: Worksite = {coordinateX:-1, coordinateY: -1, roomId:0, worksiteId: 0,worksiteInRoomId: 0};
+    roomFromEditedReservation: Room = {dimensionX: -1, dimensionY: -1, floor: 0, id: -1, name: '', numberOfWorksites: 0};
+
+    user: any;
     removable = true;
     visibleWorkSitesChips = true;
     addOnBlurWorkSitesChips = true;
@@ -118,43 +122,42 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
                 break
             }
         }
-        let worksite = this.reservationToModify.worksiteId;
-        let room: Room = {dimensionX: -1, dimensionY: -1, floor: 0, id: -1, name: '', numberOfWorksites: 0};
         let roomId: number;
         let floor: number;
         for(let ws of this.worksitesList){
-            if(ws.worksiteId === worksite){
+            if(ws.worksiteId ===  this.reservationToModify.worksiteId){
                 roomId = ws.roomId;
-                worksite = ws
+                this.worskstieFromEditedReservation = ws
                 break;
             }
         }
         for(let r of this.roomsList){
             if(r.id === roomId){
-                room = r;
+                this.roomFromEditedReservation = r;
                 floor = r.floor;
                 break
             }
         }
         this.getRooms(floor, this.reservationToModify.startDate, this.reservationToModify.endDate);
-        this.getWorksites(room.id, this.reservationToModify.startDate, this.reservationToModify.endDate);
+        this.getWorksites(this.roomFromEditedReservation.id, this.reservationToModify.startDate, this.reservationToModify.endDate);
         setTimeout(() => {
             let i: number = 0;
             for(let r of this.roomsList){
-                if (r.id === room.id){
-                    this.roomsList[i] = room;
+                if (r.id === roomId){
+                    this.roomsList[i] = this.roomFromEditedReservation;
                     break
                 }
                 i++;
                 if(i === this.roomsList.length){
-                    this.roomsList.push(room);
+                    this.roomsList.push(this.roomFromEditedReservation);
                     this.sortRoomList();
                     break;
                 }
             }
-            this.worksitesList.push(worksite);
+            this.worksitesList.push(this.worskstieFromEditedReservation);
             this.sortWorksiteList();
-            this.preparedReservationToInput = {user: this.userFromEditedReservation, startDate: startDate, endDate: endDate, worksite: worksite, room: room, floor: floor};
+            this.preparedReservationToInput = {user: this.userFromEditedReservation, startDate: startDate, endDate: endDate,
+                                            worksite: this.worskstieFromEditedReservation, room: this.roomFromEditedReservation, floor: floor};
         }, 300);
     }
 
@@ -209,9 +212,17 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
             await this.worksiteService.getWorksites().then((worksites) => this.worksitesList = worksites);
         };
         if(this.reservationToModify.id !== undefined && this.preparedReservationToInput.worksite !== undefined
-            && this.worksitesList.indexOf(this.preparedReservationToInput.worksite) === -1){
-            this.worksitesList.push(this.preparedReservationToInput.worksite);
-            this.sortWorksiteList();
+            && this.worksitesList.indexOf(this.worskstieFromEditedReservation) === -1){
+                for(let w of this.worksitesList){
+                    if(w.worksiteInRoomId === this.worskstieFromEditedReservation.worksiteInRoomId){
+                        break;
+                    }else if(this.worksitesList.indexOf(w) === this.worksitesList.length - 1){
+                        this.worksitesList.push(this.worskstieFromEditedReservation);
+                        this.sortWorksiteList();
+                        break;
+                    }
+                }
+
         }
     }
 
