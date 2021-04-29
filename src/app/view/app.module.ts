@@ -19,7 +19,10 @@ import { AuthService } from './service/auth.service';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatCardModule } from '@angular/material/card';
 import { RoomPlanComponent } from './room/component/room-plan/room-plan.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -39,7 +42,9 @@ import { RoomPlanComponent } from './room/component/room-plan/room-plan.componen
 
     MatIconModule,
     MatToolbarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatCardModule,
+    MatFormFieldModule
   ],
   providers: [
     KeycloakService,

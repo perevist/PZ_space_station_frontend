@@ -47,6 +47,7 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDest
   }
 
   ngOnInit(){
+    
     this.subscription = this.dataService.currentReservation.subscribe(reservation => this.reservation = reservation);
     let user = this.keycloakService.getLoggedUser();
     console.log(user);
