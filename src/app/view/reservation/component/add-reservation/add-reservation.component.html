@@ -114,7 +114,12 @@
         (click)="postReservations(Floor.value, dateRange.value.start, dateRange.value.end)">
         Zarezerwuj wszystko z listy
         </button>
+
+        <button mat-stroked-button routerLink='/reservations-table' class='button-add-field'>
+            Anuluj
+        </button>
     </mat-card-actions>
+
 </mat-card>
 
 <!---------------------------------------------------------
@@ -197,6 +202,10 @@
     <mat-card-actions>
         <button mat-stroked-button class ="input-form-field" (click)="putReservation(User.value, dateRange.value.start, dateRange.value.end ,WorkSite.value)">
             Zmodyfikuj rezerwację
+        </button>
+
+        <button mat-stroked-button routerLink='/reservations-table' class='button-mod-field'>
+            Anuluj
         </button>
     </mat-card-actions>
 
