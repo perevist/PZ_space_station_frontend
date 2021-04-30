@@ -59,20 +59,22 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDest
     this.dataSource.getReservations().then((reservations) => this.table.dataSource=reservations);
   }
 
-  goToAddReservations(modify: boolean, $myParam: string = ''): void {
-    if (modify !== true){
-        this.dataService.changeReservation({});
-    }
+  goToAddReservations($myParam: string = ''): void {
+    this.dataService.changeReservation({});
     const navigationDetails: string[] = ['/add-reservation'];
     if($myParam.length) {
       navigationDetails.push($myParam);
     }
     this.router.navigate(navigationDetails);
   }
-
-  modifyReservation(reservation: any){
-      this.dataService.changeReservation(reservation);
-      this.goToAddReservations(true);
+  
+  goToEditReservations(reservation: any, $myParam: string = ''): void {
+    this.dataService.changeReservation(reservation);
+    const navigationDetails: string[] = ['/edit-reservation'];
+    if($myParam.length) {
+      navigationDetails.push($myParam);
+    }
+    this.router.navigate(navigationDetails);
   }
 
   showToast(message: string, action: string): void{

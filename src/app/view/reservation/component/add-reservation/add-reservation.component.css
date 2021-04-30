@@ -1,8 +1,3 @@
-.card{
-  width: 40%;
-  left: 30%;
-}
-
 .title{
     left: 30%
 }
@@ -17,10 +12,7 @@
   left: 4%;
 }
 
-.button-mod-field{
-  left: 48%;
-}
 
 .button-add-field{
-    left: 40%;
+    float: right;
 }

@@ -26,13 +26,15 @@ import { UsersChipsComponent } from './component/users-chips/users-chips.compone
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DialogWindowComponent } from './component/dialog-window/dialog-window.component';
 import { RoomModule } from '../room/room.module';
+import { EditReservationComponent } from './component/edit-reservation/edit-reservation.component';
 
 @NgModule({
   declarations: [
     AddReservationComponent,
     ReservationsTableComponent,
     UsersChipsComponent,
-    DialogWindowComponent
+    DialogWindowComponent,
+    EditReservationComponent
   ],
   imports: [
     BrowserModule,

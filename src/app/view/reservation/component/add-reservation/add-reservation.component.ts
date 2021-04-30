@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { DatePipe } from '@angular/common';
 import { UsersService } from 'src/app/view/service/users.service';
 import { FloorsService } from 'src/app/view/service/floors.service';
@@ -34,8 +34,7 @@ export interface ReservatedWorkSite{
     styleUrls: ['./add-reservation.component.css']
 })
 
-export class AddReservationComponent implements OnDestroy ,OnInit{
-
+export class AddReservationComponent implements OnInit{
     @ViewChild('planView') planView: RoomPlanComponent;
 
     constructor(  
@@ -53,26 +52,17 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
     ) {}
 
 
-    dateRange = new FormGroup({
-        start: new FormControl(),
-        end: new FormControl()
-    });
+     dateRange = new FormGroup({
+         start: new FormControl(),
+         end: new FormControl()
+     });
 
+     availableRooms = true;
+     selectableAvailableRooms = false;
 
-    subscription: Subscription;
-    availableRooms = true;
-    selectableAvailableRooms = false;
-
-    reservationToModify: any = {};
-    preparedReservationToInput: any = {};
 
     defualtFloor: number = 1;
     lastWorksite: Worksite = {coordinateX:-1, coordinateY: -1, roomId:0, worksiteId: 0,worksiteInRoomId: 0};
-    title: string;
-    
-    userFromEditedReservation: KeycloakProfile;
-    worskstieFromEditedReservation: Worksite = {coordinateX:-1, coordinateY: -1, roomId:0, worksiteId: 0,worksiteInRoomId: 0};
-    roomFromEditedReservation: Room = {dimensionX: -1, dimensionY: -1, floor: 0, id: -1, name: '', numberOfWorksites: 0};
 
     user: any;
     removable = true;
@@ -88,24 +78,8 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
 
 
     ngOnInit(): void {
-        this.getWorksites();
-        this.getFloors();
-        this.getRooms();
         this.getUsers();
-        setTimeout(() =>{
-        this.subscription = this.dataService.currentReservation.subscribe(reservation => this.reservationToModify = reservation);
-        if(this.reservationToModify.worksiteId){
-            this.prepareDataToInput();
-            this.title = 'Zmodyfikuj rezerwację';
-        }else{
-            this.title = 'Dodaj rezerwacje';
-        };
-        this.user = this.keycloakService.getLoggedUser();}, 400);
-
-    }
-
-    ngOnDestroy(): void{
-        this.subscription.unsubscribe();
+        this.getFloors();
     }
 
     getUsers(): void{
@@ -115,53 +89,10 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
         
     }
 
-    prepareDataToInput(): void{
-        let startDate = new Date(this.reservationToModify.startDate);
-        let endDate = new Date(this.reservationToModify.endDate);
-        for (let u of this.usersList){
-            if (u.firstName === this.reservationToModify.ownerFirstName && u.lastName === this.reservationToModify.ownerLastName){
-                this.userFromEditedReservation = u;
-                break
-            }
-        }
-        let roomId: number;
-        let floor: number;
-        for(let ws of this.worksitesList){
-            if(ws.worksiteId ===  this.reservationToModify.worksiteId){
-                roomId = ws.roomId;
-                this.worskstieFromEditedReservation = ws
-                break;
-            }
-        }
-        for(let r of this.roomsList){
-            if(r.id === roomId){
-                this.roomFromEditedReservation = r;
-                floor = r.floor;
-                break
-            }
-        }
-        this.getRooms(floor, this.reservationToModify.startDate, this.reservationToModify.endDate);
-        this.getWorksites(this.roomFromEditedReservation.id, this.reservationToModify.startDate, this.reservationToModify.endDate);
-        setTimeout(() => {
-            let i: number = 0;
-            for(let r of this.roomsList){
-                if (r.id === roomId){
-                    this.roomsList[i] = this.roomFromEditedReservation;
-                    break
-                }
-                i++;
-                if(i === this.roomsList.length){
-                    this.roomsList.push(this.roomFromEditedReservation);
-                    this.sortRoomList();
-                    break;
-                }
-            }
-            this.worksitesList.push(this.worskstieFromEditedReservation);
-            this.sortWorksiteList();
-            this.preparedReservationToInput = {user: this.userFromEditedReservation, startDate: startDate, endDate: endDate,
-                                            worksite: this.worskstieFromEditedReservation, room: this.roomFromEditedReservation, floor: floor};
-        }, 300);
+    reline(room: Room){
+        this.planView.reline(room.dimensionX, room.dimensionY);
     }
+
 
     sortRoomList(): void{
         this.roomsList.sort((room1, room2) => {
@@ -202,31 +133,18 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
             if(start < end){
                 await this.roomsService.getRooms(floors, start, end).then((rooms) => this.roomsList = rooms);
                 this.worksitesList = [];
-                console.log(this.roomsList);
         }}else{
                 this.roomsList = await this.roomsService.getRooms();
         }
     }
 
-    async getWorksites(roomId?: number, start?:Date, end?:Date){
-        if(roomId !== undefined){
-            await this.worksiteService.getWorksites(roomId, start, end).then((worksites) => this.worksitesList = worksites);
+    async getWorksites(room?: Room, start?:Date, end?:Date){
+        if(room !== undefined){
+            await this.worksiteService.getWorksites(room.id, start, end).then((worksites) => this.worksitesList = worksites);
         }else{
             await this.worksiteService.getWorksites().then((worksites) => this.worksitesList = worksites);
         };
-        if(this.reservationToModify.id !== undefined && this.preparedReservationToInput.worksite !== undefined
-            && this.worksitesList.indexOf(this.worskstieFromEditedReservation) === -1){
-                for(let w of this.worksitesList){
-                    if(w.worksiteInRoomId === this.worskstieFromEditedReservation.worksiteInRoomId){
-                        break;
-                    }else if(this.worksitesList.indexOf(w) === this.worksitesList.length - 1){
-                        this.worksitesList.push(this.worskstieFromEditedReservation);
-                        this.sortWorksiteList();
-                        break;
-                    }
-                }
-
-        }
+        this.reline(room);
     }
 
     postReservations(floor?:number, start?:Date, end?:Date){
@@ -255,38 +173,38 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
         }
     }
 
-    putReservation(
-        owner: KeycloakProfile,
-        startDate: Date,
-        endDate: Date,
-        worksite: Worksite){
-            let date = new Date();
-            let start = new Date(this.reservationToModify.startDate).getDate();
-            let end = new Date(this.reservationToModify.endDate).getDate();
+    // putReservation(
+    //     owner: KeycloakProfile,
+    //     startDate: Date,
+    //     endDate: Date,
+    //     worksite: Worksite){
+    //         let date = new Date();
+    //         let start = new Date(this.reservationToModify.startDate).getDate();
+    //         let end = new Date(this.reservationToModify.endDate).getDate();
 
-            if(startDate < date){
-                this.showToast('Wybrany termin jest nie poprawny(na dzisiaj też nie można)', 'OK');
-            }else if(worksite.worksiteId === this.reservationToModify.worksiteId && owner.id === this.userFromEditedReservation.id &&
-                 endDate.getDate() === end && startDate.getDate() === start){
-                    //(endDate <= end && endDate >= start || (startDate <= end && startDate >= start))){
-                this.showToast('Wybrano te same miejsce do zarezerwowania', 'OK');
-            }else{
-                this.reservation = {
-                    ownerId: owner.id,
-                    startDate: this.datepipe.transform(startDate, 'yyyy-MM-dd'),
-                    endDate: this.datepipe.transform(endDate, 'yyyy-MM-dd'),
-                    worksiteId: worksite.worksiteId
-                }
-                this.reservationService.putReservation(this.reservationToModify.id , this.reservation )
-                .subscribe(msg => {
-                console.log(msg); // RservationResponse
-                this.openDialog('Sukces', 'Pomyślnie zmodyfikowano rezerwację');
-                }, error => {
-                    console.log(error.message);
-                    this.showToast('Nie udało się zmodyfikować rezerwacji', 'OK');
-            });
-        }
-    }
+    //         if(startDate < date){
+    //             this.showToast('Wybrany termin jest nie poprawny(na dzisiaj też nie można)', 'OK');
+    //         }else if(worksite.worksiteId === this.reservationToModify.worksiteId && owner.id === this.userFromEditedReservation.id &&
+    //              endDate.getDate() === end && startDate.getDate() === start){
+    //                 //(endDate <= end && endDate >= start || (startDate <= end && startDate >= start))){
+    //             this.showToast('Wybrano te same miejsce do zarezerwowania', 'OK');
+    //         }else{
+    //             this.reservation = {
+    //                 ownerId: owner.id,
+    //                 startDate: this.datepipe.transform(startDate, 'yyyy-MM-dd'),
+    //                 endDate: this.datepipe.transform(endDate, 'yyyy-MM-dd'),
+    //                 worksiteId: worksite.worksiteId
+    //             }
+    //             this.reservationService.putReservation(this.reservationToModify.id , this.reservation )
+    //             .subscribe(msg => {
+    //             console.log(msg); // RservationResponse
+    //             this.openDialog('Sukces', 'Pomyślnie zmodyfikowano rezerwację');
+    //             }, error => {
+    //                 console.log(error.message);
+    //                 this.showToast('Nie udało się zmodyfikować rezerwacji', 'OK');
+    //         });
+    //     }
+    // }
 
     openDialog(state: string, message: string){
         const dialogConfig =  new MatDialogConfig()
