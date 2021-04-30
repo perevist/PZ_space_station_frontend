@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from "@angular/forms";
 import { DatePipe } from '@angular/common';
 import { UsersService } from 'src/app/view/service/users.service';
@@ -17,6 +17,7 @@ import { Subscription } from 'rxjs';
 import { KeycloakProfile} from 'keycloak-js'
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogWindowComponent } from '../dialog-window/dialog-window.component';
+import { RoomPlanComponent } from 'src/app/view/room/component/room-plan/room-plan.component';
 
 export interface ReservatedWorkSite{
     owner:	KeycloakProfile;
@@ -34,6 +35,9 @@ export interface ReservatedWorkSite{
 })
 
 export class AddReservationComponent implements OnDestroy ,OnInit{
+
+    @ViewChild('planView') planView: RoomPlanComponent;
+
     constructor(  
         protected router: Router, 
         protected keycloakService: AuthService,

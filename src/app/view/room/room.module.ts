@@ -55,6 +55,9 @@ import { RoomPlanComponent } from './component/room-plan/room-plan.component';
     MatSliderModule,
     MatDialogModule,
     MatSnackBarModule
-  ]
+  ],
+  exports:[
+    RoomPlanComponent
+  ],
 })
 export class RoomModule { }

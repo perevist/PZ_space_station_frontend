@@ -29,7 +29,8 @@ export class RoomPlanComponent implements AfterViewInit{
   @Input() height: string = "400";
   @Input() width: string = "400";
   @Input() color: string = "#FFFFFF";
-  @Input() colorGrid: string = "#FFFFFF";
+  @Input() colorGrid: string = "#000000";
+  @Input() modeReservation: boolean = false;
   
   /** Canvas 2d context */
   private context: CanvasRenderingContext2D;
@@ -45,7 +46,6 @@ export class RoomPlanComponent implements AfterViewInit{
   private readonly font: string = "Arial";
 
   constructor() {
-    this.isReservation = false;
     this.isEditable = true;    
   }
 
@@ -59,14 +59,7 @@ export class RoomPlanComponent implements AfterViewInit{
 
     this.reline(10, 5);
     this.createUserEvents();
-  }
-
-  public modeAddRoom(){
-    this.isReservation = false;
-  }
-
-  public modeReservationWorkSites(){
-    this.isReservation = true;
+    this.isReservation = this.modeReservation;
   }
 
   public reline(columns: number, rows: number): void {
@@ -137,6 +130,13 @@ export class RoomPlanComponent implements AfterViewInit{
     const workSitePosition = this.workSitePosition;
     positions.forEach(pos => {
       workSitePosition[pos[0]][pos[1]] = WorkSiteField.RESERVED;
+    });
+  }
+
+  public setFree(positions: [number, number]): void{
+    const workSitePosition = this.workSitePosition;
+    positions.forEach(pos => {
+      workSitePosition[pos[0]][pos[1]] = WorkSiteField.FREE;
     });
   }
 

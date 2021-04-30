@@ -25,13 +25,14 @@ import { AddReservationComponent } from './component/add-reservation/add-reserva
 import { UsersChipsComponent } from './component/users-chips/users-chips.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DialogWindowComponent } from './component/dialog-window/dialog-window.component';
+import { RoomModule } from '../room/room.module';
 
 @NgModule({
   declarations: [
     AddReservationComponent,
     ReservationsTableComponent,
     UsersChipsComponent,
-    DialogWindowComponent,
+    DialogWindowComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +44,7 @@ import { DialogWindowComponent } from './component/dialog-window/dialog-window.c
     ]),
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    RoomModule,
 
     // Material Components
     MatButtonModule,
@@ -58,8 +60,6 @@ import { DialogWindowComponent } from './component/dialog-window/dialog-window.c
     MatSelectModule,
     MatDialogModule,
     MatSnackBarModule,
-
-
   ],
   providers: [
     { 

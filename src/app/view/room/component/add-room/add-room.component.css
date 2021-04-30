@@ -5,10 +5,6 @@
     justify-content: center;
   }
 
-/* .card {
-    width: 40%;
-}
-
 .title {
     font-size: x-large;
     left: 30%;
@@ -16,12 +12,16 @@
 
 .input-form, .input-form-field {
     width: 40%;
-    left: 30%;
-} */
+    margin-left: 5%;
+}
+
+.mat-stroked-button{
+    width: 40%;
+    left: 5%;
+
+}
 
 .button-add {
-    /* left: 50%; */
-    /* width: 20%; */
     background-color: #1976D2;
     color: white;
 }
