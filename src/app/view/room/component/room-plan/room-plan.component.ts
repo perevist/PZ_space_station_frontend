@@ -1,47 +1,72 @@
-import { Component, ChangeDetectionStrategy, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild, AfterViewInit, ElementRef, Input } from '@angular/core';
 
 
 enum WorkSiteField{
-  RESERVED,
   FREE,
+  CHOSEN,
+  RESERVED,
   LACK
 }
 
 
 @Component({
   selector: 'app-room-plan',
-  template: '<canvas #canvasRoomPlan width=500 height=500 > </canvas>',
+  template: `<canvas #canvasRoomPlan height="{{height}}" width="{{width}}"> </canvas>`,
   styleUrls: ['./room-plan.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RoomPlanComponent implements AfterViewInit{
+  readonly WrokSiteFreeColor = "#1488E0";
+  readonly WrokSiteChosenColor = "#14FFE0";
+  readonly WrokSiteReservedColor = "#F05323";
+  readonly WrokSiteLackColor = "#000000";
+  
+  private ColorGrid: string;
+  private ColorFont: string;
 
   @ViewChild('canvasRoomPlan') canvasRoomPlan: ElementRef;
+  
+  @Input() height: string = "400";
+  @Input() width: string = "400";
+  @Input() color: string = "#FFFFFF";
+  @Input() colorGrid: string = "#FFFFFF";
   
   /** Canvas 2d context */
   private context: CanvasRenderingContext2D;
   private workSitePosition: WorkSiteField[][];
+  private isReservation: boolean;
+  private isEditable: boolean;
 
+  private WorkSitesNumber: number;
   private cellHeight: number;
   private cellWidth: number;
   private columns: number;
   private rows: number;
   private readonly font: string = "Arial";
 
-  readonly WrokSiteFreeColor = "#1488E0";
-  readonly WrokSiteReservedColor = "#F05323";
-  readonly WrokSiteLackColor = "#000000";
-
-  constructor() {}
+  constructor() {
+    this.isReservation = false;
+    this.isEditable = true;    
+  }
 
   ngAfterViewInit() {
     const canvas = this.canvasRoomPlan.nativeElement as HTMLCanvasElement;    
 
     this.context = canvas.getContext('2d');
 
-    this.reline(10, 5);
+    this.ColorFont = this.color;
+    this.ColorGrid = this.colorGrid;
 
+    this.reline(10, 5);
     this.createUserEvents();
+  }
+
+  public modeAddRoom(){
+    this.isReservation = false;
+  }
+
+  public modeReservationWorkSites(){
+    this.isReservation = true;
   }
 
   public reline(columns: number, rows: number): void {
@@ -55,12 +80,21 @@ export class RoomPlanComponent implements AfterViewInit{
       .map(() => new Array(columns)
         .fill(WorkSiteField.FREE));
 
-    this.cellHeight = canvas.height / rows;
-    this.cellWidth = canvas.width / columns;
+    this.cellHeight = canvas.height / rows - 1;
+    this.cellWidth = canvas.width / columns - 1;
 
     this.workSitePosition = workSitePosition;
+    this.WorkSitesNumber = columns * rows;
 
     this.redraw();
+  }
+
+  public getDimensions(): [number, number]{
+    return [this.columns, this.rows];
+  }
+
+  public getWorkSitesListSize(): number{
+    return this.WorkSitesNumber;
   }
 
   public getWorkSites(): [number, number]{
@@ -73,6 +107,24 @@ export class RoomPlanComponent implements AfterViewInit{
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < columns; col++) {
         if(workSitePosition[row][col] !== WorkSiteField.LACK){
+          worksites.push(row, col);
+        }
+      }
+    }
+
+    return worksites;
+  }
+
+  public getChosenWorkSites(): [number, number]{
+    const rows = this.rows;
+    const columns = this.columns;
+    const workSitePosition = this.workSitePosition;
+
+    let worksites: [number, number];
+
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < columns; col++) {
+        if(workSitePosition[row][col] === WorkSiteField.CHOSEN){
           worksites.push(row, col);
         }
       }
@@ -116,8 +168,23 @@ export class RoomPlanComponent implements AfterViewInit{
           continue;
         }
         this.context.fillRect(
-          col * cellWidth,
-          row * cellHeight,
+          col * (cellWidth + 1) + 1,
+          row * (cellHeight + 1) + 1,
+          cellWidth,
+          cellHeight,
+        );
+      }
+    }
+
+    context.fillStyle = this.WrokSiteChosenColor;
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < columns; col++) {
+        if(workSitePosition[row][col] !== WorkSiteField.CHOSEN){
+          continue;
+        }
+        this.context.fillRect(
+          col * (cellWidth + 1) + 1,
+          row * (cellHeight + 1) + 1,
           cellWidth,
           cellHeight,
         );
@@ -132,8 +199,8 @@ export class RoomPlanComponent implements AfterViewInit{
           continue;
         }
         this.context.fillRect(
-          col * cellWidth,
-          row * cellHeight,
+          col * (cellWidth + 1) + 1,
+          row * (cellHeight + 1) + 1,
           cellWidth,
           cellHeight,
         );
@@ -148,25 +215,46 @@ export class RoomPlanComponent implements AfterViewInit{
           continue;
         }
         this.context.fillRect(
-          col * cellWidth,
-          row * cellHeight,
+          col * (cellWidth + 1) + 1,
+          row * (cellHeight + 1) + 1,
           cellWidth,
           cellHeight,
         );
       }
     }
 
-    context.fillStyle = "#000000";
+    context.fillStyle = this.ColorFont;
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < columns; col++) {
         if(workSitePosition[row][col] === WorkSiteField.LACK){
           continue;
         }
-        context.fillText(this.getIndex(col, row).toString(), col * cellWidth + cellWidth / 2, row * cellHeight + cellHeight / 2);
+        context.fillText(this.getIndex(col, row).toString(), col * (cellWidth+1) + cellWidth / 2, row * (cellHeight+1) + cellHeight / 2);
       }
     }
 
     this.context.stroke();
+    this.redrawGrid();
+  }
+
+  private redrawGrid(): void{
+    const ctx = this.context;
+    ctx.beginPath();
+    ctx.strokeStyle = this.ColorGrid;
+
+    // Vertical lines.
+    for (let i = 0; i <= this.columns; i++) {
+        ctx.moveTo(i * (this.cellWidth + 1) + 1, 0);
+        ctx.lineTo(i * (this.cellWidth + 1) + 1, (this.cellHeight + 1) * this.rows + 1);
+    }
+
+    // Horizontal lines.
+    for (let j = 0; j <= this.rows; j++) {
+        ctx.moveTo(0,                           j * (this.cellHeight + 1) + 1);
+        ctx.lineTo((this.cellWidth + 1) * this.columns + 1, j * (this.cellHeight + 1) + 1);
+    }
+
+    ctx.stroke();
   }
 
   private getIndex(x: number, y: number): number{
@@ -176,7 +264,7 @@ export class RoomPlanComponent implements AfterViewInit{
         if( row === y && col === x){
           break;
         }
-        if(this.workSitePosition[row][col] === WorkSiteField.FREE){
+        if(this.workSitePosition[row][col] !== WorkSiteField.LACK){
           ++indexCounter;
         }
       }
@@ -185,6 +273,9 @@ export class RoomPlanComponent implements AfterViewInit{
   }
 
   private pressEventHandler = (e: MouseEvent | TouchEvent) => {
+    if( !this.isEditable ){
+      return;
+    }
     const canvas = (this.canvasRoomPlan.nativeElement as HTMLCanvasElement);
     const rect = canvas.getBoundingClientRect();
 
@@ -198,11 +289,21 @@ export class RoomPlanComponent implements AfterViewInit{
     const col = Math.floor(canvasLeft / this.cellWidth);
     
     switch(this.workSitePosition[row][col]){
-      case WorkSiteField.FREE: 
-        this.workSitePosition[row][col] = WorkSiteField.LACK;
+      case WorkSiteField.FREE:
+        if( this.isReservation ){
+          this.workSitePosition[row][col] = WorkSiteField.CHOSEN; 
+        }
+        else{
+          this.workSitePosition[row][col] = WorkSiteField.LACK;
+          --this.WorkSitesNumber; 
+        }
+        break;
+      case WorkSiteField.CHOSEN:
+        this.workSitePosition[row][col] = WorkSiteField.FREE;
         break;
       case WorkSiteField.LACK:
         this.workSitePosition[row][col] = WorkSiteField.FREE;
+        ++this.WorkSitesNumber; 
         break;
       }
       

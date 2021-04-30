@@ -37,7 +37,8 @@ export class AddRoomComponent implements OnInit {
     private floorsService: FloorsService,
     private roomsService: RoomsService,
     private _snackBar: MatSnackBar
-  ) { }
+  ) { 
+  }
 
   ngOnInit(): void { 
     this.getFloors();
@@ -61,10 +62,18 @@ export class AddRoomComponent implements OnInit {
 
   postRoom(
     floorNumber: number,
-    roomName: string
+    roomName: string,
+    dimensionX: number,
+    dimensionY: number
   ): void{
-    if( this.newRoomFormGroup.valid ){
-      this.newRoom = {floor: floorNumber, name: roomName, numberOfWorksites: 0}
+    if( this.newRoomFormGroup.valid && this.planFormGroup.valid ){
+      this.newRoom = {
+        floor: floorNumber, 
+        name: roomName, 
+        dimensionX: dimensionX, 
+        dimensionY: dimensionY,
+        numberOfWorksites: dimensionX * dimensionY
+      }
       this.roomsService.postRoom( this.newRoom )
         .subscribe(msg => {
           console.log(msg); 

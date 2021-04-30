@@ -198,6 +198,7 @@ export class AddReservationComponent implements OnDestroy ,OnInit{
             if(start < end){
                 await this.roomsService.getRooms(floors, start, end).then((rooms) => this.roomsList = rooms);
                 this.worksitesList = [];
+                console.log(this.roomsList);
         }}else{
                 this.roomsList = await this.roomsService.getRooms();
         }

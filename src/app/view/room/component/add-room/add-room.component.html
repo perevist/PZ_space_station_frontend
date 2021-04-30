@@ -1,102 +1,115 @@
+<div class="container">   
 <mat-card class="card">
-
+    
     <!-- Title of component -->
-    <mat-card-title class="title">
-        Dodawanie nowego pokoju
-    </mat-card-title>
-
-    <!-- Field to select number of floor where room will be add -->
-    <mat-card-content>
-        <mat-form-field 
-        appearance="fill" 
-        class="input-form">
-            <mat-label> Piętro </mat-label> 
-            <mat-select #floorNumber>
-                <mat-option *ngFor="let floorNumber of floors.slice(1, floors.length)" [value]="floorNumber">
-                {{ floorNumber }}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-    <!-- </mat-card-content> -->
-
-    <!-- Textfield to write name of the new room -->
-    <!-- <mat-card-content> -->
-		<mat-form-field 
+    <mat-card-header>
+        <mat-card-title class="title">
+            Dodawanie nowego pokoju
+        </mat-card-title>
+    </mat-card-header>
+    
+    <div class="row">
+    
+        <div class="col-sm">
+        
+        <!-- Field to select number of floor where room will be add -->
+        <mat-card-content>
+            <mat-form-field 
             appearance="fill" 
-			class="input-form-field"
-            [formGroup]="newRoomFormGroup" >
-			<mat-label> Nazwa pokoju </mat-label>
-			<input 
-                matInput placeholder="Wpisz nazwę pokoju (np. 'Pokój 6C')" 
-                formControlName="name"
-                #roomName>
-			<button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="roomName.value=''">
-				<mat-icon>close</mat-icon>
-			</button>
-		</mat-form-field>
-	<!-- </mat-card-content> -->
+            class="input-form">
+                <mat-label> Piętro </mat-label> 
+                <mat-select #floorNumber>
+                    <mat-option *ngFor="let floorNumber of floors.slice(1, floors.length)" [value]="floorNumber">
+                    {{ floorNumber }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
 
-    <!-- Text Field to write number of work sites -->
-    <!-- <mat-card-content> -->
-		<mat-form-field appearance="fill" 
-			class="input-form-field"
-            [formGroup]="planFormGroup">
-			<mat-label> Liczba rzędów </mat-label>
-			<input 
-                matInput placeholder="Wpisz rzędów w pokoju" 
-                type="number"
-                min="1"
-                formControlName="numberOfRows"
-                #numberRowsOfWorksites
-            />
-			<button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="numberRowsOfWorksites.value=''">
-				<mat-icon>close</mat-icon>
-			</button>
-		</mat-form-field>
+            <!-- <div class="w-100"></div> -->
 
-        <mat-form-field appearance="fill" 
-			class="input-form-field"
-            [formGroup]="planFormGroup">
-			<mat-label> Liczba miejsc w rzędzie </mat-label>
-			<input 
-                matInput placeholder="Wpisz liczbę miejsc w rzędzie" 
-                type="number"
-                min="1"
-                formControlName="numberOfColumns"
-                #numberColumnsOfWorksites 
-            />
-			<button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="numberColumnsOfWorksites.value=''">
-				<mat-icon>close</mat-icon>
-			</button>
-		</mat-form-field>
+            <!-- Textfield to write name of the new room -->
+            <mat-form-field 
+                appearance="fill" 
+                class="input-form-field"
+                [formGroup]="newRoomFormGroup" >
+                <mat-label> Nazwa pokoju </mat-label>
+                <input 
+                    matInput placeholder="Wpisz nazwę pokoju (np. 'Pokój 6C')" 
+                    formControlName="name"
+                    #roomName>
+                <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="roomName.value=''">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
 
-        <!-- Button to change number of columns and rows in the plan -->
-        <button mat-stroked-button
-        class="button-reline"
-        (click)="reline(
-            +numberColumnsOfWorksites.value,
-            +numberRowsOfWorksites.value
-        )" >
-        Przeskaluj
-        </button>
-	</mat-card-content>
-    
-    <mat-card-content>
-        <app-room-plan #planView> </app-room-plan>
-	</mat-card-content>
-    
+            <div class="w-100"></div>
 
-    <!-- Button to send the new room to the DataBase -->
-    <mat-card-actions>
-        <button mat-stroked-button
-        class="button-add"
-        (click)="postRoom(
-            floorNumber.value,
-            roomName.value
-        )" >
-        Dodaj pokój
-        </button>
-    </mat-card-actions>
-    
+            <!-- Text Field to write number of work sites -->
+            <mat-form-field appearance="fill" 
+                class="input-form-field"
+                [formGroup]="planFormGroup">
+                <mat-label> Liczba rzędów </mat-label>
+                <input 
+                    matInput placeholder="Wpisz rzędów w pokoju" 
+                    type="number"
+                    min="1"
+                    formControlName="numberOfRows"
+                    #numberRowsOfWorksites
+                />
+                <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="numberRowsOfWorksites.value=''">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
 
-</mat-card>
+
+            <mat-form-field appearance="fill" 
+                class="input-form-field"
+                [formGroup]="planFormGroup">
+                <mat-label> Liczba miejsc w rzędzie </mat-label>
+                <input 
+                    matInput placeholder="Wpisz liczbę miejsc w rzędzie" 
+                    type="number"
+                    min="1"
+                    formControlName="numberOfColumns"
+                    #numberColumnsOfWorksites 
+                />
+                <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="numberColumnsOfWorksites.value=''">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+
+            <div class="w-100"></div>
+
+            <!-- Button to change number of columns and rows in the plan -->
+            <mat-card-actions>
+                <button mat-stroked-button
+                class="button-reline"
+                (click)="reline(
+                    +numberColumnsOfWorksites.value,
+                    +numberRowsOfWorksites.value
+                )" >
+                Przeskaluj
+                </button>
+
+                <!-- Button to send the new room to the DataBase -->
+                <button mat-stroked-button
+                class="button-add"
+                (click)="postRoom(
+                    floorNumber.value,
+                    roomName.value,
+                    numberRowsOfWorksites.value,
+                    numberColumnsOfWorksites.value
+                )" >
+                Dodaj pokój
+                </button>
+            </mat-card-actions>
+        </mat-card-content>
+        </div>
+
+        <div class="col-sm">
+            <mat-card-content>
+                <app-room-plan height="400" width="400" #planView> </app-room-plan>
+            </mat-card-content>
+        </div>
+<!-- </mat-card> -->
+</div>
