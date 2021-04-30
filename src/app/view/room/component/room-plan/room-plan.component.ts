@@ -127,10 +127,11 @@ export class RoomPlanComponent implements AfterViewInit{
   }
 
   public setReservedAll(): void{
-    const workSitePosition = this.workSitePosition;
-    workSitePosition.forEach(pos => {
-      workSitePosition[pos[0]][pos[1]] = WorkSiteField.RESERVED;
-    });
+    const workSitePosition = new Array(this.rows)
+      .fill(undefined)
+      .map(() => new Array(this.columns)
+        .fill(WorkSiteField.RESERVED));
+    this.workSitePosition = workSitePosition;
   }
 
   public setReserved(positions: [number, number]): void{
