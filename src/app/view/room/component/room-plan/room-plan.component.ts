@@ -8,7 +8,6 @@ enum WorkSiteField{
   LACK
 }
 
-
 @Component({
   selector: 'app-room-plan',
   template: `<canvas #canvasRoomPlan height="{{height}}" width="{{width}}"> </canvas>`,
@@ -59,7 +58,8 @@ export class RoomPlanComponent implements AfterViewInit{
 
     this.reline(10, 5);
     this.createUserEvents();
-    this.isReservation = this.modeReservation;
+    // this.isReservation = this.modeReservation;
+    this.isReservation = true;
   }
 
   public reline(columns: number, rows: number): void {
@@ -124,6 +124,13 @@ export class RoomPlanComponent implements AfterViewInit{
     }
 
     return worksites;
+  }
+
+  public setReservedAll(): void{
+    const workSitePosition = this.workSitePosition;
+    workSitePosition.forEach(pos => {
+      workSitePosition[pos[0]][pos[1]] = WorkSiteField.RESERVED;
+    });
   }
 
   public setReserved(positions: [number, number]): void{
