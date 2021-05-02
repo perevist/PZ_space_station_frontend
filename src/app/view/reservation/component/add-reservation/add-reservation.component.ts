@@ -173,39 +173,6 @@ export class AddReservationComponent implements OnInit{
         }
     }
 
-    // putReservation(
-    //     owner: KeycloakProfile,
-    //     startDate: Date,
-    //     endDate: Date,
-    //     worksite: Worksite){
-    //         let date = new Date();
-    //         let start = new Date(this.reservationToModify.startDate).getDate();
-    //         let end = new Date(this.reservationToModify.endDate).getDate();
-
-    //         if(startDate < date){
-    //             this.showToast('Wybrany termin jest nie poprawny(na dzisiaj też nie można)', 'OK');
-    //         }else if(worksite.worksiteId === this.reservationToModify.worksiteId && owner.id === this.userFromEditedReservation.id &&
-    //              endDate.getDate() === end && startDate.getDate() === start){
-    //                 //(endDate <= end && endDate >= start || (startDate <= end && startDate >= start))){
-    //             this.showToast('Wybrano te same miejsce do zarezerwowania', 'OK');
-    //         }else{
-    //             this.reservation = {
-    //                 ownerId: owner.id,
-    //                 startDate: this.datepipe.transform(startDate, 'yyyy-MM-dd'),
-    //                 endDate: this.datepipe.transform(endDate, 'yyyy-MM-dd'),
-    //                 worksiteId: worksite.worksiteId
-    //             }
-    //             this.reservationService.putReservation(this.reservationToModify.id , this.reservation )
-    //             .subscribe(msg => {
-    //             console.log(msg); // RservationResponse
-    //             this.openDialog('Sukces', 'Pomyślnie zmodyfikowano rezerwację');
-    //             }, error => {
-    //                 console.log(error.message);
-    //                 this.showToast('Nie udało się zmodyfikować rezerwacji', 'OK');
-    //         });
-    //     }
-    // }
-
     openDialog(state: string, message: string){
         const dialogConfig =  new MatDialogConfig()
 
@@ -217,14 +184,17 @@ export class AddReservationComponent implements OnInit{
     }
 
     addChipToList(  
-        owner:	KeycloakProfile,
-        floorNumber: number,
-        roomName: string,
-        worksite: Worksite,
-        startDate: Date,
-        endDate: Date
+        owner?:	KeycloakProfile,
+        floorNumber?: number,
+        roomName?: string,
+        worksite?: Worksite,
+        startDate?: Date,
+        endDate?: Date
     ): void{
-        if(this.lastWorksite.worksiteId === worksite.worksiteId){
+        if(owner === undefined || floorNumber === undefined || roomName === undefined || worksite === undefined || startDate === undefined || endDate === undefined){
+            this.showToast('Wszystkie pola muszą być wypełnione', 'OK');
+        }
+        else if(this.lastWorksite.worksiteId === worksite.worksiteId){
             this.showToast('Wybierz inne stanowisko', 'OK');
         }else{
             var date = new Date();
