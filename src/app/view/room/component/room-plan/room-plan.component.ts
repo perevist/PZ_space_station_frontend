@@ -108,44 +108,48 @@ export class RoomPlanComponent implements AfterViewInit{
     return worksites;
   }
 
-  public getChosenWorkSites(): [number, number]{
+  public getChosenWorkSites(): [[number, number]]{
     const rows = this.rows;
     const columns = this.columns;
     const workSitePosition = this.workSitePosition;
 
-    let worksites: [number, number];
+    let worksites: [[number, number]] = [[-1, -1]];
+    worksites.pop();
 
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < columns; col++) {
         if(workSitePosition[row][col] === WorkSiteField.CHOSEN){
-          worksites.push(row, col);
+          worksites.push([row, col]);
         }
       }
     }
-
     return worksites;
   }
 
   public setReservedAll(): void{
+
     const workSitePosition = new Array(this.rows)
       .fill(undefined)
       .map(() => new Array(this.columns)
         .fill(WorkSiteField.RESERVED));
+
+        console.log(workSitePosition);
     this.workSitePosition = workSitePosition;
   }
 
   public setReserved(positions: [number, number]): void{
     const workSitePosition = this.workSitePosition;
-    positions.forEach(pos => {
-      workSitePosition[pos[0]][pos[1]] = WorkSiteField.RESERVED;
-    });
+      workSitePosition[positions[0]][positions[1]] = WorkSiteField.RESERVED;
+      this.redraw();
   }
 
-  public setFree(positions: [number, number]): void{
+  public setFree(positions: [[number, number]]): void{
     const workSitePosition = this.workSitePosition;
-    positions.forEach(pos => {
+    console.log(workSitePosition);
+    positions.forEach(pos => {console.log('0');console.log(workSitePosition[pos[0]][pos[1]]);
       workSitePosition[pos[0]][pos[1]] = WorkSiteField.FREE;
     });
+    this.redraw();
   }
 
   private createUserEvents() {
