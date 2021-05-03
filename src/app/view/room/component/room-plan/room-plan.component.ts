@@ -68,10 +68,15 @@ export class RoomPlanComponent implements AfterViewInit{
     this.columns = columns;
     this.rows = rows;
 
-    const workSitePosition = new Array(rows)
-      .fill(undefined)
-      .map(() => new Array(columns)
-        .fill(WorkSiteField.FREE));
+    var workSitePosition = new Array(this.rows);
+    for(var row = 0; row < this.rows; row++){
+        workSitePosition[row] = new Array(this.columns + 1);
+        workSitePosition[row].fill(WorkSiteField.FREE);
+        workSitePosition[row].pop();
+
+    }
+    console.log(workSitePosition);
+    
 
     this.cellHeight = canvas.height / rows - 1;
     this.cellWidth = canvas.width / columns - 1;
@@ -127,13 +132,12 @@ export class RoomPlanComponent implements AfterViewInit{
   }
 
   public setReservedAll(): void{
-
-    const workSitePosition = new Array(this.rows)
-      .fill(undefined)
-      .map(() => new Array(this.columns)
-        .fill(WorkSiteField.RESERVED));
-
-        console.log(workSitePosition);
+    var workSitePosition = new Array(this.rows);
+    for(var row = 0; row < this.rows; row++){
+        workSitePosition[row] = new Array(this.columns + 1);
+        workSitePosition[row].fill(WorkSiteField.RESERVED);
+        workSitePosition[row].pop();
+    }
     this.workSitePosition = workSitePosition;
   }
 
@@ -145,11 +149,14 @@ export class RoomPlanComponent implements AfterViewInit{
 
   public setFree(positions: [[number, number]]): void{
     const workSitePosition = this.workSitePosition;
-    console.log(workSitePosition);
-    positions.forEach(pos => {console.log('0');console.log(workSitePosition[pos[0]][pos[1]]);
-      workSitePosition[pos[0]][pos[1]] = WorkSiteField.FREE;
+    positions.forEach(pos => {
+        console.log(pos);
+        workSitePosition[pos[1]][pos[0]] = WorkSiteField.FREE;
+        console.log(workSitePosition[pos[1]][pos[0]]);
     });
+    this.workSitePosition = workSitePosition;
     this.redraw();
+    console.log(this.workSitePosition);
   }
 
   private createUserEvents() {
