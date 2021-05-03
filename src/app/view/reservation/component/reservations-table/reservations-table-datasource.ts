@@ -46,6 +46,7 @@ export class ReservationsTableDataSource extends DataSource<ReservationResponse>
   }
   disconnect(): void {}
 /*
+
   private getPagedData(data: Reservation[]): Reservation[] {
     if (this.paginator) {
       const startIndex = this.paginator.pageIndex * this.paginator.pageSize;

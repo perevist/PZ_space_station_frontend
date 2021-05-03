@@ -19,8 +19,16 @@ import { Subscription } from 'rxjs';
 })
 
 export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDestroy{
+
+  // MatPaginator Inputs
+  //length = 100;
+  pageSize = 10;
+  pageSizeOptions: number[] = [10];
+
  // @ViewChild(MatPaginator) paginator!: MatPaginator;
  // @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   @ViewChild(MatTable) table!: MatTable<ReservationResponse>;
   dataSource: ReservationsTableDataSource;
@@ -53,8 +61,8 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDest
   }
 
   ngAfterViewInit(): void {
-//    this.dataSource.sort = this.sort;
-//    this.dataSource.paginator = this.paginator;
+   //this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
     this.dataSource.getReservations().then((reservations) => this.table.dataSource=reservations);
   }
 

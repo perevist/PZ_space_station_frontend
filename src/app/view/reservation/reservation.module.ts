@@ -24,6 +24,8 @@ import { ReservationsTableComponent } from './component/reservations-table/reser
 import { AddReservationComponent } from './component/add-reservation/add-reservation.component';
 import { UsersChipsComponent } from './component/users-chips/users-chips.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -56,8 +58,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatSelectModule,
     MatDialogModule,
     MatSnackBarModule,
-
-
+    MatPaginatorModule,
+    MatSortModule,
   ],
   providers: [
     { 
