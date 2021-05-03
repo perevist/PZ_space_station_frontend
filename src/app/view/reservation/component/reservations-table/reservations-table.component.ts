@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortable } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { ReservationsTableDataSource } from './reservations-table-datasource';
@@ -19,8 +19,6 @@ import { Subscription } from 'rxjs';
 })
 
 export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDestroy{
- // @ViewChild(MatPaginator) paginator!: MatPaginator;
- // @ViewChild(MatSort) sort!: MatSort;
 
   @ViewChild(MatTable) table!: MatTable<ReservationResponse>;
   dataSource: ReservationsTableDataSource;
@@ -28,13 +26,18 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDest
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns: string[] = ['id', 'ownerFirstName', 'ownerLastName', 'worksiteId', 'reservationMakerFirstName', 'reservationMakerLastName', 'startDate', 'endDate', 'action'];
   subscription: Subscription;
+  pageIndex: number=1;
+  userId: string;
+  offset: number=11;
+  pageSize: number=10;
+
 
   constructor(private reservationsService: ReservationsService,
              protected router: Router, 
              protected keycloakService: AuthService,
              private _snackBar: MatSnackBar,
              private dataService: DataflowService) {
-    this.dataSource = new ReservationsTableDataSource(this.reservationsService);
+    this.dataSource = new ReservationsTableDataSource(this.reservationsService, this.keycloakService);
   }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
@@ -42,21 +45,52 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDest
 
   async deleteReservation(id: number){
     let del = await this.reservationsService.deleteReservation(id);
-    this.dataSource.getReservations().then((reservations) => this.table.dataSource=reservations);
+    this.dataSource.getReservations(this.pageIndex, this.userId).then((reservations) =>  {
+      
+      if(this.dataSource.reservations.length<this.pageSize){
+        this.offset = (this.pageIndex) * this.pageSize}
+      else{
+        this.offset = (this.pageIndex) * this.pageSize + 1
+      }
+      this.table.dataSource=reservations});
+      
     this.showToast('Pomyślnie usunięto rezerwację', 'OK');
   }
 
   ngOnInit(){
     this.subscription = this.dataService.currentReservation.subscribe(reservation => this.reservation = reservation);
     let user = this.keycloakService.getLoggedUser();
-    console.log(user);
+    this.userId = user["sub"];
   }
 
   ngAfterViewInit(): void {
-//    this.dataSource.sort = this.sort;
-//    this.dataSource.paginator = this.paginator;
-    this.dataSource.getReservations().then((reservations) => this.table.dataSource=reservations);
+    this.dataSource.getReservations(this.pageIndex, this.userId).then((reservations) => {
+      
+      if(this.dataSource.reservations.length<this.pageSize){
+        this.offset = (this.pageIndex) * this.pageSize}
+      else{
+        this.offset = (this.pageIndex) * this.pageSize + 1
+      }
+      this.table.dataSource=reservations});
   }
+
+  getNext(event: PageEvent) {
+    this.pageIndex = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.dataSource.getReservations(this.pageIndex, this.userId).then((reservations) => { 
+      
+    if(this.dataSource.reservations.length<this.pageSize){
+      this.offset = (event.pageIndex+1) * event.pageSize}
+    else{
+      this.offset = (event.pageIndex+1) * event.pageSize + 1
+    }
+  
+    this.table.dataSource=reservations});
+  }    
+    
+
+  
+
 
   goToAddReservations(modify: boolean, $myParam: string = ''): void {
     if (modify !== true){
@@ -78,3 +112,7 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDest
     this._snackBar.open(message, action);
   }
 }
+function pageIndex(pageIndex: any) {
+  throw new Error('Function not implemented.');
+}
+

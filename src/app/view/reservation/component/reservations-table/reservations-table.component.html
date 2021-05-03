@@ -1,6 +1,7 @@
 
 <div class="mat-elevation-z9">
-  <table mat-table  aria-label="Reservations">
+
+  <table mat-table aria-label="Reservations" [dataSource]="dataSource" matSort>
     <!-- Id Column -->
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center">ID</th>
@@ -62,12 +63,14 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-<!--
+
+
   <mat-paginator #paginator
-      [length]="dataSource?.data?.length"
-      [pageIndex]="0"
-      [pageSize]="10"
-      [pageSizeOptions]="[5, 10, 20]">
-  </mat-paginator>-->
+  [length]="offset"
+  [pageIndex]=0
+  [pageSize]=10
+  (page)="getNext($event)">
+  </mat-paginator>
+  
 </div>
 <button class="button-class" mat-raised-button (click)="goToAddReservations(false)" >Dodaj rezerwację</button>
