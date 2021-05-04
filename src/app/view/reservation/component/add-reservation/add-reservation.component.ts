@@ -12,8 +12,6 @@ import { ReservationRequest } from '../../model/ReservationRequest';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/view/service/auth.service';
-import { DataflowService } from '../../service/dataflow.service';
-import { Subscription } from 'rxjs';
 import { KeycloakProfile} from 'keycloak-js'
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogWindowComponent } from '../dialog-window/dialog-window.component';
@@ -47,7 +45,6 @@ export class AddReservationComponent implements OnInit{
         private reservationService: ReservationsService,
         private datepipe: DatePipe,
         private _snackBar: MatSnackBar,
-        private dataService: DataflowService,
         private dialog: MatDialog
     ) {}
 
@@ -83,7 +80,7 @@ export class AddReservationComponent implements OnInit{
     }
 
     getUsers(): void{
-        this.usersService.getUsers().subscribe(
+        this.usersService.getUsers().then(
             users => this.usersList = users
         );
         
@@ -129,6 +126,7 @@ export class AddReservationComponent implements OnInit{
     }
 
     async getRooms(floors?: number, start?:Date, end?:Date){
+        this.planView.reline(0,0);
         if(floors !== undefined){
             if(start < end){
                 await this.roomsService.getRooms(floors, start, end).then((rooms) => this.roomsList = rooms);
@@ -147,8 +145,17 @@ export class AddReservationComponent implements OnInit{
             positions.pop();
             await this.worksiteService.getWorksites(room.id, start, end).then((worksites) => {
                                                                         this.worksitesList = worksites;
-                                                                        this.worksitesList.forEach(worksite => {positions.push([worksite.coordinateX - 1, worksite.coordinateY - 1])});
+                                                                        this.worksitesList.forEach(worksite => {
+                                                                            if(this.reservatedWorkSites.length !== 0){
+                                                                                this.reservatedWorkSites.forEach(reservation => {if(reservation.worksite.worksiteId !== worksite.worksiteId){
+                                                                                    positions.push([worksite.coordinateX - 1, worksite.coordinateY - 1])}
+                                                                                })
+                                                                            }else{
+                                                                                positions.push([worksite.coordinateX - 1, worksite.coordinateY - 1]);
+                                                                            }
+                                                                        });
                                                                         this.planView.setFree(positions);
+                                                                        
             });
         }else{
             await this.worksiteService.getWorksites().then((worksites) => this.worksitesList = worksites);
@@ -207,34 +214,38 @@ export class AddReservationComponent implements OnInit{
         endDate?: Date
     ): void{
         let worksites = this.planView.getChosenWorkSites();
-        worksites.forEach((index) => {
-            let worksite = this.getWorksiteFromPosition(index);
-            if(owner === undefined || floorNumber === undefined || room === undefined || worksite === undefined || startDate === undefined || endDate === undefined){
-                this.showToast('Wszystkie pola muszą być wypełnione', 'OK');
-            }
-            else if(this.lastWorksite.worksiteId === worksite.worksiteId){
-                this.showToast('Wybierz inne stanowisko', 'OK');
-            }else{
-                var date = new Date();
-                if(startDate < date){
-                    this.showToast('Wybrany termin jest nie poprawny(na dzisiaj też nie można)', 'OK');
-                }else{
-                    this.lastWorksite = {
-                        coordinateX: worksite.coordinateX,
-                        coordinateY: worksite.coordinateY,
-                        roomId: worksite.roomId,
-                        worksiteId: worksite.worksiteId,
-                        worksiteInRoomId: worksite.worksiteInRoomId};
-
-                    let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
-                    let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
-
-                    if(!this.checkIfChipExist(worksite, start, end)){
-                        this.planView.setReserved([worksite.coordinateX - 1, worksite.coordinateY - 1]);
-                        this.reservatedWorkSites.push({owner , floorNumber,  roomName: room.name , worksite, startDate:start, endDate:end});
-                    }
+        if(worksites.length < 1){
+            this.showToast('Nie zaznaczono żadnego miejsca', 'OK');
+        } else{
+            worksites.forEach((index) => {
+                let worksite = this.getWorksiteFromPosition(index);
+                if(owner === undefined || floorNumber === undefined || room === undefined || worksite === undefined || startDate === undefined || endDate === undefined){
+                    this.showToast('Wszystkie pola muszą być wypełnione', 'OK');
                 }
-        }});
+                else if(this.lastWorksite.worksiteId === worksite.worksiteId){
+                    this.showToast('Wybierz inne stanowisko', 'OK');
+                }else{
+                    var date = new Date();
+                    if(startDate < date){
+                        this.showToast('Wybrany termin jest nie poprawny(na dzisiaj też nie można)', 'OK');
+                    }else{
+                        this.lastWorksite = {
+                            coordinateX: worksite.coordinateX,
+                            coordinateY: worksite.coordinateY,
+                            roomId: worksite.roomId,
+                            worksiteId: worksite.worksiteId,
+                            worksiteInRoomId: worksite.worksiteInRoomId};
+
+                        let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
+                        let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
+
+                        if(!this.checkIfChipExist(worksite, start, end)){
+                            this.planView.setReserved([worksite.coordinateX - 1, worksite.coordinateY - 1]);
+                            this.reservatedWorkSites.push({owner , floorNumber,  roomName: room.name , worksite, startDate:start, endDate:end});
+                        }
+                    }
+            }});
+        }
     }
 
     checkIfChipExist( worksite: Worksite, startDate: string, endDate: string ) {
@@ -287,7 +298,10 @@ export class AddReservationComponent implements OnInit{
                 worksiteId: 0,
                 worksiteInRoomId: 0
             };
+            this.planView.setFree([[this.reservatedWorkSites[index].worksite.coordinateX - 1,
+                                    this.reservatedWorkSites[index].worksite.coordinateY - 1]]);
             this.reservatedWorkSites.splice(index, 1);
+            
         }
     }
 

@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { __core_private_testing_placeholder__ } from '@angular/core/testing';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -25,7 +26,7 @@ import { DialogWindowComponent } from '../dialog-window/dialog-window.component'
   styleUrls: ['./edit-reservation.component.css']
 })
 export class EditReservationComponent implements OnInit {
-@ViewChild('planView') planView: RoomPlanComponent;
+@ViewChild('planView') planView: RoomPlanComponent = new RoomPlanComponent;
 
   constructor(  
     protected router: Router, 
@@ -49,6 +50,7 @@ export class EditReservationComponent implements OnInit {
 
 
     subscription: Subscription;
+    pageLoad: boolean = true;
     availableRooms = true;
     selectableAvailableRooms = false;
 
@@ -69,14 +71,17 @@ export class EditReservationComponent implements OnInit {
     reservation: ReservationRequest;
 
     ngOnInit(): void {
+        this.getUsers();
         this.getWorksites();
         this.getFloors();
+
         this.getRooms();
-        this.getUsers();
+ 
         setTimeout(() =>{
         this.subscription = this.dataService.currentReservation.subscribe(reservation => this.reservationToModify = reservation);
         this.prepareDataToInput();
-        this.user = this.keycloakService.getLoggedUser();}, 400);
+        this.planView.isEditReservation = true;
+        this.user = this.keycloakService.getLoggedUser();}, 500);
     }
 
     ngOnDestroy(): void{
@@ -84,8 +89,8 @@ export class EditReservationComponent implements OnInit {
     }
 
     
-    getUsers(): void{
-        this.usersService.getUsers().subscribe(
+    async getUsers(){
+        await this.usersService.getUsers().then(
             users => this.usersList = users
         );
         
@@ -116,8 +121,9 @@ export class EditReservationComponent implements OnInit {
                 break
             }
         }
-        this.getRooms(floor, this.reservationToModify.startDate, this.reservationToModify.endDate);
+        
         this.getWorksites(this.roomFromEditedReservation, this.reservationToModify.startDate, this.reservationToModify.endDate);
+        this.getRooms(floor, this.reservationToModify.startDate, this.reservationToModify.endDate);
         setTimeout(() => {
             let i: number = 0;
             for(let r of this.roomsList){
@@ -134,21 +140,21 @@ export class EditReservationComponent implements OnInit {
             }
             this.worksitesList.push(this.worskstieFromEditedReservation);
             this.sortWorksiteList();
+            this.preparedReservationToInput = {user: this.userFromEditedReservation, startDate: startDate, endDate: endDate,
+                worksite: this.worskstieFromEditedReservation, room: this.roomFromEditedReservation, floor: floor};
+            console.log(this.preparedReservationToInput);
             this.reline(this.roomFromEditedReservation);
+
             this.planView.setReservedAll();
             let positions: [[number, number]] = [[-1, -1]];
             positions.pop();
             this.worksitesList.forEach(worksite => {positions.push([worksite.coordinateX - 1, worksite.coordinateY - 1])});
-            console.log(positions);
-            console.log(this.worksitesList);
-            console.log(this.worskstieFromEditedReservation);
             this.planView.setFree(positions);
-            
-            this.planView.setChosen([this.worskstieFromEditedReservation.coordinateX-1, this.worskstieFromEditedReservation.coordinateY-1]);
 
-            this.preparedReservationToInput = {user: this.userFromEditedReservation, startDate: startDate, endDate: endDate,
-                                            worksite: this.worskstieFromEditedReservation, room: this.roomFromEditedReservation, floor: floor};
-        }, 300);
+            this.planView.setChosen([this.worskstieFromEditedReservation.coordinateX-1, this.worskstieFromEditedReservation.coordinateY-1]);
+            this.pageLoad = false;
+
+ }, 300);
     }
 
     sortRoomList(): void{
@@ -190,7 +196,9 @@ export class EditReservationComponent implements OnInit {
             if(start < end){
                 await this.roomsService.getRooms(floor, start, end).then((rooms) => this.roomsList = rooms);
                 this.getWorksites(this.roomFromEditedReservation, start, end);
-                //this.worksitesList = [];
+                if(!this.pageLoad){
+                    this.planView.reline(0, 0);
+                }
         }}else{
                 this.roomsList = await this.roomsService.getRooms();
         }
@@ -198,7 +206,6 @@ export class EditReservationComponent implements OnInit {
             let i = 0;
             for(let r of this.roomsList){
                 if (r.id === this.roomFromEditedReservation.id){
-                    this.roomsList[i] = this.roomFromEditedReservation;
                     break;
                 }
                 i++;
@@ -215,16 +222,19 @@ export class EditReservationComponent implements OnInit {
     }
 
     async getWorksites(room?: Room, start?:Date, end?:Date){
-        this.reline(room);
         if(room !== undefined){
+            this.reline(room);
             await this.worksiteService.getWorksites(room.id, start, end).then((worksites) => {
-                                                                        this.worksitesList = worksites;                  
+                                                                        this.worksitesList = worksites;
+                                                                        this.planView.setReservedAll();
+                                                                                    
             });
         }else{
             await this.worksiteService.getWorksites().then((worksites) => this.worksitesList = worksites);
         };
         if(this.preparedReservationToInput.worksite !== undefined && this.worksitesList.indexOf(this.worskstieFromEditedReservation) === -1
           && this.worskstieFromEditedReservation.roomId === room.id){
+              console.log('RURAJ TEZ')
             if (this.worksitesList.length === 0){
                 this.worksitesList.push(this.worskstieFromEditedReservation);
             }else{
@@ -238,7 +248,19 @@ export class EditReservationComponent implements OnInit {
                     }
                 }
             }
-
+        }
+        console.log('TUTAJ ROWNIEZ')
+        if(this.worksitesList.length !== 0){
+            console.log('A TUAJ?')
+            let positions: [[number, number]] = [[-1, -1]];
+            positions.pop();
+            this.worksitesList.forEach(worksite => {positions.push([worksite.coordinateX - 1, worksite.coordinateY - 1])});
+            this.planView.setFree(positions);
+            this.worksitesList.forEach(worksite => {
+                if(worksite.worksiteId === this.worskstieFromEditedReservation.worksiteId){
+                    this.planView.setChosen([worksite.coordinateX - 1, worksite.coordinateY - 1]);
+                }
+            })
         }
     }
 
@@ -260,12 +282,14 @@ export class EditReservationComponent implements OnInit {
             let end = new Date(this.reservationToModify.endDate).getDate();
             let worksitePosition = this.planView.getChosenWorkSites();
             let worksite = this.getWorksiteFromPosition(worksitePosition[0]);
-
-            if(startDate < date){
+            if (worksitePosition.length < 1){
+                this.showToast('Nie wybrano miejsca', 'OK');
+            }else if(owner === undefined || startDate === undefined || endDate === undefined){
+                this.showToast('Wszystkie pola muszą być wypełnione', 'OK');
+            }else if(startDate < date){
                 this.showToast('Wybrany termin jest nie poprawny(na dzisiaj też nie można)', 'OK');
             }else if(worksite.worksiteId === this.reservationToModify.worksiteId && owner.id === this.userFromEditedReservation.id &&
                  endDate.getDate() === end && startDate.getDate() === start){
-                    //(endDate <= end && endDate >= start || (startDate <= end && startDate >= start))){
                 this.showToast('Wybrano te same miejsce do zarezerwowania', 'OK');
             }else{
                 this.reservation = {

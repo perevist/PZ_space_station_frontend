@@ -47,7 +47,7 @@
         <mat-card-content>
         <mat-form-field appearance="fill" class="input-form">
             <mat-label>Pokój</mat-label>
-            <mat-select #Room (selectionChange)="getWorksites(Room.value.id, dateRange.value.start, dateRange.value.end)"
+            <mat-select #Room (selectionChange)="getWorksites(Room.value, dateRange.value.start, dateRange.value.end)"
             [(value)]="preparedReservationToInput.room">
             <div *ngIf="this.roomsList.length !== 0; else noRoomBlock">
                 <mat-option *ngFor="let room of roomsList" [value]="room">
@@ -64,17 +64,6 @@
             </mat-select>
         </mat-form-field>
         </mat-card-content>
-    
-        <!-- <mat-card-content>
-        <mat-form-field appearance="fill" class="input-form">
-            <mat-label>Numer stanowiska w pokoju</mat-label>
-            <mat-select #WorkSite [(value)]="preparedReservationToInput.worksite">
-            <mat-option *ngFor="let workSite of worksitesList" [value]="workSite">
-                {{workSite.worksiteInRoomId}}
-            </mat-option>
-            </mat-select>
-        </mat-form-field>
-        </mat-card-content> -->
         </div>
 
         <div class="col-sm">
@@ -85,14 +74,14 @@
     </div>
   
     <mat-card-actions>
-      <button mat-stroked-button class="input-form-field"
-        (click)="putReservation(User.value, dateRange.value.start, dateRange.value.end)">
-        Zmodyfikuj rezerwację
-      </button>
+        <button mat-stroked-button class="input-form-field"
+            (click)="putReservation(User.value, dateRange.value.start, dateRange.value.end)">
+            Zmodyfikuj rezerwację
+        </button>
   
-      <button mat-stroked-button routerLink='/reservations-table' class='button-mod-field'>
-        Anuluj
-      </button>
+        <button mat-stroked-button routerLink='/reservations-table' class='button-mod-field'>
+            Anuluj
+        </button>
     </mat-card-actions>
   
   </mat-card>

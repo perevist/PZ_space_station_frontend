@@ -36,6 +36,9 @@ export class RoomPlanComponent implements AfterViewInit{
   private workSitePosition: WorkSiteField[][];
   private isReservation: boolean;
   private isEditable: boolean;
+  
+  public isEditReservation: boolean = false;
+  public isOneChoosenInEditReservation: boolean = false;
 
   private WorkSitesNumber: number;
   private cellHeight: number;
@@ -45,7 +48,7 @@ export class RoomPlanComponent implements AfterViewInit{
   private readonly font: string = "Arial";
 
   constructor() {
-    this.isEditable = true;    
+        this.isEditable = true;    
   }
 
   ngAfterViewInit() {
@@ -81,7 +84,6 @@ export class RoomPlanComponent implements AfterViewInit{
     .fill(undefined)
     .map(() => new Array(columns)
     .fill(WorkSiteField.FREE));
-    console.log(workSitePosition);
     
 
     this.cellHeight = (canvas.height-1) / rows - 1;
@@ -154,16 +156,20 @@ export class RoomPlanComponent implements AfterViewInit{
 
   public setFree(positions: [[number, number]]): void{
     const workSitePosition = this.workSitePosition;
-    positions.forEach(pos => {
-        workSitePosition[pos[1]][pos[0]] = WorkSiteField.FREE;
-    });
-    this.workSitePosition = workSitePosition;
-    this.redraw();
+    if(this.rows !== 0 && this.columns !== 0){
+        positions.forEach(pos => {
+            workSitePosition[pos[1]][pos[0]] = WorkSiteField.FREE;
+        });
+        this.workSitePosition = workSitePosition;
+        this.redraw();
+    }
   }
 
   public setChosen(position: [number, number]): void{
-      this.workSitePosition[position[1]][position[0]] = WorkSiteField.CHOSEN;
-      this.redraw();
+      if(this.rows !== 0 && this.columns !== 0){
+        this.workSitePosition[position[1]][position[0]] = WorkSiteField.CHOSEN;
+        this.redraw();
+      }
   }
 
   private createUserEvents() {
@@ -317,7 +323,12 @@ export class RoomPlanComponent implements AfterViewInit{
     switch(this.workSitePosition[row][col]){
       case WorkSiteField.FREE:
         if( this.isReservation ){
-          this.workSitePosition[row][col] = WorkSiteField.CHOSEN; 
+            if(this.isEditReservation && this.getChosenWorkSites().length === 1){
+                this.isOneChoosenInEditReservation = true;
+            } else{
+                this.workSitePosition[row][col] = WorkSiteField.CHOSEN; 
+                
+            }
         }
         else{
           this.workSitePosition[row][col] = WorkSiteField.LACK;
@@ -326,6 +337,9 @@ export class RoomPlanComponent implements AfterViewInit{
         break;
       case WorkSiteField.CHOSEN:
         this.workSitePosition[row][col] = WorkSiteField.FREE;
+        if(this.isEditReservation){
+            this.isOneChoosenInEditReservation = false;
+        }
         break;
       case WorkSiteField.LACK:
         this.workSitePosition[row][col] = WorkSiteField.FREE;
