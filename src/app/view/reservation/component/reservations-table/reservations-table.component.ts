@@ -24,7 +24,7 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDest
   dataSource: ReservationsTableDataSource;
   reservation: any;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns: string[] = ['id', 'ownerFirstName', 'ownerLastName', 'worksiteId', 'reservationMakerFirstName', 'reservationMakerLastName', 'startDate', 'endDate', 'action'];
+  displayedColumns: string[] = ['id', 'ownerName', 'floor', 'room', 'worksiteInRoomId', 'reservationMakerName', 'startDate', 'endDate', 'action'];
   subscription: Subscription;
   pageIndex: number=1;
   userId: string;
@@ -66,7 +66,7 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDest
 
   ngAfterViewInit(): void {
     this.dataSource.getReservations(this.pageIndex, this.userId).then((reservations) => {
-      
+      console.log(reservations);
       if(this.dataSource.reservations.length<this.pageSize){
         this.offset = (this.pageIndex) * this.pageSize}
       else{
@@ -89,9 +89,6 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDest
     this.table.dataSource=reservations});
   }    
     
-
-  
-
 
   goToAddReservations($myParam: string = ''): void {
     this.dataService.changeReservation({});

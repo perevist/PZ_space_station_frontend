@@ -9,33 +9,32 @@
     </ng-container>
 
     <!-- First name Column -->
-    <ng-container matColumnDef="ownerFirstName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center">Imię</th>
-      <td mat-cell *matCellDef="let row">{{row.ownerFirstName}}</td>
+    <ng-container matColumnDef="ownerName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center">Właściciel</th>
+      <td mat-cell *matCellDef="let row">{{row.ownerFirstName}} {{row.ownerLastName}}</td>
     </ng-container>
 
     <!-- Last Name Column -->
-    <ng-container matColumnDef="ownerLastName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center">Nazwisko</th>
-      <td mat-cell *matCellDef="let row">{{row.ownerLastName}}</td>
+    <ng-container matColumnDef="floor">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center">Piętro</th>
+      <td mat-cell *matCellDef="let row">{{row.floor}}</td>
     </ng-container>
 
     <!-- Worksite ID Column -->
-    <ng-container matColumnDef="worksiteId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center">ID Miejsca</th>
-      <td mat-cell *matCellDef="let row">{{row.worksiteId}}</td>
+    <ng-container matColumnDef="room">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center">Pokój</th>
+      <td mat-cell *matCellDef="let row">{{row.roomName}}</td>
     </ng-container>
+
+    <ng-container matColumnDef="worksiteInRoomId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center">Stanowisko w pokoju</th>
+        <td mat-cell *matCellDef="let row">{{row.worksiteInRoomId}}</td>
+      </ng-container>
 
     <!-- Reservations maker first name Column -->
-   <ng-container matColumnDef="reservationMakerFirstName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center">Imie właściciela rezerwacji</th>
-      <td mat-cell *matCellDef="let row">{{row.reservationMakerFirstName}}</td>
-    </ng-container>
-
-    <!-- Reservations maker last name Column -->
-  <ng-container matColumnDef="reservationMakerLastName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center">Nazwisko właściciela rezerwacji</th>
-      <td mat-cell *matCellDef="let row">{{row.reservationMakerLastName}}</td>
+   <ng-container matColumnDef="reservationMakerName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center">Rezerwujący</th>
+      <td mat-cell *matCellDef="let row">{{row.reservationMakerFirstName}} {{row.reservationMakerLastName}}</td>
     </ng-container>
 
     <!-- Start Date Column -->
@@ -66,10 +65,10 @@
 
 
   <mat-paginator #paginator
-  [length]="offset"
-  [pageIndex]=0
-  [pageSize]=10
-  (page)="getNext($event)">
+    [length]="offset"
+    [pageIndex]=0
+    [pageSize]=10
+    (page)="getNext($event)">
   </mat-paginator>
   
 </div>

@@ -23,7 +23,7 @@ export class ReservationsService {
             private keycloakService: AuthService) { }
 
   getReservations(pageIndex: number, ownerId: string): Promise<ReservationResponse[]>{
-    console.log(this.keycloakService.getToken());
+    
     return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS+ "?page=" + pageIndex + "&ownerId=" + ownerId).toPromise();
   }
 
