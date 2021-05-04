@@ -1,7 +1,7 @@
 <button class="button-class" mat-raised-button (click)="goToAddRoom()" >Utwórz nowy pokój</button>
 
 <div class="mat-elevation-z9">
-    <table mat-table  aria-label="Rooms" [dataSource]="dataSource">
+    <table mat-table [dataSource]="dataSource">
       <!-- Id Room -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center">ID</th>
@@ -30,9 +30,5 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    <mat-paginator #paginator
-    [length]="dataSource.roomsList.length"
-    [pageSize]="pageSize"
-    (page)="getNext($event)">
-    </mat-paginator>
+    <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
 </div>

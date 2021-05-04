@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTable } from '@angular/material/table';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/view/service/auth.service';
 import { Room } from '../../model/Room';
@@ -23,36 +23,31 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
     'worksidesNumber'
   ];
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatTable) table!: MatTable<Room>;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;  
-  dataSource: RoomDataSource;
-  //roomsList: any;
-  pageIndex: number=1;
-  pageSize: number=5;
-  offset: number=6;
+  roomsList: Room[]=[];
+  dataSource: any;
 
   constructor(
     private roomsService: ViewRoomsService,
     protected router: Router, 
     protected keycloakService: AuthService
-  ) { 
-    this.dataSource = new RoomDataSource(this.roomsService);
-  }
+  ) {}
 
   ngAfterViewInit(): void {
-    this.dataSource.getRooms().then((roomsList) => { 
-      
-      if(this.dataSource.roomsList.length<this.pageSize){
-        this.offset = (this.pageIndex+1) * this.pageSize}
-      else{
-        this.offset = (this.pageIndex+1) * this.pageSize + 1
-      }
-      
-      this.table.dataSource=roomsList});
+    // this.dataSource.paginator = this.paginator;
   }
 
   ngOnInit(): void {
     let user = this.keycloakService.getLoggedUser();
+    
+    this.roomsService.getRooms().then((roomsList) => {
+      this.roomsList=roomsList;
+      this.dataSource = new MatTableDataSource<Room>(this.roomsList);
+      
+    this.dataSource.paginator = this.paginator; // ten dataSource paginator musi byc wewnątrz,  dlaczego? nie wiem: https://stackoverflow.com/questions/51527623/error-typeerror-cannot-set-property-paginator-of-undefined
+    });
+
   }
 
   goToAddRoom($myParam: string = ''): void {
@@ -65,19 +60,5 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
 
     this.router.navigate(navigationDetails);
   }
-
-  getNext(event: PageEvent) {
-    this.pageIndex = event.pageIndex + 1;
-    this.pageSize = event.pageSize;
-    this.dataSource.getRooms().then((roomsList) => { 
-      
-    if(this.dataSource.roomsList.length<this.pageSize){
-      this.offset = (event.pageIndex+1) * event.pageSize}
-    else{
-      this.offset = (event.pageIndex+1) * event.pageSize + 1
-    }
-  
-    this.table.dataSource=roomsList});
-  }  
 
 }
