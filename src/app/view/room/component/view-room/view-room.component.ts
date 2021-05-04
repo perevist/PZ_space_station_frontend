@@ -25,6 +25,7 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
 
   @ViewChild(MatTable) table!: MatTable<Room>;
   dataSource: RoomDataSource;
+  //roomsList: any;
   pageIndex: number;
   pageSize: number;
   userId: any;
@@ -39,7 +40,7 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.getRooms().then((reservations) => this.table.dataSource=reservations);
+    this.dataSource.getRooms().then((roomsList) => this.table.dataSource=roomsList);
   }
 
   ngOnInit(): void {
@@ -60,15 +61,16 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
   getNext(event: PageEvent) {
     this.pageIndex = event.pageIndex + 1;
     this.pageSize = event.pageSize;
-    this.dataSource.getRooms().then((reservations) => { 
+    // this.offset = (event.pageIndex+1) * event.pageSize+1;
+    this.dataSource.getRooms().then((roomsList) => { 
       
-    // if(this.dataSource.reservations.length<this.pageSize){
-    //   this.offset = (event.pageIndex+1) * event.pageSize}
-    // else{
-    //   this.offset = (event.pageIndex+1) * event.pageSize + 1
-    // }
+    if(this.dataSource.roomsList.length<this.pageSize){
+      this.offset = (event.pageIndex+1) * event.pageSize}
+    else{
+      this.offset = (event.pageIndex+1) * event.pageSize + 1
+    }
   
-    this.table.dataSource=reservations});
+    this.table.dataSource=roomsList});
   }  
 
 }
