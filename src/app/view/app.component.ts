@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { KeycloakTokenParsed } from 'keycloak-js';
 import { AuthService } from './service/auth.service';
 
@@ -14,7 +15,7 @@ export class AppComponent implements OnInit{
   public isLoggedIn = false;
   public isAdmin = false;
   userProfile : KeycloakTokenParsed;
-  constructor(private readonly keycloak: AuthService){
+  constructor(private readonly keycloak: AuthService, public router: Router){
     
   }
 

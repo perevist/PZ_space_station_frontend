@@ -20,6 +20,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RoomRoutingModule } from './room-routing.module';
 import { RoomPlanComponent } from './component/room-plan/room-plan.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 
 
@@ -54,7 +55,13 @@ import { RoomPlanComponent } from './component/room-plan/room-plan.component';
     MatTableModule,
     MatSliderModule,
     MatDialogModule,
-    MatSnackBarModule
-  ]
+    MatSnackBarModule,
+    MatPaginatorModule
+  ],
+  exports:[
+    RoomPlanComponent
+  ],
+    
+  
 })
 export class RoomModule { }

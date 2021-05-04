@@ -6,6 +6,7 @@ import { LoginInputComponent } from './login/component/login-input/login-input.c
 import { AddReservationComponent } from './reservation/component/add-reservation/add-reservation.component';
 import { ReservationsTableComponent } from './reservation/component/reservations-table/reservations-table.component';
 import { AuthGuard } from 'src/app/utility/auth.guard';
+import { EditReservationComponent } from './reservation/component/edit-reservation/edit-reservation.component';
 
 const routes: Routes = [
     {
@@ -26,6 +27,12 @@ const routes: Routes = [
         canActivate: [ AuthGuard ],
         data: { roles: ['user', 'admin'] },
     },
+    {
+        path: 'edit-reservation',
+        component: EditReservationComponent,
+        canActivate: [ AuthGuard ],
+        data: { roles: ['user', 'admin']}
+    }
 
         
     

@@ -21,3 +21,23 @@ div a {
     position: relative;
     top: 4px; /*Change this to adjust the icon*/
 }
+
+mat-card img{
+    object-fit: cover;
+    display: block;
+    float: right;
+    left: 60%;
+    width: 45%;
+    height: 50%;
+}
+
+.card{
+    top: 4%;
+}
+
+.label{
+    width: 50%;
+    display: block;
+    text-align: justify;
+    text-justify: auto;
+}

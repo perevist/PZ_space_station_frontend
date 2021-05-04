@@ -17,13 +17,14 @@ export class ReservationsService {
   readonly GET_RESERVATIONS = 'http://localhost:8081/api/reservations/list';
   readonly POST_RESERVATIONS = 'http://localhost:8081/api/reservations';
   readonly DEL_RESERVATIONS = 'http://localhost:8081/api/reservations/';
+  readonly PUT_RESERVATION = 'http://localhost:8081/api/reservations/';
   
   constructor(private http: HttpClient, 
             private keycloakService: AuthService) { }
 
-  getReservations(): Promise<ReservationResponse[]>{
-    console.log(this.keycloakService.getToken());
-    return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS).toPromise();
+  getReservations(pageIndex: number, ownerId: string): Promise<ReservationResponse[]>{
+    
+    return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS+ "?page=" + pageIndex + "&ownerId=" + ownerId).toPromise();
   }
 
   /** POST: add a new Reservation to the database */
@@ -36,6 +37,11 @@ export class ReservationsService {
       console.log(this.DEL_RESERVATIONS+id);
       return this.http.delete(this.DEL_RESERVATIONS+id).toPromise();
       ;
+  }
+
+  putReservation(id: number, reservationRequest: ReservationRequest){
+    let enco: any = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.put<ReservationResponse>(this.PUT_RESERVATION+id.toString(), reservationRequest, {headers: enco});
   }
 
   private handleError<T>(operation = 'operation') {

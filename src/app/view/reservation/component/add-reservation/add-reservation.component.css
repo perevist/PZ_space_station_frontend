@@ -1,11 +1,10 @@
-.card{
-  width: 53%;
-  left: 23%;
+.title{
+    left: 30%
 }
 
 .input-form{
-    width: 240px;
-    left: 2%;
+    width: 40%;
+    left: 30%;
 }
 
 .chips-form{
@@ -13,6 +12,7 @@
   left: 4%;
 }
 
-.button-field{
-  left: 90%;
+
+.button-add-field{
+    float: right;
 }

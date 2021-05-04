@@ -389,8 +389,44 @@
     </svg>
 
   </div>
+  <mat-card *ngIf="this.router.url === '/'"> 
+    <mat-card-header>
+        <mat-card-title>Witaj na stacji kosmicznej!</mat-card-title>
+    </mat-card-header>
+        <mat-card-content>
+            <div>
+                <img mat-card-sm-image class='images' src="../../assets/images/space-station-image.jpg" type='image/jpg'>
+            </div>
+            <mat-label class='label'>
+            <div>
+                Jeżeli marzyłeś o tym, aby wylecieć w przestrzeń kosmiczną ale martwiłeś się o nocleg albo sąsiad nie daje ci żyć i chciałbyś od niego odpocząć, to jesteś w dobrym miejscu. 
+                Na tej stronie możesz zarezerwować miejsce na ultra nowoczesnej stacji kosmicznej krążącej po niskiej orbicie okołoziemskiej na wysokości 1500km.
+                Zastosowana została tutaj najnowocześniejsza technologia do wytwarzania sztucznej grawitacji dzięki czemu ciążenie jest zbliżone do ziemskiego. Stacja została przystosowana nie tylko do podziwiania niespotykanych na ziemii widoków,
+                ale też do rozrywki, której w innych miejscach próżno szukać.
+                <br>Oferujemy między innymi: 
+            </div>
+            <div>
+                <ul>
+                    <li>Spacery kosmiczne</li>
+                    <li>Eksperymenty w niskiej grawitacji</li>
+                    <li>Gry znane z Ziemii ale w stanie nieważkości</li>
+                    <li>Wyścigi specjalnymi małymi statkami kosmicznymi</li>
+                </ul>
+                Z usług naszej stacji skorzystały takie sławy jak na przykład: Darth Vader, Spok oraz Rick Sanchez. Uznali oni stację za najlepsze miejsce w tej stronie galaktyki.
+                Ze względu na to, że na sacji można się spotkać również przedstawicieli innych ras, u których weekend zaczyna się w środku ziemskiego tygodnia (najczęściej środa), prawie każdego dnia
+                można spotkać istoty chętne do imprezowania. Z tego powodu znaleźć można tutaj liczne bary i kantyny.
+                Organizowane są tutaj również specjalne imprezy okolicznościowe np. z okazji Kosmonaliów, czyli rocznicy uruchomienia stacji, podczas, których są liczne koncerty (nie tylko ludzkich gwaizd)
+                oraz wymyślane co roku nowe gry. 
+            </div>
+            </mat-label>
+
+
+        </mat-card-content>
+    </mat-card>
 </div>
 
+<router-outlet></router-outlet>
 
 
-<router-outlet></router-outlet> 
+
+

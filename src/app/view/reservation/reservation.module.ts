@@ -24,12 +24,18 @@ import { ReservationsTableComponent } from './component/reservations-table/reser
 import { AddReservationComponent } from './component/add-reservation/add-reservation.component';
 import { UsersChipsComponent } from './component/users-chips/users-chips.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { DialogWindowComponent } from './component/dialog-window/dialog-window.component';
+import { RoomModule } from '../room/room.module';
+import { EditReservationComponent } from './component/edit-reservation/edit-reservation.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
     AddReservationComponent,
     ReservationsTableComponent,
     UsersChipsComponent,
+    DialogWindowComponent,
+    EditReservationComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +47,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ]),
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    RoomModule,
 
     // Material Components
     MatButtonModule,
@@ -56,6 +63,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatSelectModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatPaginatorModule,
 
 
   ],

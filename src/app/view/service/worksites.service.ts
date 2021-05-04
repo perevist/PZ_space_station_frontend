@@ -23,8 +23,6 @@ export class WorksitesService {
     if (room !== undefined){
         roomId = room.toString();
     }
-    let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
-    let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
     if(startDate && !roomId && !endDate){
       startDateSearch = "?startDate=";
       let start = this.datepipe.transform(startDate, 'yyyy-MM-dd');
@@ -55,9 +53,6 @@ export class WorksitesService {
       let end = this.datepipe.transform(endDate, 'yyyy-MM-dd');
       return this.http.get<Worksite[]>(this.GET_WORKSITES+endDateSearch+end+floorSearch+roomId+startDateSearch+start).toPromise();
     }
-
-
-
     return this.http.get<Worksite[]>(this.GET_WORKSITES).toPromise();
   }
 

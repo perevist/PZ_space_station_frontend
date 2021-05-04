@@ -4,7 +4,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/view/service/auth.service';
 import { FloorsService } from 'src/app/view/service/floors.service';
-import { Room } from '../../model/Room';
 import { RoomRequest } from '../../model/RoomRequest';
 import { RoomsService } from '../../service/rooms.service';
 import { RoomPlanComponent } from '../room-plan/room-plan.component';
@@ -12,10 +11,9 @@ import { RoomPlanComponent } from '../room-plan/room-plan.component';
 @Component({
   selector: 'app-add-room',
   templateUrl: './add-room.component.html',
-  styleUrls: ['./add-room.component.css']
+  styleUrls: ['./add-room.component.css'],
 })
 export class AddRoomComponent implements OnInit {
-
   @ViewChild('planView') planView: RoomPlanComponent;
 
   floors: number[] = [];
@@ -23,69 +21,76 @@ export class AddRoomComponent implements OnInit {
 
   // TODO Add validators of new room fields in formm
   newRoomFormGroup: FormGroup = new FormGroup({
-    name: new FormControl('', Validators.required)
-  })
+    name: new FormControl('', Validators.required),
+  });
 
   planFormGroup: FormGroup = new FormGroup({
     numberOfRows: new FormControl('', Validators.required),
-    numberOfColumns: new FormControl('', Validators.required)
-  })
+    numberOfColumns: new FormControl('', Validators.required),
+  });
 
   constructor(
-    protected router: Router, 
+    protected router: Router,
     protected keycloakService: AuthService,
     private floorsService: FloorsService,
     private roomsService: RoomsService,
     private _snackBar: MatSnackBar
-  ) { }
+  ) {}
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.getFloors();
   }
 
   reline(columns: number, rows: number): void {
-    if(this.planFormGroup.valid){
+    if (this.planFormGroup.valid) {
       this.planView.reline(columns, rows);
     }
   }
 
-  getFloors(): void{
-    this.floorsService.getFloors().subscribe(
-      numberOfFloors => {
-        for(var i=1; i <= numberOfFloors.numberOfFloors; i++){
-          this.floors[i] = i;
-        }
+  getFloors(): void {
+    this.floorsService.getFloors().subscribe((numberOfFloors) => {
+      for (var i = 1; i <= numberOfFloors.numberOfFloors; i++) {
+        this.floors[i] = i;
       }
-    );
+    });
   }
 
   postRoom(
     floorNumber: number,
-    roomName: string
-  ): void{
-    if( this.newRoomFormGroup.valid ){
-      this.newRoom = {floor: floorNumber, name: roomName, numberOfWorksites: 0}
-      this.roomsService.postRoom( this.newRoom )
-        .subscribe(msg => {
-          console.log(msg); 
+    roomName: string,
+    dimensionX: number,
+    dimensionY: number
+  ): void {
+    if (this.newRoomFormGroup.valid && this.planFormGroup.valid) {
+      this.newRoom = {
+        floor: floorNumber,
+        name: roomName,
+        dimensionX: dimensionX,
+        dimensionY: dimensionY,
+        numberOfWorksites: dimensionX * dimensionY,
+      };
+      this.roomsService.postRoom(this.newRoom).subscribe(
+        (msg) => {
+          console.log(msg);
           this.showToast('Udało się utworzyć nowy pokój', 'OK');
-        }, error => {
+        },
+        (error) => {
           console.log(error.message);
           this.showToast('Utworzenie pokoju nie powiodło się', 'OK');
-        });
-        this.newRoomFormGroup.reset({
-          name : '',
-          workSiteNumber : ''
-        });
-    }
-    else {
+        }
+      );
+      this.newRoomFormGroup.reset({
+        name: '',
+        workSiteNumber: '',
+      });
+    } else {
       this.showToast('Niepoprawne wypełnienie pola', 'OK');
     }
   }
 
-  showToast(message: string, action: string): void{
+  showToast(message: string, action: string): void {
     this._snackBar.open(message, action, {
-      duration: 3000
+      duration: 3000,
     });
   }
 }

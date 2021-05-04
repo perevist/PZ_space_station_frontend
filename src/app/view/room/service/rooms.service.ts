@@ -17,7 +17,7 @@ export class RoomsService {
   constructor(private http: HttpClient,
               private datepipe: DatePipe) { }
 
-  getRooms(floor?: number, startDate?: Date, endDate?:Date): Observable<Room[]>{
+  getRooms(floor?: number, startDate?: Date, endDate?:Date): Promise<Room[]>{
     let enco: any = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     var startDateSearch = "startDate=";
     var endDateSearch = "endDate=";
@@ -34,7 +34,7 @@ export class RoomsService {
           map(data => {
               return data.filter(d => d.floor === floor)
           })
-      )
+      ).toPromise()
     }
     if(startDate && endDate){
       return this.http.get<Room[]>(
@@ -46,10 +46,10 @@ export class RoomsService {
         map(data => {
             return data.filter(d => d.floor === floor)
         })
-    );
+    ).toPromise();
     }
 
-    return this.http.get<Room[]>(this.GET_ROOMS, {headers: enco, withCredentials: true});
+    return this.http.get<Room[]>(this.GET_ROOMS, {headers: enco, withCredentials: true}).toPromise();
   }
 
   /** POST: add a new Room to the database */

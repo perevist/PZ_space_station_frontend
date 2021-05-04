@@ -11,13 +11,12 @@ import { UserResponseDto } from '../model/UserResponseDto';
   providedIn: 'root'
 })
 export class UsersService {
-  //readonly GET_USERS = 'http://localhost:8081/api/users/list';
     readonly GET_USERS = 'http://localhost:8080/auth/admin/realms/SpaceStation/users';
   constructor(private http: HttpClient) { }
 
-  getUsers(): Observable<KeycloakProfile[]>{
+  getUsers(): Promise<KeycloakProfile[]>{
 
-    return this.http.get<KeycloakProfile[]>(this.GET_USERS);
+    return this.http.get<KeycloakProfile[]>(this.GET_USERS).toPromise();
   }
 
   private handleError<T>(operation = 'operation'){
