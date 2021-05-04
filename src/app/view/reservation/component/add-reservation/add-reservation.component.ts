@@ -148,7 +148,6 @@ export class AddReservationComponent implements OnInit{
             await this.worksiteService.getWorksites(room.id, start, end).then((worksites) => {
                                                                         this.worksitesList = worksites;
                                                                         this.worksitesList.forEach(worksite => {positions.push([worksite.coordinateX - 1, worksite.coordinateY - 1])});
-                                                                        console.log(positions);
                                                                         this.planView.setFree(positions);
             });
         }else{

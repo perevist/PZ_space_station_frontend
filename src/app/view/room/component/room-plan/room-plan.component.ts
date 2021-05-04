@@ -75,7 +75,6 @@ export class RoomPlanComponent implements AfterViewInit{
         workSitePosition[row].pop();
 
     }
-    console.log(workSitePosition);
     
 
     this.cellHeight = canvas.height / rows - 1;
@@ -150,13 +149,15 @@ export class RoomPlanComponent implements AfterViewInit{
   public setFree(positions: [[number, number]]): void{
     const workSitePosition = this.workSitePosition;
     positions.forEach(pos => {
-        console.log(pos);
         workSitePosition[pos[1]][pos[0]] = WorkSiteField.FREE;
-        console.log(workSitePosition[pos[1]][pos[0]]);
     });
     this.workSitePosition = workSitePosition;
     this.redraw();
-    console.log(this.workSitePosition);
+  }
+
+  public setChosen(position: [number, number]): void{
+      this.workSitePosition[position[1]][position[0]] = WorkSiteField.CHOSEN;
+      this.redraw();
   }
 
   private createUserEvents() {
