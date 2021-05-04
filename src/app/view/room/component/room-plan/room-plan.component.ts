@@ -17,7 +17,7 @@ enum WorkSiteField{
 export class RoomPlanComponent implements AfterViewInit{
   readonly WrokSiteFreeColor = "#1488E0";
   readonly WrokSiteChosenColor = "#14FFE0";
-  readonly WrokSiteReservedColor = "#F05323";
+  readonly WrokSiteReservedColor = "#DD0031";
   readonly WrokSiteLackColor = "#000000";
   
   private ColorGrid: string;
@@ -56,10 +56,9 @@ export class RoomPlanComponent implements AfterViewInit{
     this.ColorFont = this.color;
     this.ColorGrid = this.colorGrid;
 
-    this.reline(10, 5);
+    this.reline(0, 0);
     this.createUserEvents();
-    // this.isReservation = this.modeReservation;
-    this.isReservation = true;
+    this.isReservation = this.modeReservation;
   }
 
   public reline(columns: number, rows: number): void {
@@ -68,17 +67,25 @@ export class RoomPlanComponent implements AfterViewInit{
     this.columns = columns;
     this.rows = rows;
 
-    var workSitePosition = new Array(this.rows);
-    for(var row = 0; row < this.rows; row++){
-        workSitePosition[row] = new Array(this.columns + 1);
-        workSitePosition[row].fill(WorkSiteField.FREE);
-        workSitePosition[row].pop();
-
+    if(columns === 0 || rows === 0){
+      this.cellHeight = canvas.height;
+      this.cellWidth = canvas.width;
+      this.isEmpty();
+      return;
     }
+    else{
+      this.isEditable = true;
+    }
+
+    const workSitePosition = new Array(rows)
+    .fill(undefined)
+    .map(() => new Array(columns)
+    .fill(WorkSiteField.FREE));
+    console.log(workSitePosition);
     
 
-    this.cellHeight = canvas.height / rows - 1;
-    this.cellWidth = canvas.width / columns - 1;
+    this.cellHeight = (canvas.height-1) / rows - 1;
+    this.cellWidth = (canvas.width-1) / columns - 1;
 
     this.workSitePosition = workSitePosition;
     this.WorkSitesNumber = columns * rows;
@@ -104,7 +111,7 @@ export class RoomPlanComponent implements AfterViewInit{
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < columns; col++) {
         if(workSitePosition[row][col] !== WorkSiteField.LACK){
-          worksites.push(row, col);
+          worksites.push(col, row);
         }
       }
     }
@@ -123,7 +130,7 @@ export class RoomPlanComponent implements AfterViewInit{
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < columns; col++) {
         if(workSitePosition[row][col] === WorkSiteField.CHOSEN){
-          worksites.push([row, col]);
+          worksites.push([col, row]);
         }
       }
     }
@@ -131,18 +138,17 @@ export class RoomPlanComponent implements AfterViewInit{
   }
 
   public setReservedAll(): void{
-    var workSitePosition = new Array(this.rows);
-    for(var row = 0; row < this.rows; row++){
-        workSitePosition[row] = new Array(this.columns + 1);
-        workSitePosition[row].fill(WorkSiteField.RESERVED);
-        workSitePosition[row].pop();
-    }
+    const workSitePosition = new Array(this.rows)
+    .fill(undefined)
+    .map(() => new Array(this.columns)
+    .fill(WorkSiteField.RESERVED));
+
     this.workSitePosition = workSitePosition;
   }
 
   public setReserved(positions: [number, number]): void{
     const workSitePosition = this.workSitePosition;
-      workSitePosition[positions[0]][positions[1]] = WorkSiteField.RESERVED;
+      workSitePosition[positions[1]][positions[0]] = WorkSiteField.RESERVED;
       this.redraw();
   }
 
@@ -289,7 +295,7 @@ export class RoomPlanComponent implements AfterViewInit{
         }
       }
     }
-    return indexCounter;
+    return indexCounter + 1;
   }
 
   private pressEventHandler = (e: MouseEvent | TouchEvent) => {
@@ -329,4 +335,26 @@ export class RoomPlanComponent implements AfterViewInit{
       
     this.redraw();
   }
+
+  private isEmpty(): void {
+    const cellWidth = this.cellWidth;
+    const cellHeight = this.cellHeight;
+    const context = this.context;
+
+    const fontSize = cellHeight / 6;
+    context.font = fontSize.toString() + "px " + this.font;
+    context.textBaseline = 'middle';
+    context.textAlign = 'center';
+
+    context.beginPath();
+
+    context.fillStyle = this.WrokSiteLackColor;
+    context.fillRect( 0, 0, cellWidth, cellHeight );
+    context.fillStyle = this.ColorFont;
+    context.fillText("Plan pokoju", cellWidth / 2, cellHeight / 2);
+    
+    context.stroke();
+    this.isEditable = false;
+  }  
 }
+
