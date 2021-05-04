@@ -31,9 +31,8 @@
     </table>
 
     <mat-paginator #paginator
-    [length]="offset"
-    [pageIndex]=0
-    [pageSize]=5
+    [length]="dataSource.roomsList.length"
+    [pageSize]="pageSize"
     (page)="getNext($event)">
     </mat-paginator>
 </div>

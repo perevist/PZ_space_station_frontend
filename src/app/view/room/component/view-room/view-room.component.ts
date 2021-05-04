@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTable } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/view/service/auth.service';
@@ -24,12 +24,12 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
   ];
 
   @ViewChild(MatTable) table!: MatTable<Room>;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;  
   dataSource: RoomDataSource;
   //roomsList: any;
-  pageIndex: number;
-  pageSize: number;
-  userId: any;
-  offset: number;
+  pageIndex: number=1;
+  pageSize: number=5;
+  offset: number=6;
 
   constructor(
     private roomsService: ViewRoomsService,
@@ -40,7 +40,15 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.getRooms().then((roomsList) => this.table.dataSource=roomsList);
+    this.dataSource.getRooms().then((roomsList) => { 
+      
+      if(this.dataSource.roomsList.length<this.pageSize){
+        this.offset = (this.pageIndex+1) * this.pageSize}
+      else{
+        this.offset = (this.pageIndex+1) * this.pageSize + 1
+      }
+      
+      this.table.dataSource=roomsList});
   }
 
   ngOnInit(): void {
@@ -61,7 +69,6 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
   getNext(event: PageEvent) {
     this.pageIndex = event.pageIndex + 1;
     this.pageSize = event.pageSize;
-    // this.offset = (event.pageIndex+1) * event.pageSize+1;
     this.dataSource.getRooms().then((roomsList) => { 
       
     if(this.dataSource.roomsList.length<this.pageSize){
