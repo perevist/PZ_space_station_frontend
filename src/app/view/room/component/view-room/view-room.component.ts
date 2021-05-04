@@ -40,7 +40,6 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     let user = this.keycloakService.getLoggedUser();
-    
     this.roomsService.getRooms().then((roomsList) => {
       this.roomsList=roomsList;
       this.dataSource = new MatTableDataSource<Room>(this.roomsList);
