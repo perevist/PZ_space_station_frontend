@@ -22,9 +22,9 @@ export class ReservationsService {
   constructor(private http: HttpClient, 
             private keycloakService: AuthService) { }
 
-  getReservations(): Promise<ReservationResponse[]>{
+  getReservations(pageIndex: number, ownerId: string): Promise<ReservationResponse[]>{
     console.log(this.keycloakService.getToken());
-    return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS).toPromise();
+    return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS+ "?page=" + pageIndex + "&ownerId=" + ownerId).toPromise();
   }
 
   /** POST: add a new Reservation to the database */

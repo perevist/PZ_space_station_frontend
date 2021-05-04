@@ -27,6 +27,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DialogWindowComponent } from './component/dialog-window/dialog-window.component';
 import { RoomModule } from '../room/room.module';
 import { EditReservationComponent } from './component/edit-reservation/edit-reservation.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,9 @@ import { EditReservationComponent } from './component/edit-reservation/edit-rese
     MatSelectModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatPaginatorModule,
+
+
   ],
   providers: [
     { 
