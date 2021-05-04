@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatTable } from '@angular/material/table';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/view/service/auth.service';
 import { Room } from '../../model/Room';
@@ -22,23 +23,31 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
     'worksidesNumber'
   ];
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatTable) table!: MatTable<Room>;
-  dataSource: RoomDataSource;
+  roomsList: Room[]=[];
+  dataSource: any;
 
   constructor(
     private roomsService: ViewRoomsService,
     protected router: Router, 
     protected keycloakService: AuthService
-  ) { 
-    this.dataSource = new RoomDataSource(this.roomsService);
-  }
+  ) {}
 
   ngAfterViewInit(): void {
-    this.dataSource.getRooms().then((reservations) => this.table.dataSource=reservations);
+    // this.dataSource.paginator = this.paginator;
   }
 
   ngOnInit(): void {
     let user = this.keycloakService.getLoggedUser();
+    
+    this.roomsService.getRooms().then((roomsList) => {
+      this.roomsList=roomsList;
+      this.dataSource = new MatTableDataSource<Room>(this.roomsList);
+      
+    this.dataSource.paginator = this.paginator; // ten dataSource paginator musi byc wewnątrz,  dlaczego? nie wiem: https://stackoverflow.com/questions/51527623/error-typeerror-cannot-set-property-paginator-of-undefined
+    });
+
   }
 
   goToAddRoom($myParam: string = ''): void {
