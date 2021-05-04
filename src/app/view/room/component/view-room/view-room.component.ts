@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTable } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/view/service/auth.service';
@@ -24,6 +25,10 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
 
   @ViewChild(MatTable) table!: MatTable<Room>;
   dataSource: RoomDataSource;
+  pageIndex: number;
+  pageSize: number;
+  userId: any;
+  offset: number;
 
   constructor(
     private roomsService: ViewRoomsService,
@@ -51,5 +56,19 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
 
     this.router.navigate(navigationDetails);
   }
+
+  getNext(event: PageEvent) {
+    this.pageIndex = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.dataSource.getRooms().then((reservations) => { 
+      
+    // if(this.dataSource.reservations.length<this.pageSize){
+    //   this.offset = (event.pageIndex+1) * event.pageSize}
+    // else{
+    //   this.offset = (event.pageIndex+1) * event.pageSize + 1
+    // }
+  
+    this.table.dataSource=reservations});
+  }  
 
 }
