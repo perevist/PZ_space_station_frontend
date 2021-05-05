@@ -203,15 +203,27 @@ export class EditReservationComponent implements OnInit {
                 this.roomsList = await this.roomsService.getRooms();
         }
         if(this.preparedReservationToInput.floor !== undefined && floor === this.roomFromEditedReservation.floor ){
-            let i = 0;
-            for(let r of this.roomsList){
-                if (r.id === this.roomFromEditedReservation.id){
-                    break;
-                }
-                i++;
-                if(i === this.roomsList.length){
-                    this.roomsList.push(this.roomFromEditedReservation);
-                    this.sortRoomList();
+            let startDate = new Date(this.reservationToModify.startDate);
+            let endDate = new Date(this.reservationToModify.endDate);
+            if(!(endDate.getDate() < start.getDate() || startDate.getDate() > end.getDate())){
+                let i = 0;
+                for(let r of this.roomsList){
+                    if (r.id === this.roomFromEditedReservation.id){
+                        break;
+                    }
+                    i++;
+                    if(i === this.roomsList.length){
+                        let room: Room = {
+                            dimensionX: this.roomFromEditedReservation.dimensionX,
+                            dimensionY: this.roomFromEditedReservation.dimensionY,
+                            floor: this.roomFromEditedReservation.floor,
+                            id: this.roomFromEditedReservation.id,
+                            name: this.roomFromEditedReservation.name,
+                            numberOfWorksites: this.roomFromEditedReservation.numberOfWorksites
+                        }
+                        this.roomsList.push(room);
+                        this.sortRoomList();
+                    }
                 }
             }
         }
@@ -234,24 +246,25 @@ export class EditReservationComponent implements OnInit {
         };
         if(this.preparedReservationToInput.worksite !== undefined && this.worksitesList.indexOf(this.worskstieFromEditedReservation) === -1
           && this.worskstieFromEditedReservation.roomId === room.id){
-              console.log('RURAJ TEZ')
-            if (this.worksitesList.length === 0){
-                this.worksitesList.push(this.worskstieFromEditedReservation);
-            }else{
-                for(let w of this.worksitesList){
-                    if(w.worksiteInRoomId === this.worskstieFromEditedReservation.worksiteInRoomId){
-                        break;
-                    }else if(this.worksitesList.indexOf(w) === this.worksitesList.length - 1){
-                        this.worksitesList.push(this.worskstieFromEditedReservation);
-                        this.sortWorksiteList();
-                        break;
+            let startDate = new Date(this.reservationToModify.startDate);
+            let endDate = new Date(this.reservationToModify.endDate);
+            if(!(endDate.getDate() < start.getDate() || startDate.getDate() > end.getDate())){
+                if (this.worksitesList.length === 0){
+                    this.worksitesList.push(this.worskstieFromEditedReservation);
+                }else{
+                    for(let w of this.worksitesList){
+                        if(w.worksiteInRoomId === this.worskstieFromEditedReservation.worksiteInRoomId){
+                            break;
+                        }else if(this.worksitesList.indexOf(w) === this.worksitesList.length - 1){
+                            this.worksitesList.push(this.worskstieFromEditedReservation);
+                            this.sortWorksiteList();
+                            break;
+                        }
                     }
                 }
             }
         }
-        console.log('TUTAJ ROWNIEZ')
         if(this.worksitesList.length !== 0){
-            console.log('A TUAJ?')
             let positions: [[number, number]] = [[-1, -1]];
             positions.pop();
             this.worksitesList.forEach(worksite => {positions.push([worksite.coordinateX - 1, worksite.coordinateY - 1])});
