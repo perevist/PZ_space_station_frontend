@@ -69,12 +69,17 @@ export class EditReservationComponent implements OnInit {
     roomsList: Room[] = [];
     worksitesList: Worksite[] = [];
     reservation: ReservationRequest;
-
+    tomorrow: Date;
+    
     ngOnInit(): void {
         this.getUsers();
         this.getWorksites();
         this.getFloors();
 
+        let today = new Date();
+        this.tomorrow = new Date(today);
+        this.tomorrow.setDate(this.tomorrow.getDate() + 1);
+        
         this.getRooms();
  
         setTimeout(() =>{

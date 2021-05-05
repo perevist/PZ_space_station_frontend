@@ -73,10 +73,15 @@ export class AddReservationComponent implements OnInit{
     reservatedWorkSites: ReservatedWorkSite[] = [];  
     reservation: ReservationRequest;
 
+    tomorrow: Date;
 
     ngOnInit(): void {
         this.getUsers();
         this.getFloors();  
+        let today = new Date();
+        this.tomorrow = new Date(today);
+        this.tomorrow.setDate(this.tomorrow.getDate() + 1);
+
     }
 
     getUsers(): void{
