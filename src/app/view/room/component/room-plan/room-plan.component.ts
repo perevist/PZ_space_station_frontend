@@ -1,4 +1,6 @@
 import { Component, ChangeDetectionStrategy, ViewChild, AfterViewInit, ElementRef, Input } from '@angular/core';
+import { Coordinates } from 'src/app/view/model/Coordinates';
+import { WorksiteRequestDto } from 'src/app/view/model/WorksiteRequestDto';
 
 
 enum WorkSiteField{
@@ -34,7 +36,6 @@ export class RoomPlanComponent implements AfterViewInit{
   /** Canvas 2d context */
   private context: CanvasRenderingContext2D;
   private workSitePosition: WorkSiteField[][];
-  private isReservation: boolean;
   private isEditable: boolean;
   
   public isEditReservation: boolean = false;
@@ -61,7 +62,6 @@ export class RoomPlanComponent implements AfterViewInit{
 
     this.reline(0, 0);
     this.createUserEvents();
-    this.isReservation = this.modeReservation;
   }
 
   public reline(columns: number, rows: number): void {
@@ -70,7 +70,7 @@ export class RoomPlanComponent implements AfterViewInit{
     this.columns = columns;
     this.rows = rows;
 
-    if(columns === 0 || rows === 0){
+    if(columns <= 0 || rows <= 0){
       this.cellHeight = canvas.height;
       this.cellWidth = canvas.width;
       this.isEmpty();
@@ -80,10 +80,12 @@ export class RoomPlanComponent implements AfterViewInit{
       this.isEditable = true;
     }
 
+    let WorkSiteFieldFill: WorkSiteField = this.modeReservation ? WorkSiteField.LACK : WorkSiteField.FREE;
+
     const workSitePosition = new Array(rows)
     .fill(undefined)
     .map(() => new Array(columns)
-    .fill(WorkSiteField.FREE));
+    .fill(WorkSiteFieldFill));
     
 
     this.cellHeight = (canvas.height-1) / rows - 1;
@@ -103,17 +105,17 @@ export class RoomPlanComponent implements AfterViewInit{
     return this.WorkSitesNumber;
   }
 
-  public getWorkSites(): [number, number]{
+  public getWorkSitesAsCoordinates(): [[number, number]]{
     const rows = this.rows;
     const columns = this.columns;
     const workSitePosition = this.workSitePosition;
 
-    let worksites: [number, number];
+    let worksites: [[number, number]];
 
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < columns; col++) {
         if(workSitePosition[row][col] !== WorkSiteField.LACK){
-          worksites.push(col, row);
+          worksites.push([col, row]);
         }
       }
     }
@@ -121,13 +123,32 @@ export class RoomPlanComponent implements AfterViewInit{
     return worksites;
   }
 
-  public getChosenWorkSites(): [[number, number]]{
+  public getWorkSites(): Array<WorksiteRequestDto>{
     const rows = this.rows;
     const columns = this.columns;
     const workSitePosition = this.workSitePosition;
 
-    let worksites: [[number, number]] = [[-1, -1]];
-    worksites.pop();
+    let worksites: WorksiteRequestDto[] = [];
+
+    console.log(worksites);
+
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < columns; col++) {
+        if(workSitePosition[row][col] !== WorkSiteField.LACK){
+          // we should add 1 to columns and rows becouse some genius started indexing from one in the DB
+          worksites.push({ coordinates: {x: col + 1, y: row + 1}, worksiteInRoomId: this.getIndex(col, row)});
+        }
+      }
+    }
+    return worksites;
+  }
+
+  public getChosenWorkSites(): [number, number][]{
+    const rows = this.rows;
+    const columns = this.columns;
+    const workSitePosition = this.workSitePosition;
+
+    let worksites: [number, number][] = [];
 
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < columns; col++) {
@@ -148,26 +169,29 @@ export class RoomPlanComponent implements AfterViewInit{
     this.workSitePosition = workSitePosition;
   }
 
-  public setReserved(positions: [number, number]): void{
+  public setReserved(positions: Coordinates[]): void{
     const workSitePosition = this.workSitePosition;
-      workSitePosition[positions[1]][positions[0]] = WorkSiteField.RESERVED;
+    console.log(positions);
+    positions.forEach(pos => {
+      workSitePosition[pos.y - 1][pos.x - 1] = WorkSiteField.RESERVED;
+    });
       this.redraw();
   }
 
-  public setFree(positions: [[number, number]]): void{
+  public setFree(positions: Coordinates[]): void{
     const workSitePosition = this.workSitePosition;
     if(this.rows !== 0 && this.columns !== 0){
         positions.forEach(pos => {
-            workSitePosition[pos[1]][pos[0]] = WorkSiteField.FREE;
+            workSitePosition[pos.y - 1][pos.x - 1] = WorkSiteField.FREE;
         });
         this.workSitePosition = workSitePosition;
         this.redraw();
     }
   }
 
-  public setChosen(position: [number, number]): void{
+  public setChosen(position: Coordinates): void{
       if(this.rows !== 0 && this.columns !== 0){
-        this.workSitePosition[position[1]][position[0]] = WorkSiteField.CHOSEN;
+        this.workSitePosition[position.y - 1][position.x - 1] = WorkSiteField.CHOSEN;
         this.redraw();
       }
   }
@@ -322,7 +346,7 @@ export class RoomPlanComponent implements AfterViewInit{
     
     switch(this.workSitePosition[row][col]){
       case WorkSiteField.FREE:
-        if( this.isReservation ){
+        if( this.modeReservation ){
             if(this.isEditReservation && this.getChosenWorkSites().length === 1){
                 this.isOneChoosenInEditReservation = true;
             } else{
@@ -342,8 +366,10 @@ export class RoomPlanComponent implements AfterViewInit{
         }
         break;
       case WorkSiteField.LACK:
-        this.workSitePosition[row][col] = WorkSiteField.FREE;
-        ++this.WorkSitesNumber; 
+        if(!this.modeReservation){
+          this.workSitePosition[row][col] = WorkSiteField.FREE;
+          ++this.WorkSitesNumber;
+        }
         break;
       }
       
