@@ -341,8 +341,8 @@ export class RoomPlanComponent implements AfterViewInit{
     const canvasLeft = ((e as MouseEvent).clientX - rect.left) * scaleX;
     const canvasTop = ((e as MouseEvent).clientY - rect.top) * scaleY;
 
-    const row = Math.floor(canvasTop / this.cellHeight);
-    const col = Math.floor(canvasLeft / this.cellWidth);
+    const row = Math.floor(canvasTop / (this.cellHeight + 1));
+    const col = Math.floor(canvasLeft / (this.cellWidth+ 1));
     
     switch(this.workSitePosition[row][col]){
       case WorkSiteField.FREE:

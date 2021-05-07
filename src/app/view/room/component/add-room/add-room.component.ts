@@ -25,8 +25,8 @@ export class AddRoomComponent implements OnInit {
   });
 
   planFormGroup: FormGroup = new FormGroup({
-    numberOfRows: new FormControl('', Validators.required),
-    numberOfColumns: new FormControl('', Validators.required),
+    numberOfRows: new FormControl('0', Validators.required),
+    numberOfColumns: new FormControl('0', Validators.required),
   });
 
   constructor(

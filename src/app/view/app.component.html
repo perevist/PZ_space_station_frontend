@@ -88,7 +88,8 @@
     justify-content: center;
     margin-top: 16px;
   }
- /* .mat-card{
+
+  /* .mat-card{
     position: inherit;
 }  */
   .card {
@@ -197,7 +198,7 @@
   }
 
   .terminal pre {
-    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
     color: white;
     padding: 0 1rem 1rem;
     margin: 0;
@@ -241,17 +242,17 @@
     align-items: center;
     font-size: 12px;
     padding: 3px 10px;
-    border: 1px solid rgba(27,31,35,.2);
+    border: 1px solid rgba(27, 31, 35, .2);
     border-radius: 3px;
-    background-image: linear-gradient(-180deg,#fafbfc,#eff3f6 90%);
+    background-image: linear-gradient(-180deg, #fafbfc, #eff3f6 90%);
     margin-left: 4px;
     font-weight: 600;
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
   }
 
   .github-star-badge:hover {
-    background-image: linear-gradient(-180deg,#f0f3f6,#e6ebf1 90%);
-    border-color: rgba(27,31,35,.35);
+    background-image: linear-gradient(-180deg, #f0f3f6, #e6ebf1 90%);
+    border-color: rgba(27, 31, 35, .35);
     background-position: -.5em;
   }
 
@@ -273,7 +274,7 @@
   /* Responsive Styles */
   @media screen and (max-width: 767px) {
 
-    .card-container > *:not(.circle-link) ,
+    .card-container>*:not(.circle-link),
     .terminal {
       width: 100%;
     }
@@ -299,74 +300,76 @@
       visibility: hidden;
     }
   }
+
 </style>
 
 <!-- Toolbar-->
 
-<mat-toolbar> 
-    <a [routerLink]="['/']">
+<mat-toolbar>
+  <a [routerLink]="['/']">
+    <mat-icon>home</mat-icon> 
     Stacja kosmiczna
+  </a>
+
+  <pre>   </pre>
+  <div *ngIf="isLoggedIn; then logged else notLogged"></div>
+
+  <ng-template #logged>
+    <a [matMenuTriggerFor]="menuReservations" aria-label="Reservations menu">
+      Rezerwacje
     </a>
-
-    <pre>   </pre>
-    <div *ngIf="isLoggedIn; then logged else notLogged"></div>
+    <mat-menu #menuReservations="matMenu" xPosition="after">
+      <button mat-menu-item routerLink='/reservations-table'>
+        <span>Twoje rezerwacje</span>
+      </button>
+      <button mat-menu-item routerLink='/add-reservation'>
+        <span>Dodaj nowe rezerwacje</span>
+      </button>
+    </mat-menu>
     
-        <ng-template #logged>
-            <a routerLink="/reservations-table">
-                Rezerwacje
-            </a>
-            <pre>    </pre>
-            <!-- <a routerLink='room/view'>
-              Pokoje
-            </a> -->
+    <pre>    </pre>
 
-            <a [matMenuTriggerFor]="menuRooms" 
-              aria-label="Rooms menu"
-            >
-              Pokoje
-            </a>
-            <mat-menu #menuRooms="matMenu" xPosition="after">
-              <button mat-menu-item routerLink='room/view'>
-                <span>Tabela pokoi</span>
-              </button>
-              <div *ngIf="isAdmin; then admin else notAdmin"></div>
-              <ng-template #admin>
-                <button mat-menu-item routerLink='room/add' >
-                  <span>Dodaj nowy pokój</span>
-                </button>
-              </ng-template>             
-            </mat-menu>
+    <a [matMenuTriggerFor]="menuRooms" aria-label="Rooms menu">
+      Pokoje
+    </a>
+    <mat-menu #menuRooms="matMenu" xPosition="after">
+      <button mat-menu-item routerLink='room/view'>
+        <span>Spis pokoi</span>
+      </button>
+      <div *ngIf="isAdmin; then admin else notAdmin"></div>
+      <ng-template #admin>
+        <button mat-menu-item routerLink='room/add'>
+          <span>Dodaj nowy pokój</span>
+        </button>
+      </ng-template>
+    </mat-menu>
 
-            <pre class="spacer"></pre>
+    <pre class="spacer"></pre>
 
-            <a [matMenuTriggerFor]="menuUser" 
-              aria-label="Users menu"
-            >
-              <mat-icon>person</mat-icon> {{ userProfile.name }}
-            </a>
-            <mat-menu #menuUser="matMenu" xPosition="before">
-              <button mat-menu-item href="#" href="http://localhost:8080/auth/realms/SpaceStation/protocol/openid-connect/logout?redirect_uri=http://localhost:4200" (click)="logout()">
-                <mat-icon>highlight_off</mat-icon>
-                <span>Wyloguj</span>
-              </button>
-              <button mat-menu-item>
-                <mat-icon>delete_forever</mat-icon>
-                <span>Skasuj wszechświat</span>
-              </button>
-            </mat-menu>
+    <a [matMenuTriggerFor]="menuUser" aria-label="Users menu">
+      <mat-icon>person</mat-icon> {{ userProfile.name }} <mat-icon>keyboard_arrow_down</mat-icon>
+    </a>
+    <mat-menu #menuUser="matMenu" xPosition="before">
+      <button mat-menu-item href="#"
+        href="http://localhost:8080/auth/realms/SpaceStation/protocol/openid-connect/logout?redirect_uri=http://localhost:4200"
+        (click)="logout()">
+        <mat-icon>highlight_off</mat-icon>
+        <span>Wyloguj</span>
+      </button>
+    </mat-menu>
 
-        </ng-template>
-    
-    <ng-template #notLogged>
-        <pre class="spacer"></pre>
-        <a href="#" (click)="login()">
-            Logowanie
-        </a>
-        <pre>    </pre>
-        <a href="#" (click)="register()">
-         Rejestracja 
-        </a>
-    </ng-template>
+  </ng-template>
+
+  <ng-template #notLogged>
+    <pre class="spacer"></pre>
+    <a href="#" (click)="login()">
+      Logowanie
+    </a>
+    <pre>    </pre>
+    <a href="#" (click)="register()">
+      Rejestracja
+    </a>
+  </ng-template>
 </mat-toolbar>
 
 <div class="content" role="main">
@@ -374,62 +377,74 @@
   <!-- Highlight Card -->
   <div class="card highlight-card card-small">
 
-    <svg id="rocket" alt="Rocket Ship" xmlns="http://www.w3.org/2000/svg" width="101.678" height="101.678" margin="40" viewBox="0 0 101.678 101.678">
-        <g id="Group_83" data-name="Group 83" transform="translate(-141 -696)">
-            <circle id="Ellipse_8" data-name="Ellipse 8" cx="50.839" cy="50.839" r="50.839" transform="translate(141 696)" fill="#dd0031"/>
-            <g id="Group_47" data-name="Group 47" transform="translate(165.185 720.185)">
-            <path id="Path_33" data-name="Path 33" d="M3.4,42.615a3.084,3.084,0,0,0,3.553,3.553,21.419,21.419,0,0,0,12.215-6.107L9.511,30.4A21.419,21.419,0,0,0,3.4,42.615Z" transform="translate(0.371 3.363)" fill="#fff"/>
-            <path id="Path_34" data-name="Path 34" d="M53.3,3.221A3.09,3.09,0,0,0,50.081,0,48.227,48.227,0,0,0,18.322,13.437c-6-1.666-14.991-1.221-18.322,7.218A33.892,33.892,0,0,1,9.439,25.1l-.333.666a3.013,3.013,0,0,0,.555,3.553L23.985,43.641a2.9,2.9,0,0,0,3.553.555l.666-.333A33.892,33.892,0,0,1,32.647,53.3c8.55-3.664,8.884-12.326,7.218-18.322A48.227,48.227,0,0,0,53.3,3.221ZM34.424,9.772a6.439,6.439,0,1,1,9.106,9.106,6.368,6.368,0,0,1-9.106,0A6.467,6.467,0,0,1,34.424,9.772Z" transform="translate(0 0.005)" fill="#fff"/>
-            </g>
+    <svg id="rocket" alt="Rocket Ship" xmlns="http://www.w3.org/2000/svg" width="101.678" height="101.678" margin="40"
+      viewBox="0 0 101.678 101.678">
+      <g id="Group_83" data-name="Group 83" transform="translate(-141 -696)">
+        <circle id="Ellipse_8" data-name="Ellipse 8" cx="50.839" cy="50.839" r="50.839" transform="translate(141 696)"
+          fill="#dd0031" />
+        <g id="Group_47" data-name="Group 47" transform="translate(165.185 720.185)">
+          <path id="Path_33" data-name="Path 33"
+            d="M3.4,42.615a3.084,3.084,0,0,0,3.553,3.553,21.419,21.419,0,0,0,12.215-6.107L9.511,30.4A21.419,21.419,0,0,0,3.4,42.615Z"
+            transform="translate(0.371 3.363)" fill="#fff" />
+          <path id="Path_34" data-name="Path 34"
+            d="M53.3,3.221A3.09,3.09,0,0,0,50.081,0,48.227,48.227,0,0,0,18.322,13.437c-6-1.666-14.991-1.221-18.322,7.218A33.892,33.892,0,0,1,9.439,25.1l-.333.666a3.013,3.013,0,0,0,.555,3.553L23.985,43.641a2.9,2.9,0,0,0,3.553.555l.666-.333A33.892,33.892,0,0,1,32.647,53.3c8.55-3.664,8.884-12.326,7.218-18.322A48.227,48.227,0,0,0,53.3,3.221ZM34.424,9.772a6.439,6.439,0,1,1,9.106,9.106,6.368,6.368,0,0,1-9.106,0A6.467,6.467,0,0,1,34.424,9.772Z"
+            transform="translate(0 0.005)" fill="#fff" />
         </g>
+      </g>
     </svg>
 
     <span style='font-size: large;font-weight: bold;'>Stacja kosmiczna</span>
 
-    <svg id="rocket-smoke" alt="Rocket Ship Smoke" xmlns="http://www.w3.org/2000/svg" width="516.119" height="1083.632" viewBox="0 0 516.119 1083.632">
-        <path id="Path_40" data-name="Path 40" d="M644.6,141S143.02,215.537,147.049,870.207s342.774,201.755,342.774,201.755S404.659,847.213,388.815,762.2c-27.116-145.51-11.551-384.124,271.9-609.1C671.15,139.365,644.6,141,644.6,141Z" transform="translate(-147.025 -140.939)" fill="#f5f5f5"/>
+    <svg id="rocket-smoke" alt="Rocket Ship Smoke" xmlns="http://www.w3.org/2000/svg" width="516.119" height="1083.632"
+      viewBox="0 0 516.119 1083.632">
+      <path id="Path_40" data-name="Path 40"
+        d="M644.6,141S143.02,215.537,147.049,870.207s342.774,201.755,342.774,201.755S404.659,847.213,388.815,762.2c-27.116-145.51-11.551-384.124,271.9-609.1C671.15,139.365,644.6,141,644.6,141Z"
+        transform="translate(-147.025 -140.939)" fill="#f5f5f5" />
     </svg>
 
   </div>
-  <mat-card *ngIf="this.router.url === '/'"> 
+  <mat-card *ngIf="this.router.url === '/'">
     <mat-card-header>
-        <mat-card-title>Witaj na stacji kosmicznej!</mat-card-title>
+      <mat-card-title>Witaj na stacji kosmicznej!</mat-card-title>
     </mat-card-header>
-        <mat-card-content>
-            <div>
-                <img mat-card-sm-image class='images' src="../../assets/images/space-station-image.jpg" type='image/jpg'>
-            </div>
-            <mat-label class='label'>
-            <div>
-                Jeżeli marzyłeś o tym, aby wylecieć w przestrzeń kosmiczną ale martwiłeś się o nocleg albo sąsiad nie daje ci żyć i chciałbyś od niego odpocząć, to jesteś w dobrym miejscu. 
-                Na tej stronie możesz zarezerwować miejsce na ultra nowoczesnej stacji kosmicznej krążącej po niskiej orbicie okołoziemskiej na wysokości 1500km.
-                Zastosowana została tutaj najnowocześniejsza technologia do wytwarzania sztucznej grawitacji dzięki czemu ciążenie jest zbliżone do ziemskiego. Stacja została przystosowana nie tylko do podziwiania niespotykanych na ziemii widoków,
-                ale też do rozrywki, której w innych miejscach próżno szukać.
-                <br>Oferujemy między innymi: 
-            </div>
-            <div>
-                <ul>
-                    <li>Spacery kosmiczne</li>
-                    <li>Eksperymenty w niskiej grawitacji</li>
-                    <li>Gry znane z Ziemii ale w stanie nieważkości</li>
-                    <li>Wyścigi specjalnymi małymi statkami kosmicznymi</li>
-                </ul>
-                Z usług naszej stacji skorzystały takie sławy jak na przykład: Darth Vader, Spok oraz Rick Sanchez. Uznali oni stację za najlepsze miejsce w tej stronie galaktyki.
-                Ze względu na to, że na sacji można się spotkać również przedstawicieli innych ras, u których weekend zaczyna się w środku ziemskiego tygodnia (najczęściej środa), prawie każdego dnia
-                można spotkać istoty chętne do imprezowania. Z tego powodu znaleźć można tutaj liczne bary i kantyny.
-                Organizowane są tutaj również specjalne imprezy okolicznościowe np. z okazji Kosmonaliów, czyli rocznicy uruchomienia stacji, podczas, których są liczne koncerty (nie tylko ludzkich gwiazd)
-                oraz wymyślane co roku nowe gry. 
-            </div>
-            </mat-label>
+    <mat-card-content>
+      <div>
+        <img mat-card-sm-image class='images' src="../../assets/images/space-station-image.jpg" type='image/jpg'>
+      </div>
+      <mat-label class='label'>
+        <div>
+          Jeżeli marzyłeś o tym, aby wylecieć w przestrzeń kosmiczną ale martwiłeś się o nocleg albo sąsiad nie daje ci
+          żyć i chciałbyś od niego odpocząć, to jesteś w dobrym miejscu.
+          Na tej stronie możesz zarezerwować miejsce na ultra nowoczesnej stacji kosmicznej krążącej po niskiej orbicie
+          okołoziemskiej na wysokości 1500km.
+          Zastosowana została tutaj najnowocześniejsza technologia do wytwarzania sztucznej grawitacji dzięki czemu
+          ciążenie jest zbliżone do ziemskiego. Stacja została przystosowana nie tylko do podziwiania niespotykanych na
+          ziemii widoków,
+          ale też do rozrywki, której w innych miejscach próżno szukać.
+          <br>Oferujemy między innymi:
+        </div>
+        <div>
+          <ul>
+            <li>Spacery kosmiczne</li>
+            <li>Eksperymenty w niskiej grawitacji</li>
+            <li>Gry znane z Ziemii ale w stanie nieważkości</li>
+            <li>Wyścigi specjalnymi małymi statkami kosmicznymi</li>
+          </ul>
+          Z usług naszej stacji skorzystały takie sławy jak na przykład: Darth Vader, Spok oraz Rick Sanchez. Uznali oni
+          stację za najlepsze miejsce w tej stronie galaktyki.
+          Ze względu na to, że na sacji można się spotkać również przedstawicieli innych ras, u których weekend zaczyna
+          się w środku ziemskiego tygodnia (najczęściej środa), prawie każdego dnia
+          można spotkać istoty chętne do imprezowania. Z tego powodu znaleźć można tutaj liczne bary i kantyny.
+          Organizowane są tutaj również specjalne imprezy okolicznościowe np. z okazji Kosmonaliów, czyli rocznicy
+          uruchomienia stacji, podczas, których są liczne koncerty (nie tylko ludzkich gwiazd)
+          oraz wymyślane co roku nowe gry.
+        </div>
+      </mat-label>
 
 
-        </mat-card-content>
-    </mat-card>
+    </mat-card-content>
+  </mat-card>
 
 </div>
 
 <router-outlet></router-outlet>
-
-
-
-

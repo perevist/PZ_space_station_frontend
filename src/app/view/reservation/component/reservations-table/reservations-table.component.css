@@ -2,7 +2,7 @@
   width: 80%;
 }
 
-.not-full-width{
+.not-full-width {
   width: 75%;
 }
 
@@ -10,7 +10,8 @@ table {
   width: 100%;
 }
 
-td, th {
+td,
+th {
   text-align: center !important;
   vertical-align: middle !important;
 }
@@ -19,7 +20,24 @@ td, th {
   justify-content: center !important;
 }
 
-.button-class{
-  top: 3%;
-  left: 1%;
+.button-add-reservation {
+  background-color: #1976D2;
+  color: white;
+  font-size: 20px;
+  height: 50px;
+  width: 200px;
+}
+
+.button-add-reservation:hover{
+  background-color: #1d5e9e;
+}
+
+.container-go-to-add-reservation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container-main-content {
+  margin-top: 2%;
 }
