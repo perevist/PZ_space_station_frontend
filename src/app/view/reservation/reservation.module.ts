@@ -26,7 +26,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ReservationsTableComponent } from './component/reservations-table/reservations-table.component';
 import { AddReservationComponent } from './component/add-reservation/add-reservation.component';
-import { UsersChipsComponent } from './component/users-chips/users-chips.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DialogWindowComponent } from './component/dialog-window/dialog-window.component';
 import { RoomModule } from '../room/room.module';
@@ -37,7 +36,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
   declarations: [
     AddReservationComponent,
     ReservationsTableComponent,
-    UsersChipsComponent,
     DialogWindowComponent,
     EditReservationComponent,
   ],

@@ -180,6 +180,7 @@ export class RoomPlanComponent implements AfterViewInit{
 
   public setFree(positions: Coordinates[]): void{
     const workSitePosition = this.workSitePosition;
+    console.log(positions);
     if(this.rows !== 0 && this.columns !== 0){
         positions.forEach(pos => {
             workSitePosition[pos.y - 1][pos.x - 1] = WorkSiteField.FREE;

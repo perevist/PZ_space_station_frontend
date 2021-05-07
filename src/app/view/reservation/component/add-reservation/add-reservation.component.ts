@@ -204,10 +204,9 @@ export class AddReservationComponent implements OnInit {
         (error) => {
           console.log(error.message);
           this.showToast('Nie udało się dokonać rezerwacji', 'OK');
-        }
-      );
+        },)
     }
-  }
+}
 
   openDialog(state: string, message: string) {
     const dialogConfig = new MatDialogConfig();
