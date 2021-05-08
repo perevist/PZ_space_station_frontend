@@ -140,6 +140,7 @@ export class EditReservationComponent implements OnInit {
       }
     }
     for (let r of this.roomsList) {
+        console.log(r);
       if (r.id === roomId) {
         this.roomFromEditedReservation = r;
         floor = r.floor;
@@ -158,28 +159,32 @@ export class EditReservationComponent implements OnInit {
       this.reservationToModify.endDate
     );
     setTimeout(() => {
-      let i: number = 0;
-      for (let r of this.roomsList) {
-        if (r.id === roomId) {
-          this.roomsList[i] = this.roomFromEditedReservation;
-          break;
+        if(this.roomsList.length === 0){
+            this.roomsList.push(this.roomFromEditedReservation);
+        }else{
+            let i: number = 0;
+            for (let r of this.roomsList) {
+                if (r.id === roomId) {
+                this.roomsList[i] = this.roomFromEditedReservation;
+                break;
+                }
+                i++;
+                if (i === this.roomsList.length) {
+                this.roomsList.push(this.roomFromEditedReservation);
+                this.sortRoomList();
+                break;
+                }
+            }
         }
-        i++;
-        if (i === this.roomsList.length) {
-          this.roomsList.push(this.roomFromEditedReservation);
-          this.sortRoomList();
-          break;
-        }
-      }
       this.worksitesList.push(this.worskstieFromEditedReservation);
       this.sortWorksiteList();
       this.preparedReservationToInput = {
-        user: this.userFromEditedReservation,
-        startDate: startDate,
-        endDate: endDate,
-        worksite: this.worskstieFromEditedReservation,
-        room: this.roomFromEditedReservation,
-        floor: floor,
+            user: this.userFromEditedReservation,
+            startDate: startDate,
+            endDate: endDate,
+            worksite: this.worskstieFromEditedReservation,
+            room: this.roomFromEditedReservation,
+            floor: floor,
       };
       console.log(this.preparedReservationToInput);
       this.reline(this.roomFromEditedReservation);
@@ -187,7 +192,7 @@ export class EditReservationComponent implements OnInit {
       this.planView.setReservedAll();
       let positions: Coordinates[] = [];
       this.worksitesList.forEach((worksite) => {
-        positions.push(worksite.coordinates);
+            positions.push(worksite.coordinates);
       });
       this.planView.setFree(positions);
 
@@ -254,25 +259,37 @@ export class EditReservationComponent implements OnInit {
           startDate.getDate() > end.getDate()
         )
       ) {
-        let i = 0;
-        for (let r of this.roomsList) {
-          if (r.id === this.roomFromEditedReservation.id) {
-            break;
-          }
-          i++;
-          if (i === this.roomsList.length) {
+          console.log(this.roomsList.length);
+          if(this.roomsList.length === 0){
             let room: Room = {
-              dimensionX: this.roomFromEditedReservation.dimensionX,
-              dimensionY: this.roomFromEditedReservation.dimensionY,
-              floor: this.roomFromEditedReservation.floor,
-              id: this.roomFromEditedReservation.id,
-              name: this.roomFromEditedReservation.name,
-              numberOfWorksites: this.roomFromEditedReservation
-                .numberOfWorksites,
-            };
-            this.roomsList.push(room);
-            this.sortRoomList();
-          }
+                dimensionX: this.roomFromEditedReservation.dimensionX,
+                dimensionY: this.roomFromEditedReservation.dimensionY,
+                floor: this.roomFromEditedReservation.floor,
+                id: this.roomFromEditedReservation.id,
+                name: this.roomFromEditedReservation.name,
+                numberOfWorksites: this.roomFromEditedReservation.numberOfWorksites,
+                };
+                this.roomsList.push(room);
+          }else{
+            let i = 0;
+            for (let r of this.roomsList) {
+                if (r.id === this.roomFromEditedReservation.id) {
+                    break;
+                }
+                i++;
+                if (i === this.roomsList.length) {
+                    let room: Room = {
+                    dimensionX: this.roomFromEditedReservation.dimensionX,
+                    dimensionY: this.roomFromEditedReservation.dimensionY,
+                    floor: this.roomFromEditedReservation.floor,
+                    id: this.roomFromEditedReservation.id,
+                    name: this.roomFromEditedReservation.name,
+                    numberOfWorksites: this.roomFromEditedReservation.numberOfWorksites,
+                    };
+                    this.roomsList.push(room);
+                    this.sortRoomList();
+                }
+            }
         }
       }
     }

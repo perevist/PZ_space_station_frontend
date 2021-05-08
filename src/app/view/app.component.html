@@ -63,6 +63,7 @@
   .content {
     display: flex;
     margin: 82px auto 32px;
+    margin-top: 5px;
     padding: 0 16px;
     max-width: 960px;
     flex-direction: column;
@@ -93,12 +94,13 @@
     position: inherit;
 }  */
   .card {
+
     border-radius: 4px;
     border: 1px transparent;
     background-color: #fafafa;
     height: 40px;
     width: 200px;
-    margin: 50px;
+    margin: 50px; 
     position: inherit;
     display: flex;
     flex-direction: row;
@@ -132,6 +134,7 @@
 
   .card.highlight-card {
     background-color: #1976d2;
+    bottom: 10%;
     color: white;
     font-weight: 600;
     border: none;
@@ -403,7 +406,7 @@
     </svg>
 
   </div>
-  <mat-card *ngIf="this.router.url === '/'">
+  <mat-card margin="50px" *ngIf="this.router.url === '/'">
     <mat-card-header>
       <mat-card-title>Witaj na stacji kosmicznej!</mat-card-title>
     </mat-card-header>

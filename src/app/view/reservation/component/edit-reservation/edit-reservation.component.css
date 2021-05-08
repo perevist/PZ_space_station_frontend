@@ -4,8 +4,8 @@
   }
   
   .input-form{
-      width: 40%;
-      left: 30%;
+      width: 100%;
+      left: 3%;
   }
   
   .chips-form{
@@ -13,7 +13,18 @@
     left: 4%;
   }
   
-  .button-mod-field{
+  .cancel-button{
     float: right;
   }
+
+  .edit-button{
+      width: 30%;
+      left: 3%;
+  }
+
+  .card{
+    left: 20%;
+    width: 60%;
+}
+
   

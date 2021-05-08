@@ -66,7 +66,6 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDest
 
   ngAfterViewInit(): void {
     this.dataSource.getReservations(this.pageIndex, this.userId).then((reservations) => {
-      console.log(reservations);
       if(this.dataSource.reservations.length<this.pageSize){
         this.offset = (this.pageIndex) * this.pageSize}
       else{

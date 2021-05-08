@@ -74,12 +74,12 @@
     </div>
   
     <mat-card-actions>
-        <button mat-stroked-button class="input-form-field"
+        <button mat-raised-button color='primary' class="edit-button"
             (click)="putReservation(User.value, dateRange.value.start, dateRange.value.end)">
             Zmodyfikuj rezerwację
         </button>
   
-        <button mat-stroked-button routerLink='/reservations-table' class='button-mod-field'>
+        <button mat-stroked-button routerLink='/reservations-table' class='cancel-button'>
             Anuluj
         </button>
     </mat-card-actions>
