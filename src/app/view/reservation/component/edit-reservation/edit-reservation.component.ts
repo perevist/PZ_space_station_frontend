@@ -238,7 +238,7 @@ export class EditReservationComponent implements OnInit {
       if (start < end) {
         await this.roomsService
           .getRooms(floor, start, end)
-          .then((rooms) => (this.roomsList = rooms));
+          .then((rooms) => {this.roomsList = rooms});
         this.getWorksites(this.roomFromEditedReservation, start, end);
         if (!this.pageLoad) {
           this.planView.reline(0, 0);
@@ -253,32 +253,16 @@ export class EditReservationComponent implements OnInit {
     ) {
       let startDate = new Date(this.reservationToModify.startDate);
       let endDate = new Date(this.reservationToModify.endDate);
-      if (
-        !(
-          endDate.getDate() < start.getDate() ||
-          startDate.getDate() > end.getDate()
-        )
-      ) {
-          console.log(this.roomsList.length);
-          if(this.roomsList.length === 0){
-            let room: Room = {
-                dimensionX: this.roomFromEditedReservation.dimensionX,
-                dimensionY: this.roomFromEditedReservation.dimensionY,
-                floor: this.roomFromEditedReservation.floor,
-                id: this.roomFromEditedReservation.id,
-                name: this.roomFromEditedReservation.name,
-                numberOfWorksites: this.roomFromEditedReservation.numberOfWorksites,
-                };
-                this.roomsList.push(room);
-          }else{
-            let i = 0;
-            for (let r of this.roomsList) {
-                if (r.id === this.roomFromEditedReservation.id) {
-                    break;
-                }
-                i++;
-                if (i === this.roomsList.length) {
-                    let room: Room = {
+      if(!(start.getDate() < startDate.getDate() ||
+         end.getDate() > endDate.getDate())){
+        if (
+            !(
+            endDate.getDate() < start.getDate() ||
+            startDate.getDate() > end.getDate()
+            )
+        ) {
+            if(this.roomsList.length === 0){
+                let room: Room = {
                     dimensionX: this.roomFromEditedReservation.dimensionX,
                     dimensionY: this.roomFromEditedReservation.dimensionY,
                     floor: this.roomFromEditedReservation.floor,
@@ -287,11 +271,30 @@ export class EditReservationComponent implements OnInit {
                     numberOfWorksites: this.roomFromEditedReservation.numberOfWorksites,
                     };
                     this.roomsList.push(room);
-                    this.sortRoomList();
+            }else{
+                let i = 0;
+                for (let r of this.roomsList) {
+                    if (r.id === this.roomFromEditedReservation.id) {
+                        break;
+                    }
+                    i++;
+                    if (i === this.roomsList.length) {
+                        let room: Room = {
+                        dimensionX: this.roomFromEditedReservation.dimensionX,
+                        dimensionY: this.roomFromEditedReservation.dimensionY,
+                        floor: this.roomFromEditedReservation.floor,
+                        id: this.roomFromEditedReservation.id,
+                        name: this.roomFromEditedReservation.name,
+                        numberOfWorksites: this.roomFromEditedReservation.numberOfWorksites,
+                        };
+                        this.roomsList.push(room);
+                        this.sortRoomList();
+                        break;
+                    }
                 }
             }
         }
-      }
+    }
     }
   }
 
