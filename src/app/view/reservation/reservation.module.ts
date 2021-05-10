@@ -31,6 +31,7 @@ import { DialogWindowComponent } from './component/dialog-window/dialog-window.c
 import { RoomModule } from '../room/room.module';
 import { EditReservationComponent } from './component/edit-reservation/edit-reservation.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatDialogModule,
     MatSnackBarModule,
     MatPaginatorModule,
+    MatSlideToggleModule,
   ],
   providers: [
     {
