@@ -92,7 +92,12 @@ export class ReservationsTableComponent implements AfterViewInit, OnInit, OnDest
   change($event: MatSlideToggleChange){
       this.past = $event.checked;
       this.dataSource.getReservations(this.pageIndex, this.userId, this.past).then((reservations) =>  {
-        this.table.dataSource=reservations});
+        this.table.dataSource=reservations;
+        if(this.dataSource.reservations.length<this.pageSize){
+            this.offset = (this.pageIndex+1) * this.pageSize}
+          else{
+            this.offset = (this.pageIndex+1) * this.pageSize + 1
+          }});
   }
     
 
