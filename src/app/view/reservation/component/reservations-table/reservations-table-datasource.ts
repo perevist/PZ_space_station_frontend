@@ -1,12 +1,8 @@
 import { DataSource } from '@angular/cdk/collections';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
 import { ReservationsService } from '../../service/reservations.service';
 import { ReservationResponse } from '../../model/ReservationResponse';
-import { Component, Directive, Injectable, OnInit } from '@angular/core';
-import { KeycloakService } from 'keycloak-angular';
+import { Injectable, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/view/service/auth.service';
 
 @Injectable({
@@ -14,10 +10,9 @@ import { AuthService } from 'src/app/view/service/auth.service';
 })
 export class ReservationsTableDataSource extends DataSource<ReservationResponse> implements OnInit{
   data: ReservationResponse[];
-  reservations: ReservationResponse[];
+  reservations: ReservationResponse[] = [];
   user: any;
   userId: any;
-
 
     constructor(private reservationsService: ReservationsService,
         protected keycloakService: AuthService) {

@@ -35,7 +35,6 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
   ) {}
 
   ngAfterViewInit(): void {
-    // this.dataSource.paginator = this.paginator;
   }
 
   ngOnInit(): void {
@@ -43,7 +42,6 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
     this.roomsService.getRooms().then((roomsList) => {
       this.roomsList=roomsList;
       this.dataSource = new MatTableDataSource<Room>(this.roomsList);
-      this.paginator._intl.itemsPerPageLabel = "Liczba elementów na stronie: ";
       this.dataSource.paginator = this.paginator;      
     });
 

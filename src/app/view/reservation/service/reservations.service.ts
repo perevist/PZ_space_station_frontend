@@ -29,14 +29,14 @@ export class ReservationsService {
     if (!past){
         let today = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
         let endDate = this.datepipe.transform(new Date(3000000000000), 'yyyy-MM-dd');
-        return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS + "?endDate=" + endDate + "&page=" + pageIndex + "&ownerId=" + ownerId + "&startDate=" + today).toPromise();
+        return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS + "?endDate=" + endDate + "&page=" + pageIndex + "&ownerId=" + ownerId + "&reservationMakerId=" + ownerId + "&startDate=" + today).toPromise();
     }else if (past){
         let today = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
         let startDate = this.datepipe.transform(new Date(0),'yyyy-MM-dd');
-        return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS + "?endDate=" + today + "&page=" + pageIndex + "&ownerId=" + ownerId + '&startDate=' + startDate).toPromise();
+        return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS + "?endDate=" + today + "&page=" + pageIndex + "&ownerId=" + ownerId + "&reservationMakerId=" + ownerId + '&startDate=' + startDate).toPromise();
     }
 
-    return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS+ "?page=" + pageIndex + "&ownerId=" + ownerId).toPromise();
+    return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS+ "?page=" + pageIndex + "&ownerId=" + ownerId + "&reservationMakerId=" + ownerId).toPromise();
   }
 
   /** POST: add a new Reservation to the database */
