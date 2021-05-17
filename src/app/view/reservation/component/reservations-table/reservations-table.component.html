@@ -8,11 +8,6 @@
     <div class="mat-elevation-z9">
 
       <table mat-table aria-label="Reservations" [dataSource]="dataSource" matSort>
-        <!-- Id Column -->
-        <ng-container matColumnDef="id" >
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center">ID</th>
-          <td #ID mat-cell *matCellDef="let row">{{row.id}}</td>
-        </ng-container>
 
         <!-- First name Column -->
         <ng-container matColumnDef="ownerName">
