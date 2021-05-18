@@ -204,10 +204,9 @@ export class AddReservationComponent implements OnInit {
         (error) => {
           console.log(error.message);
           this.showToast('Nie udało się dokonać rezerwacji', 'OK');
-        }
-      );
+        },)
     }
-  }
+}
 
   openDialog(state: string, message: string) {
     const dialogConfig = new MatDialogConfig();
@@ -245,13 +244,13 @@ export class AddReservationComponent implements OnInit {
         let worksite = this.getWorksiteFromPosition(index);
         if (
           owner === undefined ||
-          floorNumber === undefined ||
+          // floorNumber === undefined ||
           room === undefined ||
           worksite === undefined ||
           startDate === undefined ||
           endDate === undefined
         ) {
-          this.showToast('Wszystkie pola muszą być wypełnione', 'OK');
+          this.showToast('Wszystkie istotne pola muszą być wypełnione', 'OK');
         } else if (this.lastWorksite.worksiteId === worksite.worksiteId) {
           this.showToast('Wybierz inne stanowisko', 'OK');
         } else {

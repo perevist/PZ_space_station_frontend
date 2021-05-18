@@ -62,6 +62,18 @@
             </mat-select>
           </mat-form-field>
         </mat-card-content>
+
+        <mat-card-actions>
+            <button mat-raised-button class="add-button" color="primary" (click)="addChipToList(
+                  User.value,
+                  Floor.value, 
+                  Room.value,
+                  dateRange.value.start,
+                  dateRange.value.end
+              )">
+              Dodaj rezerwację do listy
+            </button>
+          </mat-card-actions>
       </div>
 
       <div class="col-sm">
@@ -70,6 +82,7 @@
         </mat-card-content>
       </div>
     </div>
+
     <mat-card>
       <mat-card-subtitle>Rezerwacje, które chcesz złożyć:</mat-card-subtitle>
       <mat-card-content>
@@ -93,30 +106,15 @@
     </mat-card>
 
     <mat-card-actions>
-      <button mat-stroked-button class="input-form-field" (click)="addChipToList(
-            User.value,
-            Floor.value, 
-            Room.value,
-            dateRange.value.start,
-            dateRange.value.end
-        )">
-        Dodaj rezerwację do listy
-      </button>
-    </mat-card-actions>
-
-    <mat-card-actions>
-      <button mat-stroked-button class="input-form-field"
+      <button mat-raised-button color="primary" class="post-button"
         (click)="postReservations(Floor.value, dateRange.value.start, dateRange.value.end)">
         Zarezerwuj wszystko z listy
       </button>
 
-      <button mat-stroked-button routerLink='/reservations-table' class='button-add-field'>
+      <button mat-stroked-button routerLink='/reservations-table' class='cancel-button'>
         Anuluj
       </button>
     </mat-card-actions>
 
   </mat-card>
 </div>
-<!---------------------------------------------------------
-----NEXT IS PART IF YOU WNAT TO MODIFY YOUR RESERVATION---
----------------------------------------------------------->
