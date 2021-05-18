@@ -38,6 +38,15 @@ export class AppComponent implements OnInit{
       this.isLoggedIn = false;
       this.isAdmin = false;
     } 
+    this.goStartPage();
+  }
+
+  goStartPage($myParam: string = ''): void {
+    const navigationDetails: string[] = ['/'];
+    if($myParam.length) {
+      navigationDetails.push($myParam);
+    }
+    this.router.navigate(navigationDetails);
   }
 
   private setLogin(){

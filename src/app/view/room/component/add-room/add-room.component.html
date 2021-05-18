@@ -37,21 +37,21 @@
           <!-- Text Field to write number of work sites -->
           <mat-form-field appearance="fill" class="input-form-field" [formGroup]="planFormGroup">
             <mat-label> Liczba rzędów </mat-label>
-            <input matInput placeholder="Wpisz rzędów w pokoju" type="number" min="1" formControlName="numberOfRows"
-              #numberRowsOfWorksites />
-            <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="numberRowsOfWorksites.value=''">
-              <mat-icon>close</mat-icon>
-            </button>
+            <input matInput placeholder="Wpisz rzędów w pokoju" type="number" min="0"
+              oninput="if(this.value<0){this.value= this.value * -1}" formControlName="numberOfRows" (change)="reline(
+                +numberColumnsOfWorksites.value,
+                +numberRowsOfWorksites.value
+              )" #numberRowsOfWorksites />
           </mat-form-field>
 
 
           <mat-form-field appearance="fill" class="input-form-field" [formGroup]="planFormGroup">
             <mat-label> Liczba miejsc w rzędzie </mat-label>
-            <input matInput placeholder="Wpisz liczbę miejsc w rzędzie" type="number" min="1"
-              formControlName="numberOfColumns" #numberColumnsOfWorksites />
-            <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="numberColumnsOfWorksites.value=''">
-              <mat-icon>close</mat-icon>
-            </button>
+            <input matInput placeholder="Wpisz liczbę miejsc w rzędzie" type="number" min="0"
+              oninput="if(this.value<0){this.value= this.value * -1}" formControlName="numberOfColumns" (change)="reline(
+                +numberColumnsOfWorksites.value,
+                +numberRowsOfWorksites.value
+              )" #numberColumnsOfWorksites />
           </mat-form-field>
 
           <div class="w-100"></div>
@@ -60,24 +60,27 @@
           <mat-card-actions>
 
             <div class="w-100"></div>
-            <button mat-stroked-button class="button-reline" (click)="reline(
-                    +numberColumnsOfWorksites.value,
-                    +numberRowsOfWorksites.value
+            <div class="row justify-content-between">
+              <div class="col-6">
+                <!-- Button to send the new room to the DataBase -->
+                <button mat-stroked-button class="button-add" (click)="postRoom(
+                  floorNumber.value,
+                  roomName.value,
+                  numberColumnsOfWorksites.value,
+                  numberRowsOfWorksites.value
                 )">
-              Przeskaluj
-            </button>
+                  Dodaj pokój
+                </button>
+                
+              </div>
+              <div class="col-6">
+                <button mat-stroked-button class="button-cancel" routerLink='/room/view'>
+                  Anuluj
+                </button>
+              </div>
+            </div>
 
-            <div class="w-100"></div>
 
-            <!-- Button to send the new room to the DataBase -->
-            <button mat-stroked-button class="button-add" (click)="postRoom(
-                    floorNumber.value,
-                    roomName.value,
-                    numberColumnsOfWorksites.value,
-                    numberRowsOfWorksites.value
-                )">
-              Dodaj pokój
-            </button>
           </mat-card-actions>
         </mat-card-content>
       </div>

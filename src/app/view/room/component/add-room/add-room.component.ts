@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/view/service/auth.service';
 import { FloorsService } from 'src/app/view/service/floors.service';
-import { RoomRequest } from '../../model/RoomRequest';
+import { RoomRequestDto } from '../../model/RoomRequestDto';
 import { RoomsService } from '../../service/rooms.service';
 import { RoomPlanComponent } from '../room-plan/room-plan.component';
 
@@ -17,7 +17,7 @@ export class AddRoomComponent implements OnInit {
   @ViewChild('planView') planView: RoomPlanComponent;
 
   floors: number[] = [];
-  newRoom: RoomRequest;
+  newRoom: RoomRequestDto;
 
   // TODO Add validators of new room fields in formm
   newRoomFormGroup: FormGroup = new FormGroup({
@@ -25,8 +25,8 @@ export class AddRoomComponent implements OnInit {
   });
 
   planFormGroup: FormGroup = new FormGroup({
-    numberOfRows: new FormControl('', Validators.required),
-    numberOfColumns: new FormControl('', Validators.required),
+    numberOfRows: new FormControl('0', Validators.required),
+    numberOfColumns: new FormControl('0', Validators.required),
   });
 
   constructor(
@@ -61,14 +61,17 @@ export class AddRoomComponent implements OnInit {
     dimensionX: number,
     dimensionY: number
   ): void {
-    if (this.newRoomFormGroup.valid && this.planFormGroup.valid) {
+    if (this.newRoomFormGroup.valid && this.planFormGroup.valid && this.planView.getWorkSitesListSize()) {
+      let worksites = this.planView.getWorkSites();
       this.newRoom = {
-        floor: floorNumber,
-        name: roomName,
         dimensionX: dimensionX,
         dimensionY: dimensionY,
-        numberOfWorksites: dimensionX * dimensionY,
+        floor: floorNumber,
+        name: roomName,
+        numberOfWorksites: worksites.length,
+        worksites: worksites
       };
+      console.log(this.newRoom);
       this.roomsService.postRoom(this.newRoom).subscribe(
         (msg) => {
           console.log(msg);

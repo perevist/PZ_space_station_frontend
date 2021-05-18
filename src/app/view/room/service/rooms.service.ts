@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Message } from 'src/app/view/model/Message';
 import { Room } from '../model/Room';
-import { RoomRequest } from '../model/RoomRequest';
+import { RoomRequestDto } from '../model/RoomRequestDto';
 
 @Injectable({
   providedIn: 'root'
@@ -53,9 +53,9 @@ export class RoomsService {
   }
 
   /** POST: add a new Room to the database */
-  postRoom(roomRequest: RoomRequest): any {
+  postRoom(roomRequest: RoomRequestDto): any {
     let enco: any = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.post<RoomRequest>(this.POST_ROOMS, roomRequest, {headers: enco, withCredentials: true});
+    return this.http.post<RoomRequestDto>(this.POST_ROOMS, roomRequest, {headers: enco, withCredentials: true});
   }
 
   private handleError<T>(operation = 'operation') {

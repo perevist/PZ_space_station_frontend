@@ -35,7 +35,6 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
   ) {}
 
   ngAfterViewInit(): void {
-    // this.dataSource.paginator = this.paginator;
   }
 
   ngOnInit(): void {
@@ -43,8 +42,7 @@ export class ViewRoomComponent implements AfterViewInit, OnInit {
     this.roomsService.getRooms().then((roomsList) => {
       this.roomsList=roomsList;
       this.dataSource = new MatTableDataSource<Room>(this.roomsList);
-      
-    this.dataSource.paginator = this.paginator; // ten dataSource paginator musi byc wewnątrz,  dlaczego? nie wiem: https://stackoverflow.com/questions/51527623/error-typeerror-cannot-set-property-paginator-of-undefined
+      this.dataSource.paginator = this.paginator;      
     });
 
   }
