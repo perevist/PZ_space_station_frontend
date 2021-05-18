@@ -22,6 +22,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
 import { RoomPlanComponent } from './room/component/room-plan/room-plan.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { CustomPaginator } from './custom-paginator';
 
 @NgModule({
   declarations: [
@@ -47,6 +49,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatFormFieldModule
   ],
   providers: [
+    { provide: MatPaginatorIntl, useValue: CustomPaginator() },
     KeycloakService,
     { 
         provide: APP_INITIALIZER, 

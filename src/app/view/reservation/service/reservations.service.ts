@@ -7,6 +7,8 @@ import { ReservationRequest } from '../model/ReservationRequest';
 import { ReservationResponse } from '../model/ReservationResponse';
 import { KeycloakService } from 'keycloak-angular';
 import { AuthService } from '../../service/auth.service';
+import { DatePipe } from '@angular/common';
+import { map } from 'rxjs/operators';
 
 
 @Injectable({
@@ -20,11 +22,21 @@ export class ReservationsService {
   readonly PUT_RESERVATION = 'http://localhost:8081/api/reservations/';
   
   constructor(private http: HttpClient, 
-            private keycloakService: AuthService) { }
+            private keycloakService: AuthService,
+            private datepipe: DatePipe) { }
 
-  getReservations(pageIndex: number, ownerId: string): Promise<ReservationResponse[]>{
-    
-    return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS+ "?page=" + pageIndex + "&ownerId=" + ownerId).toPromise();
+  getReservations(pageIndex: number, ownerId: string, past?: boolean): Promise<ReservationResponse[]>{
+    if (!past){
+        let today = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
+        let endDate = this.datepipe.transform(new Date(3000000000000), 'yyyy-MM-dd');
+        return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS + "?endDate=" + endDate + "&page=" + pageIndex + "&ownerId=" + ownerId + "&reservationMakerId=" + ownerId + "&startDate=" + today).toPromise();
+    }else if (past){
+        let today = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
+        let startDate = this.datepipe.transform(new Date(0),'yyyy-MM-dd');
+        return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS + "?endDate=" + today + "&page=" + pageIndex + "&ownerId=" + ownerId + "&reservationMakerId=" + ownerId + '&startDate=' + startDate).toPromise();
+    }
+
+    return this.http.get<ReservationResponse[]>(this.GET_RESERVATIONS+ "?page=" + pageIndex + "&ownerId=" + ownerId + "&reservationMakerId=" + ownerId).toPromise();
   }
 
   /** POST: add a new Reservation to the database */

@@ -38,6 +38,17 @@ th {
   align-items: center;
 }
 
+.container-past-reservations{
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    float: left;
+}
+
 .container-main-content {
   margin-top: 2%;
+}
+
+.past-reservations{
+    background-color: rgb(231, 226, 226);
 }
