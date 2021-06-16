@@ -187,9 +187,7 @@ export class EditReservationComponent implements OnInit {
             floor: floor,
       };
       console.log(this.preparedReservationToInput);
-      this.reline(this.roomFromEditedReservation);
 
-      this.planView.setReservedAll();
       let positions: Coordinates[] = [];
       this.worksitesList.forEach((worksite) => {
             positions.push(worksite.coordinates);
@@ -305,11 +303,26 @@ export class EditReservationComponent implements OnInit {
   async getWorksites(room?: Room, start?: Date, end?: Date) {
     if (room !== undefined) {
       this.reline(room);
+
+      let positions: Coordinates [] = [];
+
+      await this.worksiteService
+      .getWorksites(room.id)
+      .then((worksites) => {
+        this.worksitesList = worksites;
+
+        this.worksitesList.forEach((worksite) => {
+            positions.push( worksite.coordinates );
+          }
+          );
+        this.planView.setReserved(positions);
+      });
+
+
       await this.worksiteService
         .getWorksites(room.id, start, end)
         .then((worksites) => {
           this.worksitesList = worksites;
-          this.planView.setReservedAll();
         });
     } else {
       await this.worksiteService
